@@ -7,28 +7,35 @@
         </div>
     </div>
 
-    <header class="sticky top-0 z-50 bg-white shadow-md">
-        <nav class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header class="sticky top-0 z-50 bg-customPurple shadow-md">
+        <!-- px-4 sm:px-6 lg:px-8 -->
+        <nav class="max-w-screen-xl mx-auto shadow-md md:px-6"> 
             <!-- Desktop Menu -->
-            <div class="hidden md:flex justify-center h-16 items-center">
+            <div class="hidden md:flex justify-center h-16 items-center ">
                 <ul class="flex items-center w-full max-w-2xl justify-between max-w-screen-xl">
                     <!-- Home (no dropdown) -->
-                    <div class="hover:bg-gray-100 rounded-md transition-colors duration-300">
-                        <li>
-                            <RouterLink to="/" :class="{
-                                'text-blue-500': route.path === '/',
-                                'text-gray-600 hover:text-gray-900': route.path !== '/'
-                            }" class="px-3 py-2 text-sm font-medium">
-                                หน้าหลัก
-                            </RouterLink>
-                        </li>
+                    <div class="hover:bg-gray-400 rounded-md transition-colors duration-300">
+                        <button
+                            class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center"
+                            :class="{
+                                'bg-gray-200 rounded-md': route.path === '/',
+                                'text-white hover:text-gray-900': route.path !== '/'
+                            }">
+                            <li>
+                                <RouterLink to="/" class="px-3 py-2 text-sm font-medium" :class="{
+                                    'text-gray-500': route.path === '/',
+                                }">
+                                    หน้าหลัก
+                                </RouterLink>
+                            </li>
+                        </button>
                     </div>
 
                     <!-- บริการของเรา -->
-                    <div class="relative hover:bg-gray-100 rounded-md transition-colors duration-300">
+                    <div class="relative hover:bg-gray-400 rounded-md transition-colors duration-300">
                         <li>
                             <button @click="toggleDropdown('about')"
-                                class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
+                                class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
                                 บริการของเรา
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -49,22 +56,28 @@
                     </div>
 
                     <!-- ผลงานพร้อมถ่ายทอด -->
-                    <div class="hover:bg-gray-100 rounded-md transition-colors duration-300">
-                        <li>
-                            <RouterLink to="/admin/about" :class="{
-                                'text-blue-500': route.path === '/about',
-                                'text-gray-600 hover:text-gray-900': route.path !== '/about'
-                            }" class="px-3 py-2 text-sm font-medium">
-                                ผลงานพร้อมถ่ายทอด
-                            </RouterLink>
-                        </li>
+                    <div class="hover:bg-gray-400 rounded-md transition-colors duration-300">
+                        <button
+                            class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center"
+                            :class="{
+                                'bg-gray-200 rounded-md': route.path === '/about',
+                                'text-white hover:text-gray-900': route.path !== '/about'
+                            }">
+                            <li>
+                                <RouterLink to="/about" class="px-3 py-2 text-sm font-medium" :class="{
+                                    'text-gray-500': route.path === '/about',
+                                }">
+                                    ผลงานพร้อมถ่ายทอด
+                                </RouterLink>
+                            </li>
+                        </button>
                     </div>
 
                     <!-- ข้อมูลแนะนำ -->
-                    <div class="relative hover:bg-gray-100 rounded-md transition-colors duration-300">
+                    <div class="relative hover:bg-gray-400 rounded-md transition-colors duration-300">
                         <li>
                             <button @click="toggleDropdown('services')"
-                                class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
+                                class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
                                 ข้อมูลแนะนำ
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -85,10 +98,10 @@
                     </div>
 
                     <!-- เกี่ยวกับเรา -->
-                    <div class="relative hover:bg-gray-100 rounded-md transition-colors duration-300">
+                    <div class="relative hover:bg-gray-400 rounded-md transition-colors duration-300">
                         <li>
                             <button @click="toggleDropdown('contact')"
-                                class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
+                                class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center">
                                 เกี่ยวกับเรา
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -129,8 +142,8 @@
             </div>
 
             <!-- Mobile Menu -->
-            <div v-show="isOpen" class="md:hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1">
+            <div v-show="isOpen" class="md:hidden bg-white ">
+                <div class="px-2 pt-2 pb-3 space-y-1 ">
                     <RouterLink to="/" :class="{
                         'text-blue-500': route.path === '/',
                         'text-gray-700 hover:text-gray-900 hover:bg-gray-50': route.path !== '/'
