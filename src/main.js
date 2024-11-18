@@ -1,4 +1,3 @@
-import './assets/main.css'
 import './index.css'
 
 // Vuetify
