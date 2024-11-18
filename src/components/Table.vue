@@ -6,7 +6,8 @@
                 <v-spacer></v-spacer>
             </v-card-title>
             <v-card-text class="rounded-xl">
-                <v-data-table :headers="filteredHeaders" :items="data">
+                <v-data-table :headers="filteredHeaders" :items="data" :items-per-page="-1" :fixed-header="true"
+                height="400" class="elevation-0">
                     <template v-for="header in filteredHeaders" v-slot:[`item.${header.key}`]="{ item }">
                         <div :style="{
                             width: ['intelProp', 'editMore', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'major', 'holder', 'other', 'indust', 'utilization', 'note'].includes(header.key) ? '250px' : 'auto',
