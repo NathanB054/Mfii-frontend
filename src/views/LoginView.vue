@@ -19,33 +19,16 @@
             <!-- Email field -->
             <v-row>
               <v-col cols="12">
-                <v-text-field
-                  v-model="form.email"
-                  label="อีเมล"
-                  prepend-inner-icon="mdi-email-outline"
-                  variant="outlined"
-                  outlined
-                  color="#BA984C"
-                  :rules="[validateEmail]"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="form.email" label="อีเมล" prepend-inner-icon="mdi-email-outline"
+                  variant="outlined" outlined color="#BA984C" :rules="[validateEmail]" required></v-text-field>
               </v-col>
 
               <!-- Password field -->
               <v-col cols="12">
-                <v-text-field
-                  v-model="form.password"
-                  label="รหัสผ่าน"
-                  :type="showPassword ? 'text' : 'password'"
-                  prepend-inner-icon="mdi-lock-outline"
-                  :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append-inner="togglePasswordVisibility"
-                  variant="outlined"
-                  outlined
-                  color="#BA984C"
-                  :rules="[validatePassword]"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="form.password" label="รหัสผ่าน" :type="showPassword ? 'text' : 'password'"
+                  prepend-inner-icon="mdi-lock-outline" :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append-inner="togglePasswordVisibility" variant="outlined" outlined color="#BA984C"
+                  :rules="[validatePassword]" required></v-text-field>
               </v-col>
             </v-row>
 
@@ -57,7 +40,9 @@
             <!-- Register link -->
             <div class="text-center justify-center pt-5 flex text-base">
               <p>
-                <a class="px-2 hover:underline" style="color: #ba984c" href="/register">สมัครสมาชิก</a>
+                <router-link to="/register" class="px-2 hover:underline" style="color: #ba984c">
+                  สมัครสมาชิก
+                </router-link>
               </p>
               <p class="text-gray-500">หากท่านยังไม่สมัครสมาชิก</p>
             </div>

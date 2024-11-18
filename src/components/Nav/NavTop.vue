@@ -81,45 +81,48 @@ onUnmounted(() => {
 
 // Fetch user information when the component is mounted
 onMounted(async () => {
-  try {
-   if(authStore.token && !authStore.user) {
-    await authStore.fetchUser(); // Ensure the user is fetched and stored in authStore.user
-   }
-  } catch (error) {
-    console.error("Failed to fetch user:", error);
-  }
+    try {
+        if (authStore.token && !authStore.user) {
+            await authStore.fetchUser(); // Ensure the user is fetched and stored in authStore.user
+        }
+    } catch (error) {
+        console.error("Failed to fetch user:", error);
+    }
 });
 
 
 </script>
 
 <template>
-  <div class="w-full h-40 flex items-center justify-between">
-    <!-- Start of content -->
-    <div class="flex items-center">
-        <img src="@/assets/images/mfu_logo.png" alt="mfu logo" width="150px">
-        <div class="text-title ml-4">
-            <h1 class="text-3xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
-            <h2 class="text-2xl">MFU Intellectual Property Management and Technology Transfer</h2>
+    <div class="w-full h-40 flex items-center justify-between">
+        <!-- Start of content -->
+        <div class="flex items-center">
+            <img src="@/assets/images/mfu_logo.png" alt="mfu logo" width="150px">
+            <div class="text-title ml-4">
+                <h1 class="text-3xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+                <h2 class="text-2xl">MFU Intellectual Property Management and Technology Transfer</h2>
+            </div>
         </div>
-    </div>
 
 
-    <!-- End content -->
-    <div class="items-center mr-10">
-        <div>
-            <input type="text" placeholder="Search" class="border border-gray-300 rounded-md px-4 py-2">
-        </div>
-        <div  v-if="authStore.user" class="flex items-center justify-center mt-4">
-         <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
-            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4" @click="authStore.logout">Logout</button>
-        </div>
-        <div v-else class="flex items-center justify-center mt-4">
-            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4">Login</button>
-            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4">Register</button>
+        <!-- End content -->
+        <div class="items-center mr-10">
+            <div>
+                <input type="text" placeholder="Search" class="border border-gray-300 rounded-md px-4 py-2">
+            </div>
+            <div v-if="authStore.user" class="flex items-center justify-center mt-4">
+                <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
+                <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4"
+                    @click="authStore.logout">Logout</button>
+            </div>
+            <div v-else class="flex items-center justify-center mt-4">
+                <v-btn class="reg bg-black text-white rounded-xl border w-32 h-14 btn-nav mr-1"
+                    :to="{ name: 'Register' }">สมัครสมาชิก</v-btn>
+                <v-btn class="log text-black rounded-xl border border-black w-32 h-14 btn-nav ml-1"
+                    :to="{ name: 'Login' }">เข้าสู่ระบบ</v-btn>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- ========================================================================================== -->
 
