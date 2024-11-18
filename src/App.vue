@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import NavTop from './components/Nav/NavTop.vue';
+import CookieConsent from './components/CookieConsent.vue';
 </script>
 
 <template>
@@ -10,6 +11,7 @@ import NavTop from './components/Nav/NavTop.vue';
   <!-- Content will be rendered here -->
    <v-app>
     <RouterView />
+    <cookie-consent />
    </v-app>
 
 </template>
