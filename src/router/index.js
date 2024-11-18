@@ -27,6 +27,12 @@ const router = createRouter({
       name: 'Register',
       component: () => import('../views/RegisterView.vue'),
       meta: { showNavTop: true }
+    },
+    {
+      path: '/services/ipp',
+      name: 'Table Research',
+      component: () => import('../views/TableResearch.vue'),
+      meta: { showNavTop: true }
     }
 
   ],
