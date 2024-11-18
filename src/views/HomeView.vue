@@ -39,3 +39,7 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import "../styles/index.css";
+</style>
