@@ -1,11 +1,15 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+
 
 const isOpen = ref(false);
 const activeDropdown = ref(null);
 const mobileActiveDropdown = ref(null);
 const route = useRoute();
+const authStore = useAuthStore();
+
 
 const mobileSections = [
     {
@@ -73,16 +77,53 @@ onMounted(() => {
 onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
 });
+
+
+// Fetch user information when the component is mounted
+onMounted(async () => {
+  try {
+   if(authStore.token && !authStore.user) {
+    await authStore.fetchUser(); // Ensure the user is fetched and stored in authStore.user
+   }
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+  }
+});
+
+
 </script>
 
 <template>
-    <div class="w-full h-40 flex items-center">
+  <div class="w-full h-40 flex items-center justify-between">
+    <!-- Start of content -->
+    <div class="flex items-center">
         <img src="@/assets/images/mfu_logo.png" alt="mfu logo" width="150px">
         <div class="text-title ml-4">
             <h1 class="text-3xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
             <h2 class="text-2xl">MFU Intellectual Property Management and Technology Transfer</h2>
         </div>
     </div>
+
+
+    <!-- End content -->
+    <div class="items-center mr-10">
+        <div>
+            <input type="text" placeholder="Search" class="border border-gray-300 rounded-md px-4 py-2">
+        </div>
+        <div  v-if="authStore.user" class="flex items-center justify-center mt-4">
+         <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
+            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4" @click="authStore.logout">Logout</button>
+        </div>
+        <div v-else class="flex items-center justify-center mt-4">
+            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4">Login</button>
+            <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4">Register</button>
+        </div>
+    </div>
+</div>
+
+    <!-- ========================================================================================== -->
+
+
 
     <header class="sticky top-0 z-50 bg-customPurple shadow-md">
         <nav class="max-w-screen-xl mx-auto shadow-md md:px-6">

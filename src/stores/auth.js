@@ -1,0 +1,58 @@
+import { defineStore } from "pinia";
+import axios from "axios";
+
+export const useAuthStore = defineStore("auth", {
+  state: () => ({
+    token: null, // JWT token
+    user: null,  // User information
+  }),
+  actions: {
+    async login(email, password) {
+      try {
+        const response = await axios.post("/api/login", { email, password });
+        const { token } = response.data.result;
+
+        // Save token in state and localStorage
+        this.token = token;
+        localStorage.setItem("token", token);
+
+        // Set token in axios headers for future requests
+        axios.defaults.headers.common["Authorization"] = token;
+
+        // Optionally fetch user info immediately
+        await this.fetchUser();
+
+        return response.data.description;
+      } catch (error) {
+        console.error("Login failed:", error);
+        throw error;
+      }
+    },
+    async fetchUser() {
+      try {
+        const response = await axios.get("/api/getUser");
+        this.user = response.data.resutl;
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+        throw error;
+      }
+    },
+
+    logout() {
+      this.token = null;
+      this.user = null;
+      // Clear localStorage and axios headers
+      localStorage.removeItem("token");
+      delete axios.defaults.headers.common["Authorization"];
+    },
+
+
+    checkAuth() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        this.token = token;
+        axios.defaults.headers.common["Authorization"] = token;
+      }
+    },
+  },
+});

@@ -10,6 +10,8 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import axios from "./stores/axios-config"; // Import axios configuration
+import { useAuthStore } from './stores/auth';
 
 import App from './App.vue'
 import router from './router'
@@ -23,8 +25,12 @@ const vuetify = createVuetify({
   })
 
 const app = createApp(App)
-
 app.use(createPinia())
+
+const authStore = useAuthStore();
+authStore.checkAuth(); // Restore token on page refresh
+
+
 app.use(router)
 app.use(vuetify)
 app.mount('#app')

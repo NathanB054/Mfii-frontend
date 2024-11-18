@@ -8,7 +8,10 @@ import NavTop from './components/Nav/NavTop.vue';
   <NavTop v-if="$route.meta.showNavTop" />
   
   <!-- Content will be rendered here -->
-  <RouterView />
+   <v-app>
+    <RouterView />
+   </v-app>
+
 </template>
 
 <style scoped></style>
