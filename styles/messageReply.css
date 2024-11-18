@@ -1,0 +1,60 @@
+/* Your scoped CSS styles here */
+.list-item-border {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.chatbox {
+  overflow: auto;
+  padding: 10px; /* Adjust padding as needed */
+}
+
+.message-bubble {
+  max-width: 70%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  clear: both;
+}
+
+.current-user {
+  float: right;
+  background-color: #1E88E5;
+  color: white;
+}
+
+.other-user {
+  float: left;
+  background-color: #E0E0E0;
+  color: black;
+}
+
+.message-content {
+  word-wrap: break-word;
+}
+
+/* Customize scrollbar */
+.chatbox::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatbox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chatbox::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.chatbox::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
