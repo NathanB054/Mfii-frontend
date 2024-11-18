@@ -8,7 +8,7 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: { showNavTop: true, requiresAuth: true }
+      meta: { showNavTop: true}
     },
     {
       path: '/about',
@@ -22,10 +22,17 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
       meta: { showNavTop: true }
     },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('../views/RegisterView.vue'),
+      meta: { showNavTop: true }
+    }
 
   ],
 })
 
+// requiresAuth: true 
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
