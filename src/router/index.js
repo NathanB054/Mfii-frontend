@@ -29,6 +29,12 @@ const router = createRouter({
       meta: { showNavTop: true }
     },
     {
+      path: '/innovation',
+      name: 'Innovation',
+      component: () => import('../views/InnovationView.vue'),
+      meta: { showNavTop: true }
+    },
+    {
       path: '/services/ipp',
       name: 'Table Research',
       component: () => import('../views/TableResearch.vue'),
