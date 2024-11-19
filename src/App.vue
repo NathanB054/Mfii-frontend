@@ -15,7 +15,7 @@ import NavFooter from './components/Nav/NavFooter.vue';
     <cookie-consent />
    </v-app>
 
-    <RouterView />
+
 
 
    <!-- Footer -->
