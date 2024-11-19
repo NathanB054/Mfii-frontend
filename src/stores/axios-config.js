@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "@/stores/auth";
 
 // Set base URL
-axios.defaults.baseURL = "http://localhost:7770";
+axios.defaults.baseURL = "http://localhost:7770/api";
 
 // Add a request interceptor
 axios.interceptors.request.use(
