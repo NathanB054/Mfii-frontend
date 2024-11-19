@@ -28,6 +28,33 @@ export const useAuthStore = defineStore("auth", {
         throw error;
       }
     },
+
+    async register(formData) {
+      try {
+        // Send registration data
+        const response = await axios.post("/api/register", formData); 
+        const { token } = response.data.result;
+
+        // Save token in state and localStorage
+        this.token = token;
+        localStorage.setItem("token", token);
+
+        // Set token in axios headers for future requests
+        axios.defaults.headers.common["Authorization"] = token;
+
+        // Optionally fetch user info after registration
+        await this.fetchUser();
+
+        // After successful registration, log the user in
+        await this.login(formData.email, formData.password); // Login after registration
+
+        return response.data.description;
+      } catch (error) {
+        console.error("Registration failed:", error);
+        throw error;
+      }
+    },
+
     async fetchUser() {
       try {
         const response = await axios.get("/api/getUser");
@@ -38,14 +65,14 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    logout() {
+      logout() {
       this.token = null;
       this.user = null;
       // Clear localStorage and axios headers
       localStorage.removeItem("token");
       delete axios.defaults.headers.common["Authorization"];
+      
     },
-
 
     checkAuth() {
       const token = localStorage.getItem("token");

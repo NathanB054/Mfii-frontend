@@ -1,9 +1,7 @@
 <template>
-  <v-main>
-
 
     <!-- Main container for the login card -->
-    <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 mb-6">
+    <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 mb-6 mt-5">
       <v-card class="w-full max-w-lg rounded-xl p-8">
         <!-- Card title -->
         <v-card-title>
@@ -15,7 +13,7 @@
 
         <!-- Card content -->
         <v-card-text>
-          <v-form @submit.prevent="handleLogin" ref="form">
+          <v-form @submit.prevent="handleLogin" >
             <!-- Email field -->
             <v-row>
               <v-col cols="12">
@@ -50,7 +48,7 @@
         </v-card-text>
       </v-card>
     </v-container>
-  </v-main>
+
 </template>
 
 <script>
@@ -65,7 +63,6 @@ export default {
       password: "",
     });
     const showPassword = ref(false);
-    const responseMessage = ref(null);
 
     // Access the auth store
     const authStore = useAuthStore();
@@ -95,7 +92,6 @@ export default {
     return {
       form,
       showPassword,
-      responseMessage,
       handleLogin,
       togglePasswordVisibility,
       validateEmail,
