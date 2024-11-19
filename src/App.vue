@@ -6,20 +6,18 @@ import NavFooter from './components/Nav/NavFooter.vue';
 </script>
 
 <template>
-  <!-- Conditionally render the Navbar for User pages only -->
-  <NavTop v-if="$route.meta.showNavTop" />
-  
-  <!-- Content will be rendered here -->
+   <!-- Conditionally render the Navbar for User pages only -->
+   <NavTop v-if="$route.meta.showNavTop" />
+
+   <!-- Content will be rendered here -->
    <v-app>
-    <RouterView />
-    <cookie-consent />
+      <RouterView />
+      <cookie-consent />
+
+      <!-- Footer -->
+      <NavFooter />
    </v-app>
 
-
-
-
-   <!-- Footer -->
-   <NavFooter/>
 </template>
 
 <style scoped></style>
