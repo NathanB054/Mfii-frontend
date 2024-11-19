@@ -14,7 +14,7 @@ const authStore = useAuthStore();
 const mobileSections = [
     {
         name: 'บริการของเรา',
-        items: [{ label: 'Service 1', to: '/service1' }, { label: 'Service 2', to: '/service2' }],
+        items: [{ label: 'สร้างความตระหนักด้านทรัพย์สินทางปัญญา', to: '/services/awa' }, { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' }, { label: 'การนำไปใช้ประโยชน์', to: 'services/uti' }, { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/ups' }, { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' }],
         isActive: (route) => route.path.startsWith('/service')
     },
     {
@@ -29,7 +29,7 @@ const mobileSections = [
     },
     {
         name: 'เกี่ยวกับเรา',
-        items: [{ label: 'About 1', to: '/about' }, { label: 'About 2', to: '/about' }],
+        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true  } ,{ label: 'ติดต่อเรา', to: '/about-us/contact', external: false  }],
         isActive: (route) => route.path.startsWith('/about')
     }
 ];
