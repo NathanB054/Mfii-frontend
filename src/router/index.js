@@ -8,10 +8,15 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+<<<<<<< HEAD
       component: DataIpView,
       //component: HomeView,
       meta: { showNavTop: true }
       //meta: { showNavTop: true, requiresAuth: true }
+=======
+      component: HomeView,
+      meta: { showNavTop: true}
+>>>>>>> origin/Kim
     },
     {
       path: '/about',
@@ -25,10 +30,17 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
       meta: { showNavTop: true }
     },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('../views/RegisterView.vue'),
+      meta: { showNavTop: true }
+    }
 
   ],
 })
 
+// requiresAuth: true 
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();

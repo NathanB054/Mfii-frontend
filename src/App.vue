@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import NavTop from './components/Nav/NavTop.vue';
+import NavFooter from './components/Nav/NavFooter.vue';
 </script>
 
 <template>
@@ -8,10 +9,12 @@ import NavTop from './components/Nav/NavTop.vue';
   <NavTop v-if="$route.meta.showNavTop" />
   
   <!-- Content will be rendered here -->
-   <v-app>
-    <RouterView />
-   </v-app>
 
+    <RouterView />
+
+
+   <!-- Footer -->
+   <NavFooter/>
 </template>
 
 <style scoped></style>
