@@ -39,7 +39,18 @@ const router = createRouter({
       name: 'Table Research',
       component: () => import('../views/TableResearch.vue'),
       meta: { showNavTop: true }
-    }
+    },
+
+
+
+
+    // catch all 404
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound',
+    component: () => import('../views/NotFound.vue'),
+    meta: { showNavTop: true }
+  },
 
   ],
 })

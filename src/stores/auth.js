@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useErrorStore } from "./errorStore";
+import api from "./axios-config";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -9,7 +11,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(email, password) {
       try {
-        const response = await axios.post("/api/login", { email, password });
+        const response = await api.post("/api/login", { email, password });
         const { token } = response.data.result;
 
         // Save token in state and localStorage
@@ -24,7 +26,16 @@ export const useAuthStore = defineStore("auth", {
 
         return response.data.description;
       } catch (error) {
+        const errorStore = useErrorStore();
         console.error("Login failed:", error);
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
+          errorStore.show(errorMessage, {
+            color: 'error',
+            icon: 'mdi-alert-circle',
+            timeout: 5000
+          });
+        }
         throw error;
       }
     },
@@ -32,7 +43,7 @@ export const useAuthStore = defineStore("auth", {
     async register(formData) {
       try {
         // Send registration data
-        const response = await axios.post("/api/register", formData); 
+        const response = await api.post("/api/register", formData); 
         const { token } = response.data.result;
 
         // Save token in state and localStorage
@@ -50,17 +61,35 @@ export const useAuthStore = defineStore("auth", {
 
         return response.data.description;
       } catch (error) {
+        const errorStore = useErrorStore();
         console.error("Registration failed:", error);
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
+          errorStore.show(errorMessage, {
+            color: 'error',
+            icon: 'mdi-alert-circle',
+            timeout: 5000
+          });
+        }
         throw error;
       }
     },
 
     async fetchUser() {
       try {
-        const response = await axios.get("/api/getUser");
+        const response = await api.get("/api/getUser");
         this.user = response.data.resutl;
       } catch (error) {
+        const errorStore = useErrorStore();
         console.error("Failed to fetch user:", error);
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
+          errorStore.show(errorMessage, {
+            color: 'error',
+            icon: 'mdi-alert-circle',
+            timeout: 5000
+          });
+        }
         throw error;
       }
     },
