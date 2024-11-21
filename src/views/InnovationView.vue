@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '@/stores/axios-config';
 //env
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -200,9 +200,9 @@ export default {
       const descript = this.search.trim() || "all";
       this.loading = true;
       this.currentPage = 1;
-      axios
+      api
         .get(
-          `/getsResearch/${indust}/${prop}/${tech}/${descript}`
+          `api/getsResearch/${indust}/${prop}/${tech}/${descript}`
         )
         .then((response) => {
           if (response.status == 200) {
@@ -267,7 +267,7 @@ export default {
     async getviewCount() {
       try {
         // Make a single API call to fetch all product counts
-        const response = await axios.get("/getStatProduct");
+        const response = await api.get("api/getStatProduct");
         const productCounts = response.data.result;
 
         // Store product counts in the component's data
@@ -285,7 +285,7 @@ export default {
     this.getviewCount();
     try {
       const api1Response = await Promise.all([
-        axios.get("/getsResearch/all/all/all/all"),
+        api.get("api/getsResearch/all/all/all/all"),
       ]);
 
       if (api1Response.status == 200) {

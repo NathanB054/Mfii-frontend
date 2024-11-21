@@ -8,12 +8,14 @@ export const useAuthStore = defineStore("auth", {
     token: null, // JWT token
     user: null,  // User information
   }),
+
   actions: {
     async login(email, password) {
+      const errorStore = useErrorStore();
       try {
         const response = await api.post("/api/login", { email, password });
         const { token } = response.data.result;
-
+        
         // Save token in state and localStorage
         this.token = token;
         localStorage.setItem("token", token);
@@ -26,7 +28,6 @@ export const useAuthStore = defineStore("auth", {
 
         return response.data.description;
       } catch (error) {
-        const errorStore = useErrorStore();
         console.error("Login failed:", error);
         if (error.response && error.response.data) {
           const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
@@ -41,6 +42,7 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async register(formData) {
+      const errorStore = useErrorStore();
       try {
         // Send registration data
         const response = await api.post("/api/register", formData); 
@@ -61,7 +63,6 @@ export const useAuthStore = defineStore("auth", {
 
         return response.data.description;
       } catch (error) {
-        const errorStore = useErrorStore();
         console.error("Registration failed:", error);
         if (error.response && error.response.data) {
           const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
@@ -76,11 +77,11 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async fetchUser() {
+      const errorStore = useErrorStore();
       try {
         const response = await api.get("/api/getUser");
         this.user = response.data.resutl;
       } catch (error) {
-        const errorStore = useErrorStore();
         console.error("Failed to fetch user:", error);
         if (error.response && error.response.data) {
           const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
