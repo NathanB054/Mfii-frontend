@@ -9,8 +9,8 @@ const router = createRouter({
       name: 'home',
       // component: DataIpView,
       component: HomeView,
-      // meta: { showNavTop: true }
-      meta: { showNavTop: true, requiresAuth: true }
+      // meta: { showNavTop: true, requiresAuth: true }
+      meta: { showNavTop: true }
     },
     {
       path: '/about',
@@ -43,23 +43,26 @@ const router = createRouter({
       meta: { showNavTop: true }
     },
 
+    {
+      path: '/database',
+      name: 'Database IP MFU',
+      component: () => import('../views/DataIpView.vue'),
+      meta: { showNavTop: true }
+    },
+    {
+      path: '/user/profile',
+      name: 'Profile',
+      component: () => import('../views/UserView/ProfileView.vue'),
+      meta: { showNavTop: true, requiresAuth: true }
+    },
 
-
-
-    // catch all 404
+   // catch all 404
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
     component: () => import('../views/NotFound.vue'),
     meta: { showNavTop: true }
   },
-    
-    {
-      path: '/database',
-      name: 'Database IP MFU',
-      component: () => import('../views/DataIpView.vue'),
-      meta: { showNavTop: true }
-    }
 
   ],
 })
