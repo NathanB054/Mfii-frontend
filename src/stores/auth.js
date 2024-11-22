@@ -9,7 +9,7 @@ export const useAuthStore = defineStore("auth", {
   actions: {
     async login(email, password) {
       try {
-        const response = await axios.post("/api/login", { email, password });
+        const response = await axios.post("/login", { email, password });
         const { token } = response.data.result;
 
         // Save token in state and localStorage
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("auth", {
     async register(formData) {
       try {
         // Send registration data
-        const response = await axios.post("/api/register", formData); 
+        const response = await axios.post("/register", formData); 
         const { token } = response.data.result;
 
         // Save token in state and localStorage
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("auth", {
 
     async fetchUser() {
       try {
-        const response = await axios.get("/api/getUser");
+        const response = await axios.get("/getUser");
         this.user = response.data.resutl;
       } catch (error) {
         console.error("Failed to fetch user:", error);
