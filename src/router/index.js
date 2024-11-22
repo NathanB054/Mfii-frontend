@@ -50,6 +50,12 @@ const router = createRouter({
       meta: { showNavTop: true }
     },
     {
+      path: '/contact',
+      name: 'Contact',
+      component: () => import('../views/ContactView.vue'),
+      meta: { showNavTop: true }
+    },
+    {
       path: '/detail/:id',
       name: 'Innovation Detail',
       component: InnovaionDetail,
