@@ -1,12 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '../stores/auth';
+import HomeView from '../views/HomeView.vue'
+import InnovaionDetail from '@/views/InnovationDetailView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       // component: DataIpView,
       component: HomeView,
       // meta: { showNavTop: true }
@@ -14,7 +15,7 @@ const router = createRouter({
     },
     {
       path: '/about',
-      name: 'about',
+    name: 'About',
       component: () => import('../views/AboutView.vue'),
       meta: { showNavTop: true }
     },
@@ -42,15 +43,19 @@ const router = createRouter({
       component: () => import('../views/TableResearch.vue'),
       meta: { showNavTop: true }
     },
-
-    
     {
       path: '/database',
       name: 'Database IP MFU',
       component: () => import('../views/DataIpView.vue'),
       meta: { showNavTop: true }
-    }
-
+    },
+    {
+      path: '/detail/:id',
+      name: 'Innovation Detail',
+      component: InnovaionDetail,
+      props: true,
+      meta: { showNavTop: true }
+    },
   ],
 })
 
