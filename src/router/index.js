@@ -1,22 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '../stores/auth';
-import DataIpView from '@/views/DataIpView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-<<<<<<< HEAD
-      component: DataIpView,
-      //component: HomeView,
-      meta: { showNavTop: true }
-      //meta: { showNavTop: true, requiresAuth: true }
-=======
+      // component: DataIpView,
       component: HomeView,
-      meta: { showNavTop: true}
->>>>>>> origin/Kim
+      // meta: { showNavTop: true }
+      meta: { showNavTop: true, requiresAuth: true }
     },
     {
       path: '/about',
@@ -46,6 +40,14 @@ const router = createRouter({
       path: '/services/ipp',
       name: 'Table Research',
       component: () => import('../views/TableResearch.vue'),
+      meta: { showNavTop: true }
+    },
+
+    
+    {
+      path: '/database',
+      name: 'Database IP MFU',
+      component: () => import('../views/DataIpView.vue'),
       meta: { showNavTop: true }
     }
 
