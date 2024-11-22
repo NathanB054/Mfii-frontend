@@ -2,9 +2,9 @@
     <v-app>
         <v-main>
             <v-container fluid v-if="research" class="font-noto-sans-thai">
-                <v-row class="mx-5">
+                <v-row class="mx-5 pt-6">
                     <v-col cols="12" md="7" lg="7">
-                        <v-card class="rounded-xl max-h-fit bg-gray-100 pa-3 overflow-auto" height="500">
+                        <v-card class="rounded-xl max-h-fit !bg-gray-100 pa-3 overflow-auto" height="500">
 
                             <div class="contents">
                                 <ul class="py-3 font-bold text-xl">
@@ -52,7 +52,7 @@
                         </v-container>
                     </v-col>
                 </v-row>
-                <v-container fluid class="text-white mt-5" style="background-color: #D02630;">
+                <v-container fluid class="text-white mt-5" style="background-color: #380075;">
                     <p>
                         สนใจเทคโนโลยี โปรดติดต่อ <br />
                         ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง <br />
