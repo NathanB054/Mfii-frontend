@@ -76,7 +76,7 @@ export default {
         await authStore.login(form.value.email, form.value.password);
         window.location.href = "/"; // Redirect after login
       } catch (error) {
-        console.error("Login failed:", error);
+        
       }
     };
 
