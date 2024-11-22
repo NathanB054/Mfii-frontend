@@ -7,8 +7,10 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      // component: DataIpView,
       component: HomeView,
-      meta: { showNavTop: true}
+      // meta: { showNavTop: true }
+      meta: { showNavTop: true, requiresAuth: true }
     },
     {
       path: '/about',
@@ -51,6 +53,13 @@ const router = createRouter({
     component: () => import('../views/NotFound.vue'),
     meta: { showNavTop: true }
   },
+    
+    {
+      path: '/database',
+      name: 'Database IP MFU',
+      component: () => import('../views/DataIpView.vue'),
+      meta: { showNavTop: true }
+    }
 
   ],
 })

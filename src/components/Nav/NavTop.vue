@@ -28,8 +28,18 @@ const mobileSections = [
         isActive: (route) => route.path.startsWith('/info')
     },
     {
+        name: 'ฐานข้อมูล IP มฟล',
+        to: '/database',
+        isActive: (route) => route.path === '/database'
+    },
+    {
+        name: 'ระเบียบทรัพย์สินทางปัญญา',
+        to: '/regulation',
+        isActive: (route) => route.path === '/regulation'
+    },
+    {
         name: 'เกี่ยวกับเรา',
-        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true  } ,{ label: 'ติดต่อเรา', to: '/about-us/contact', external: false  }],
+        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true }, { label: 'ติดต่อเรา', to: '/about-us/contact', external: false }],
         isActive: (route) => route.path.startsWith('/about')
     }
 ];
@@ -132,7 +142,7 @@ onMounted(async () => {
         <nav class="max-w-screen-xl mx-auto shadow-md md:px-6">
             <!-- Desktop Menu -->
             <div class="hidden md:flex justify-center h-16 items-center">
-                <ul class="flex items-center w-full max-w-2xl justify-between max-w-screen-xl">
+                <ul class="flex items-center w-full justify-between max-w-screen-xl">
                     <!-- Home -->
                     <div class="hover:bg-gray-400 rounded-md transition-colors duration-300"
                         :class="{ 'bg-gray-400': route.path === '/' }">
@@ -149,18 +159,30 @@ onMounted(async () => {
 
                     <!-- Desktop Dropdown Menus -->
                     <template v-for="(section, index) in mobileSections" :key="index">
+                        <!-- Check if section has a single link -->
                         <div v-if="section.to" class="hover:bg-gray-400 rounded-md transition-colors duration-300"
                             :class="{ 'bg-gray-400': section.isActive(route) }">
                             <button
                                 class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center"
                                 :class="{ 'text-gray-900': section.isActive(route) }">
                                 <li>
-                                    <RouterLink :to="section.to" class="px-3 py-2 text-sm font-medium">
-                                        {{ section.name }}
-                                    </RouterLink>
+                                    <!-- For external link -->
+                                    <template v-if="section.external">
+                                        <a :href="section.to" target="_blank" class="px-3 py-2 text-sm font-medium">
+                                            {{ section.name }}
+                                        </a>
+                                    </template>
+                                    <!-- For internal link -->
+                                    <template v-else>
+                                        <RouterLink :to="section.to" class="px-3 py-2 text-sm font-medium">
+                                            {{ section.name }}
+                                        </RouterLink>
+                                    </template>
                                 </li>
                             </button>
                         </div>
+
+                        <!-- Check if section has multiple items (dropdown) -->
                         <div v-else class="relative hover:bg-gray-400 rounded-md transition-colors duration-300"
                             :class="{ 'bg-gray-400': section.isActive(route) }">
                             <li>
@@ -175,6 +197,7 @@ onMounted(async () => {
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
+
                                 <Transition enter-active-class="transition ease-out duration-200"
                                     enter-from-class="opacity-0 transform -translate-y-2"
                                     enter-to-class="opacity-100 transform translate-y-0"
@@ -183,14 +206,27 @@ onMounted(async () => {
                                     leave-to-class="opacity-0 transform -translate-y-2">
                                     <div v-if="activeDropdown === section.name"
                                         class="desktop-dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                                        <RouterLink v-for="(item, itemIndex) in section.items" :key="itemIndex"
-                                            :to="item.to" class="block px-4 py-2 text-sm transition-colors duration-200"
-                                            :class="{
-                                                'text-blue-500 bg-gray-100': route.path === item.to,
-                                                'text-gray-700 hover:bg-gray-100': route.path !== item.to
-                                            }">
-                                            {{ item.label }}
-                                        </RouterLink>
+                                        <!-- Loop over each item in the dropdown -->
+                                        <template v-for="(item, itemIndex) in section.items" :key="itemIndex">
+                                            <!-- For external links in dropdown -->
+                                            <template v-if="item.external">
+                                                <a :href="item.to" target="_blank"
+                                                    class="block px-4 py-2 text-sm transition-colors duration-200">
+                                                    {{ item.label }}
+                                                </a>
+                                            </template>
+                                            <!-- For internal links in dropdown -->
+                                            <template v-else>
+                                                <RouterLink :to="item.to"
+                                                    class="block px-4 py-2 text-sm transition-colors duration-200"
+                                                    :class="{
+                                                        'text-blue-500 bg-gray-100': route.path === item.to,
+                                                        'text-gray-700 hover:bg-gray-100': route.path !== item.to
+                                                    }">
+                                                    {{ item.label }}
+                                                </RouterLink>
+                                            </template>
+                                        </template>
                                     </div>
                                 </Transition>
                             </li>
@@ -234,13 +270,24 @@ onMounted(async () => {
                         <!-- Mobile Menu Items -->
                         <template v-for="section in mobileSections" :key="section.name">
                             <!-- Direct link -->
-                            <RouterLink v-if="section.to" :to="section.to"
-                                class="block px-3 py-2 text-base font-medium transition-colors duration-200" :class="{
-                                    'text-blue-500 bg-gray-100': section.isActive(route),
-                                    'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
-                                }">
-                                {{ section.name }}
-                            </RouterLink>
+                            <template v-if="section.to">
+                                <!-- External link -->
+                                <a v-if="section.external" :href="section.to" target="_blank" rel="noopener noreferrer"
+                                    class="block px-3 py-2 text-base font-medium transition-colors duration-200" :class="{
+                                        'text-blue-500 bg-gray-100': section.isActive(route),
+                                        'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
+                                    }">
+                                    {{ section.name }}
+                                </a>
+                                <!-- Internal link -->
+                                <RouterLink v-else :to="section.to"
+                                    class="block px-3 py-2 text-base font-medium transition-colors duration-200" :class="{
+                                        'text-blue-500 bg-gray-100': section.isActive(route),
+                                        'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
+                                    }">
+                                    {{ section.name }}
+                                </RouterLink>
+                            </template>
 
                             <!-- Dropdown section -->
                             <div v-else class="mobile-menu-section">
@@ -263,14 +310,26 @@ onMounted(async () => {
                                     leave-active-class="transition-all duration-200 ease-in"
                                     leave-from-class="opacity-100 max-h-[200px]" leave-to-class="opacity-0 max-h-0">
                                     <div v-show="mobileActiveDropdown === section.name" class="pl-4 overflow-hidden">
-                                        <RouterLink v-for="(item, itemIndex) in section.items" :key="itemIndex"
-                                            :to="item.to"
-                                            class="block px-3 py-2 text-base transition-colors duration-200" :class="{
-                                                'text-blue-500 bg-gray-100': route.path === item.to,
-                                                'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
-                                            }">
-                                            {{ item.label }}
-                                        </RouterLink>
+                                        <!-- Loop through dropdown items -->
+                                        <template v-for="(item, itemIndex) in section.items" :key="itemIndex">
+                                            <!-- External link -->
+                                            <a v-if="item.external" :href="item.to" target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="block px-3 py-2 text-base transition-colors duration-200" :class="{
+                                                    'text-blue-500 bg-gray-100': route.path === item.to,
+                                                    'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
+                                                }">
+                                                {{ item.label }}
+                                            </a>
+                                            <!-- Internal link -->
+                                            <RouterLink v-else :to="item.to"
+                                                class="block px-3 py-2 text-base transition-colors duration-200" :class="{
+                                                    'text-blue-500 bg-gray-100': route.path === item.to,
+                                                    'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
+                                                }">
+                                                {{ item.label }}
+                                            </RouterLink>
+                                        </template>
                                     </div>
                                 </Transition>
                             </div>
