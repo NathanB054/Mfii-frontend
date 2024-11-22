@@ -39,7 +39,7 @@ const mobileSections = [
     },
     {
         name: 'เกี่ยวกับเรา',
-        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true }, { label: 'ติดต่อเรา', to: '/about-us/contact', external: false }],
+        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true }, { label: 'ติดต่อเรา', to: '/contact', external: false }],
         isActive: (route) => route.path.startsWith('/about')
     }
 ];
