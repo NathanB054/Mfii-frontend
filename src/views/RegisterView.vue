@@ -17,6 +17,7 @@
               v-model="form.businessType" required>
               <v-radio label="บุคคลธรรมดา" value="บุคคลธรรมดา"></v-radio>
               <v-radio label="นิติบุคคล" value="นิติบุคคล"></v-radio>
+              <v-radio label="บุคลากร มฟล" value="บุคลากร มฟล"></v-radio>
             </v-radio-group>
           </div>
 
