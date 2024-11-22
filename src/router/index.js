@@ -1,14 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '../stores/auth';
+import DataIpView from '@/views/DataIpView.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
+<<<<<<< HEAD
+      component: DataIpView,
+      //component: HomeView,
+      meta: { showNavTop: true }
+      //meta: { showNavTop: true, requiresAuth: true }
+=======
       component: HomeView,
       meta: { showNavTop: true}
+>>>>>>> origin/Kim
     },
     {
       path: '/about',
