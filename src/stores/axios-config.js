@@ -4,7 +4,7 @@ import { useErrorStore } from "@/stores/errorStore";
 
 // Create an axios instance (recommended approach)
 const api = axios.create({
-  baseURL: "http://localhost:7770",
+  baseURL: "http://localhost:7770/api",
   timeout: 10000, // Optional: add timeout
   headers: {
     'Content-Type': 'application/json'

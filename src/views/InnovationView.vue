@@ -202,7 +202,7 @@ export default {
       this.currentPage = 1;
       api
         .get(
-          `api/getsResearch/${indust}/${prop}/${tech}/${descript}`
+          `/getsResearch/${indust}/${prop}/${tech}/${descript}`
         )
         .then((response) => {
           if (response.status == 200) {
@@ -267,7 +267,7 @@ export default {
     async getviewCount() {
       try {
         // Make a single API call to fetch all product counts
-        const response = await api.get("api/getStatProduct");
+        const response = await api.get("/getStatProduct");
         const productCounts = response.data.result;
 
         // Store product counts in the component's data
@@ -285,7 +285,7 @@ export default {
     this.getviewCount();
     try {
       const api1Response = await Promise.all([
-        api.get("api/getsResearch/all/all/all/all"),
+        api.get("/getsResearch/all/all/all/all"),
       ]);
 
       if (api1Response.status == 200) {

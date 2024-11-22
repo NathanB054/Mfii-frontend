@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from '@/stores/axios-config';
 const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
     name: "innovation-page",
@@ -104,7 +104,7 @@ export default {
     methods: {
         async fetchData() {
             try {
-                const response = await axios.get(`/getResearch?researchId=${this.id}`); // Replace with your API endpoint
+                const response = await api.get(`/getResearch?researchId=${this.id}`); // Replace with your API endpoint
                 this.research = response.data.result;
             } catch (error) {
                 let errorMessage = "An unexpected error occurred";
