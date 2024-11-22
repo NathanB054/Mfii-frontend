@@ -6,8 +6,10 @@ export default {
       colors: {
         customPurple: '#380075',
       },
+      fontFamily: {
+        sans: ['"Noto Sans Thai"', 'sans-serif'],
+      },
     },
   },
   plugins: [],
-}
-
+};
