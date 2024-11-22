@@ -1,38 +1,47 @@
 <template>
-    <main>
+    <main class="px-16 sm:px-6 lg:px-8">
         <div>
-            <h1 class="piechart-title">
+            <h1 class="text-start text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sans text-gray-800 mt-12 mb-8">
                 ประเภทของ IP
             </h1>
         </div>
-        <div class="piechart-container">
-            <div class="pie-charts">
-                <div class="pie-chart-wrapper">
-                    <PieChart chart-type="patent"/>
-                    <div class="chart-label">สิทธิบัตรการประดิษฐ์</div>
-                </div>
-                <div class="pie-chart-wrapper">
-                    <PieChart chart-type="pettyPatent"/>
-                    <div class="chart-label">อนุสิทธิบัตร</div>
-                </div>
-                <div class="pie-chart-wrapper">
-                    <PieChart chart-type="designPatent"/>
-                    <div class="chart-label">สิทธิบัตรการออกแบบผลิตภัณฑ์</div>
-                </div>
-                <div class="pie-chart-wrapper">
-                    <PieChart chart-type="copyright"/>
-                    <div class="chart-label">ลิขสิทธิ์</div>
-                </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
+            <!-- Chart 1 -->
+            <div class="w-full max-w-xs mx-auto p-4">
+                <PieChart chart-type="patent" />
+                <div class="text-center mt-2 text-sm text-gray-700">สิทธิบัตรการประดิษฐ์</div>
+            </div>
+
+            <!-- Chart 2 -->
+            <div class="w-full max-w-xs mx-auto p-4">
+                <PieChart chart-type="pettyPatent" />
+                <div class="text-center mt-2 text-sm text-gray-700">อนุสิทธิบัตร</div>
+            </div>
+
+            <!-- Chart 3 -->
+            <div class="w-full max-w-xs mx-auto p-4">
+                <PieChart chart-type="designPatent" />
+                <div class="text-center mt-2 text-sm text-gray-700">สิทธิบัตรการออกแบบผลิตภัณฑ์</div>
+            </div>
+
+            <!-- Chart 4 -->
+            <div class="w-full max-w-xs mx-auto p-4">
+                <PieChart chart-type="copyright" />
+                <div class="text-center mt-2 text-sm text-gray-700">ลิขสิทธิ์</div>
             </div>
         </div>
 
+        <!-- Protection Status Section -->
         <div>
-            <h1 class="stackedbar-title">
+            <h1 class="text-start text-xl sm:text-2xl md:text-3xl lg:text-4xl font-sans text-gray-800 mt-24">
                 สถานะการขอรับความคุ้มครอง
             </h1>
         </div>
-        <div class="stackedbar-container">
-            <div class="stacked-bar-chart">
+
+        <div class="flex justify-center mt-8">
+            <div class="w-full max-w-4xl">
                 <StackedBarChart />
             </div>
         </div>
@@ -54,64 +63,7 @@ export default {
     setup() {
         const authStore = useAuthStore();
         const user = computed(() => authStore.user); // Access the user data
-        // Return variables to make them accessible in the template
         return { user };
     },
 };
 </script>
-
-<style scoped>
-.piechart-container, .stackedbar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.piechart-title {
-    text-align: start;
-    font-size: 24px;
-    color: #333;
-    margin-top: 50px;
-    margin-bottom: 30px;
-    padding-left: 80px;
-}
-
-.stackedbar-title {
-    text-align: start;
-    font-size: 24px;
-    color: #333;
-    margin-top: 300px;
-    padding-left: 80px;
-}
-
-.pie-charts {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    width: 90%;
-    justify-items: center;
-}
-
-.pie-chart-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 150px;
-    /* Adjust the width as needed */
-    height: 100px;
-    /* Adjust the height as needed */
-}
-
-.chart-label {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 14px;
-    color: #333;
-}
-
-.stacked-bar-chart {
-    margin-top: 30px;
-    /* Increase the margin-top to avoid overlapping */
-    width: 50%;
-}
-</style>
