@@ -122,8 +122,45 @@ onMounted(async () => {
             </div>
             <div v-if="authStore.user" class="flex items-center justify-center mt-4">
                 <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
-                <button class="bg-customPurple text-white px-4 py-2 rounded-md ml-4"
-                    @click="authStore.logout">Logout</button>
+                <div>
+                    <v-menu transition="slide-x-transition">
+                        <template v-slot:activator="{ props }">
+                            <v-btn v-bind="props" icon size="48px" class="hover:bg-gray-200">
+                                <v-avatar size="48px">
+                                    <v-icon v-if="!authStore.user.img" icon="mdi-account-circle" size="58px"></v-icon>
+                                    <v-img v-else alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg" cover></v-img>
+                                </v-avatar>
+                            </v-btn>
+                        </template>
+                        <v-list class="font-noto-sans-thai">
+                            <router-link v-if="authStore.user.role === 'admin'" to="/admin">
+                                <v-list-item>
+                                    <v-list-item-title>Admin Page</v-list-item-title>
+                                </v-list-item>
+                            </router-link>
+                            <router-link v-if="authStore.user.role === 'staff' || authStore.user.role === 'admin'"
+                                to="/staff">
+                                <v-list-item>
+                                    <v-list-item-title>Staff Page</v-list-item-title>
+                                </v-list-item>
+                            </router-link>
+                            <router-link v-if="authStore.user.role === 'user'" to="/user/profile">
+                                <v-list-item>
+                                    <v-list-item-title>แก้ไขข้อมูลส่วนตัว</v-list-item-title>
+                                </v-list-item>
+                            </router-link>
+
+                            <router-link v-if="authStore.user.role === 'user'" to="/message">
+                                <v-list-item>
+                                    <v-list-item-title>ข้อความ</v-list-item-title>
+                                </v-list-item>
+                            </router-link>
+                            <v-list-item @click="authStore.logout()">
+                                <v-list-item-title>ออกระบบ</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+                </div>
             </div>
             <div v-else class="flex items-center justify-center mt-4">
                 <v-btn class="reg bg-black text-white rounded-xl border w-32 h-14 btn-nav mr-1"

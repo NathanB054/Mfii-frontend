@@ -10,8 +10,8 @@ const router = createRouter({
       name: 'Home',
       // component: DataIpView,
       component: HomeView,
-      // meta: { showNavTop: true }
-      meta: { showNavTop: true, requiresAuth: true }
+      // meta: { showNavTop: true, requiresAuth: true }
+      meta: { showNavTop: true }
     },
     {
       path: '/about',
@@ -62,11 +62,14 @@ const router = createRouter({
       props: true,
       meta: { showNavTop: true }
     },
+    {
+      path: '/user/profile',
+      name: 'Profile',
+      component: () => import('../views/UserView/ProfileView.vue'),
+      meta: { showNavTop: true, requiresAuth: true }
+    },
 
-
-
-
-    // catch all 404
+   // catch all 404
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
