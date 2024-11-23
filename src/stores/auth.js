@@ -75,7 +75,7 @@ export const useAuthStore = defineStore("auth", {
       // Clear localStorage and axios headers
       localStorage.removeItem("token");
       delete axios.defaults.headers.common["Authorization"];
-      
+      window.location.reload();
     },
 
     checkAuth() {

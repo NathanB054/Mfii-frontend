@@ -30,6 +30,12 @@ export const useErrorStore = defineStore("errorStore", {
 
       if (error.response) {
         if (error.response.data.description) {
+          if (error.response.data.description.code === 40102) {
+            setTimeout(function () {
+              window.location.reload();
+            }, 3000);
+          }
+
           errorMessage =
             error.response.data.description.description +
             " Code: " +

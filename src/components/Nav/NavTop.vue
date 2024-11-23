@@ -156,7 +156,7 @@ onMounted(async () => {
                                 </v-list-item>
                             </router-link>
                             <v-list-item @click="authStore.logout()">
-                                <v-list-item-title>ออกระบบ</v-list-item-title>
+                                <v-list-item-title>ออกจากระบบ</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>

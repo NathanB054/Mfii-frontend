@@ -16,7 +16,7 @@ import GlobalErrorSnackbar from './components/GlobalErrorSnackbar.vue';
       <NavTop v-if="$route.meta.showNavTop" />
 
       <RouterView />
-      <cookie-consent />
+      <!-- <cookie-consent /> -->
 
       <!-- Footer -->
       <NavFooter v-if="$route.meta.showNavFooter"/>
