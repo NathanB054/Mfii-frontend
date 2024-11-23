@@ -8,14 +8,9 @@
     <div>
       <quickmenu />
     </div>
-    <div>
-      <div v-if="user">
-        <p>Welcome back, {{ user.firstName }} {{ user.lastName }}</p>
-      </div>
-      <div v-else>
-        <p>User data is not available.</p>
-      </div>
-    </div>
+
+
+    
   </main>
 </template>
 
@@ -31,12 +26,7 @@ export default {
     quickmenu,
   },
 
-  setup() {
-    const authStore = useAuthStore();
-    const user = computed(() => authStore.user); // Access the user data
-    // Return variables to make them accessible in the template
-    return { user };
-  },
+
 };
 </script>
 

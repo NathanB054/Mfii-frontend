@@ -106,6 +106,7 @@ import api from '@/stores/axios-config';
 import { useAuthStore } from "@/stores/auth";
 import { computed } from "vue";
 import { useErrorStore } from "@/stores/errorStore";
+const errorStore = useErrorStore();
 
 export default {
     name: "staff-MessageReply-page",
@@ -150,6 +151,8 @@ export default {
             const formatter = new Intl.DateTimeFormat('en-GB', options);
             return formatter.format(date);
         },
+
+
         async openReplyDialog(id) {
             try {
                 const response = await api.get('/mesDetail/' + id, {
@@ -161,14 +164,14 @@ export default {
                 this.replyText = '';
                 this.isDialogOpen = true;
             } catch (error) {
-                this.handleError(error);
+                throw error;
             }
         },
         sendReply() {
             if (this.replyText.trim()) {
                 this.replyMessage(this.replyText, this.selectedMessage[0]._id);
             } else {
-                console.warn("Cannot send an empty message");
+                errorStore.showErrorMessage('กรุณากรอกข้อความให้ครบ');
             }
         },
         async replyMessage(message, id) {
@@ -176,10 +179,6 @@ export default {
                 await api.patch('/mesReplyUpdate/' + id, {
                     messages: message,
                     user: this.user._id
-                }, {
-                    headers: {
-                        Authorization: localStorage.getItem("token"),
-                    },
                 });
                 this.selectedMessage[0].messageReply.push({
                     messages: message,
@@ -189,19 +188,15 @@ export default {
                 });
                 this.replyText = '';
             } catch (error) {
-                this.handleError(error);
+                throw error;
             }
         },
         async fetchMessages() {
             try {
-                const response = await api.get('/mesGetData', {
-                    headers: {
-                        Authorization: localStorage.getItem("token"),
-                    },
-                });
+                const response = await api.get('/mesGetData');
                 this.messages = response.data.result;
             } catch (error) {
-                this.handleError(error);
+                throw error;
             }
         },
         closeReplyDialog() {
@@ -219,11 +214,7 @@ export default {
             const errorStore = useErrorStore();
             if (this.messageToDelete) {
                 try {
-                    await api.delete('/mesDelete/' + this.messageToDelete, {
-                        headers: {
-                            Authorization: localStorage.getItem("token"),
-                        },
-                    });
+                    await api.delete('/mesDelete/' + this.messageToDelete);
                     errorStore.show("ลบข้อความสำเร็จ!", {
                         color: 'success',
                         icon: 'mdi-check-circle',
@@ -231,34 +222,12 @@ export default {
                     });
                     this.fetchMessages();
                 } catch (error) {
-                    this.handleError(error);
+                    throw error;
                 }
                 this.messageToDelete = null;
             }
         },
-        handleError(error) {
-            let errorMessage = "An unexpected error occurred";
-            let errorCode = "Unknown";
-            if (error.response) {
-                const errorDesc = error.response.data.description;
-                if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                    errorMessage = errorDesc.description;
-                    errorCode = errorDesc.code;
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                    errorCode = error.response.status;
-                }
-            } else if (error.request) {
-                errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-            } else if (error.code === 'ERR_NETWORK') {
-                errorMessage = "Network Error";
-                errorCode = error.code;
-            } else {
-                errorMessage = error.message;
-            }
-            console.error(`Error: ${error.name}: ${error.message}`, error);
-        }
+       
     },
     computed: {
         filteredMessages() {
@@ -268,4 +237,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@import '../../styles/messageReply.css';
+</style>
