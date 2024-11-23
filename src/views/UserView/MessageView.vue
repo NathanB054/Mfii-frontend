@@ -10,12 +10,16 @@
                             <v-container v-if="reversedMessages.length <= 0">
                                 <h1>ไม่มีข้อความในขณะนี้...</h1>
                             </v-container>
-                            <v-list-item v-else v-for="message in reversedMessages" :key="message.id" class="list-item-border my-2">
-                                    <v-list-item-title>เทคโนโลยีที่คุณสนใจ: {{ message.interestTech }}</v-list-item-title>
-                                    <v-list-item-subtitle>ชื่อกิจการของคุณ: {{ message.businessName }}</v-list-item-subtitle>
-                                    <v-list-item-subtitle>ขอบเขตการใช้งานของคุณ: {{ message.usesScope }}</v-list-item-subtitle>
+                            <v-list-item v-else v-for="message in reversedMessages" :key="message.id"
+                                class="list-item-border my-2">
+                                <v-list-item-title>เทคโนโลยีที่คุณสนใจ: {{ message.interestTech }}</v-list-item-title>
+                                <v-list-item-subtitle>ชื่อกิจการของคุณ: {{ message.businessName
+                                    }}</v-list-item-subtitle>
+                                <v-list-item-subtitle>ขอบเขตการใช้งานของคุณ: {{ message.usesScope
+                                    }}</v-list-item-subtitle>
                                 <v-list-item-action class="my-2">
-                                    <v-btn @click="openReplyDialog(message._id)" class="!bg-slate-800 text-white mr-2">ตอบกลับ</v-btn>
+                                    <v-btn @click="openReplyDialog(message._id)"
+                                        class="!bg-slate-800 text-white mr-2">ตอบกลับ</v-btn>
                                     <v-btn @click="deleteMessage(message._id)" color="error">ลบ</v-btn>
                                 </v-list-item-action>
                             </v-list-item>
@@ -25,7 +29,8 @@
 
                 <!-- Message Reply -->
                 <v-dialog v-model="isDialogOpen" max-width="1000px" class="font-noto-sans-thai">
-                    <v-card v-for="selected in selectedMessage" :key="selected._id" class="rounded-xl d-flex flex-column">
+                    <v-card v-for="selected in selectedMessage" :key="selected._id"
+                        class="rounded-xl d-flex flex-column">
                         <v-card-title class="headline text-2xl font-semibold" style="white-space: pre-line;">
                             เทคโนโลยีที่สนใจ: <span class="text-xl">{{ selected.interestTech }}</span>
                         </v-card-title>
@@ -34,35 +39,43 @@
                         <v-card-subtitle>ขอบเขตการใช้งาน : {{ selected.usesScope }}</v-card-subtitle>
                         <v-card-subtitle>ผู้ส่ง : {{ selected.firstName }} {{ selected.lastName }}</v-card-subtitle>
                         <v-card-subtitle>อีเมล: {{ selected.email }}</v-card-subtitle>
-                        <v-card-text class="flex-grow-1 d-flex flex-column" style="max-height: 550px; overflow: hidden;">
+                        <v-card-text class="flex-grow-1 d-flex flex-column"
+                            style="max-height: 550px; overflow: hidden;">
                             <!-- Chat box -->
                             <div class="chatbox flex-grow-1" style="overflow-y: auto;" ref="chatbox">
                                 <v-list>
                                     <v-list-item v-for="reply in sortMessages(selected.messageReply)" :key="reply.id">
                                         <!-- User name displayed outside the message bubble -->
-                                        <div :class="['message-username', reply.user.role === 'user' ? 'text-right' : 'text-left']">
-                                            <p :class="[reply.user.role === 'user' ? 'text-gray text-xs' : 'text-gray text-xs']">
+                                        <div
+                                            :class="['message-username', reply.user.role === 'user' ? 'text-right' : 'text-left']">
+                                            <p
+                                                :class="[reply.user.role === 'user' ? 'text-gray text-xs' : 'text-gray text-xs']">
                                                 {{ reply.user.role }}: {{ reply.user.firstName }}
                                             </p>
-                                            <p :class="[reply.user.role === 'user' ? 'text-gray-600 text-xs mt-1' : 'text-gray-600 text-xs mt-1']">
+                                            <p
+                                                :class="[reply.user.role === 'user' ? 'text-gray-600 text-xs mt-1' : 'text-gray-600 text-xs mt-1']">
                                                 ส่งเมื่อ {{ formatDateTime(reply.date) }}
                                             </p>
                                         </div>
                                         <!-- Message bubble -->
-                                        <div :class="['message-bubble', reply.user.role === 'user' ? 'current-user' : 'other-user', 'rounded-lg mt-1']">
-                                            <div :class="['message-content', reply.user.role === 'user' ? 'text-right' : 'text-left']">
+                                        <div
+                                            :class="['message-bubble', reply.user.role === 'user' ? 'current-user' : 'other-user', 'rounded-lg mt-1']">
+                                            <div
+                                                :class="['message-content', reply.user.role === 'user' ? 'text-right' : 'text-left']">
                                                 {{ reply.messages }}
                                             </div>
                                         </div>
                                     </v-list-item>
                                 </v-list>
                             </div>
-                            <v-text-field label="Your Reply" variant="solo-filled" v-model="replyText" @keyup.enter="sendReply" outlined rounded dense></v-text-field>
+                            <v-text-field label="Your Reply" variant="solo-filled" v-model="replyText"
+                                @keyup.enter="sendReply" outlined rounded dense></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="red darken-1" text @click="closeReplyDialog">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text :disabled="!replyText.trim()" @click="replyMessage(replyText, selected._id)">Send</v-btn>
+                            <v-btn color="blue darken-1" text :disabled="!replyText.trim()"
+                                @click="replyMessage(replyText, selected._id)">Send</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -71,11 +84,14 @@
             <!-- confirm delete -->
             <v-dialog v-model="confirmDialog" max-width="600px">
                 <v-card class="rounded-xl pa-4">
-                    <v-card-title class="text-h5 text-center text-red-500">คุณแน่ใจว่าต้องการลบข้อความนี้หรือไม่?</v-card-title>
+                    <v-card-title
+                        class="text-h5 text-center text-red-500">คุณแน่ใจว่าต้องการลบข้อความนี้หรือไม่?</v-card-title>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="'blue-grey-darken-1" variant="outlined" class="hover:bg-gray-500" @click="closeDelete">ยกเลิก</v-btn>
-                        <v-btn color="red-darken-1" variant="outlined" class="hover:bg-red-300" @click="confirmDelete">ตกลง</v-btn>
+                        <v-btn color="'blue-grey-darken-1" variant="outlined" class="hover:bg-gray-500"
+                            @click="closeDelete">ยกเลิก</v-btn>
+                        <v-btn color="red-darken-1" variant="outlined" class="hover:bg-red-300"
+                            @click="confirmDelete">ตกลง</v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>
                 </v-card>
@@ -109,6 +125,9 @@ export default {
         const authStore = useAuthStore();
         const user = computed(() => authStore.user);
         return { user };
+    },
+    mounted() {
+        this.fetchMessages();
     },
     methods: {
         sortMessages(messages) {
@@ -207,9 +226,6 @@ export default {
                             Authorization: localStorage.getItem("token"),
                         },
                     });
-                    this.snackbar.message = "Deleted Successfully";
-                    this.snackbar.color = "success";
-                    this.snackbar.show = true;
                     this.fetchMessages();
                 } catch (error) {
                     this.handleError(error);
@@ -239,11 +255,6 @@ export default {
             } else {
                 errorMessage = error.message;
             }
-            this.snackbar = {
-                message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-                color: "error",
-                show: true
-            };
             console.error(`Error: ${error.name}: ${error.message}`, error);
         }
     },
@@ -255,5 +266,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
