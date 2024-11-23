@@ -105,6 +105,7 @@ import StaffLayout from "@/layouts/staff.vue";
 import api from '@/stores/axios-config';
 import { useAuthStore } from "@/stores/auth";
 import { computed } from "vue";
+import { useErrorStore } from "@/stores/errorStore";
 
 export default {
     name: "staff-MessageReply-page",
@@ -215,12 +216,18 @@ export default {
         },
         async confirmDelete() {
             this.confirmDialog = false;
+            const errorStore = useErrorStore();
             if (this.messageToDelete) {
                 try {
                     await api.delete('/mesDelete/' + this.messageToDelete, {
                         headers: {
                             Authorization: localStorage.getItem("token"),
                         },
+                    });
+                    errorStore.show("ลบข้อความสำเร็จ!", {
+                        color: 'success',
+                        icon: 'mdi-check-circle',
+                        timeout: 5000
                     });
                     this.fetchMessages();
                 } catch (error) {
