@@ -1,0 +1,362 @@
+<template>
+    <v-app>
+        <v-main>
+            <staff-layout>
+                <v-container>
+                    <v-card class="rounded-xl pa-4">
+                        <v-container class="flex justify-center">
+                            <v-card-title class="text-h4">สร้างโพสข่าวสาร</v-card-title>
+                        </v-container>
+                        <v-container class="containerPost d-flex justify-space-between">
+                            <!-- news images -->
+                            <v-container class="imageUpload">
+                                <div>
+                                    <div class="titleNews flex justify-center">
+                                        <v-chip class="ma-2 pa-5 text-10" elevation="2" style="border-radius: 50px; font-size: 1.2rem;">
+                                            อัพโหลดรูปภาพข่าวสาร
+                                        </v-chip>
+                                    </div>
+                                    <v-container class="imageUpload flex justify-center">
+                                        <v-btn color="blue" @click="openDialog('images')" prepend-icon="mdi-file-image">อัพโหลดไฟล์รูปภาพ</v-btn>
+                                        <div class="mx-4 flex align-center">
+                                            <h1>หรือ</h1>
+                                        </div>
+                                        <v-btn color="light-blue lighten-5" class="black--text" @click="openDialog('linkImage')" prepend-icon="mdi-web">
+                                            อัพโหลดลิงค์รูปภาพ
+                                        </v-btn>
+                                    </v-container>
+                                </div>
+                            </v-container>
+
+                            <!-- Spacer -->
+                            <v-spacer></v-spacer>
+
+                            <!-- youtube -->
+                            <v-container class="youtubeContainer flex align-center">
+                                <div>
+                                    <div>
+                                        <v-chip class="ma-2 pa-5 text-h10" elevation="2" style="border-radius: 50px;font-size: 1.2rem;">
+                                            อัพโหลดลิงค์(Youtube) Success case
+                                        </v-chip>
+                                    </div>
+                                    <v-container class="youtubeBtn d-flex justify-center">
+                                        <v-btn color="red" class="white--text" @click="openDialog('linkVideo')" prepend-icon="mdi-youtube">
+                                            อัพโหลดลิงค์ youtube
+                                        </v-btn>
+                                    </v-container>
+                                </div>
+                            </v-container>
+                        </v-container>
+
+                        <v-dialog v-model="dialogNewpost" max-width="500px">
+                            <v-card class="rounded-xl py-2 px-2">
+                                <v-card-text>
+                                    <v-form @submit.prevent="addNews">
+                                        <p class="ml-10 text-red-500 mb-2" v-if="activeField === 'linkImage' || activeField === 'images'">
+                                            อัพโหลดรูปภาพขนาดไม่เกิน 2048 X 800
+                                        </p>
+                                        <div v-if="activeField === 'images'">
+                                            <p class="text-warning text-sm font-italic ml-10">
+                                                <v-icon color="warning">mdi-alert-circle-outline</v-icon>
+                                                อัพโหลดไฟล์รูปภาพไม่เกิน 2 MB
+                                            </p>
+                                        </div>
+                                        <v-text-field v-if="activeField === 'linkVideo'" v-model="news.linkVideo" label="URL video" clearable prepend-icon="mdi-youtube" variant="solo-filled"></v-text-field>
+                                        <v-text-field v-if="activeField === 'linkImage'" v-model="news.linkImage" label="URL Images" clearable prepend-icon="mdi-web" variant="solo-filled"></v-text-field>
+                                        <v-file-input v-if="activeField === 'images'" v-model="news.images" label="Upload Images" chips show-size variant="solo-filled" accept="image/*" :rules="[fileSizeRule]"></v-file-input>
+                                    </v-form>
+                                    <v-text-field v-if="activeField === 'images' || activeField === 'linkImage'" v-model="news.linkPage" label="URL PAGE" clearable prepend-icon="mdi-web" variant="solo-filled"></v-text-field>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="red darken-1" variant="tonal" @click="dialogNewpost = false">ยกเลิก</v-btn>
+                                    <v-btn color="green darken-1" variant="tonal" type="submit" @click="addNews">บันทึก</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-card>
+                </v-container>
+
+                <v-container>
+                    <v-window v-model="currentSlide" show-arrows="hover">
+                        <v-window-item>
+                            <v-row>
+                                <v-col v-for="(img, index) in imgs" :key="index" cols="12" md="4">
+                                    <v-card class="hover:shadow-lg transition-shadow rounded-lg my-1 mx-1" style="max-width: 400px">
+                                        <v-img v-if="img.filePath.length > 0" :src="`${baseUrl}/${img.filePath[0]}`" height="150px" cover />
+                                        <v-img v-else-if="img.linkImage.length > 0" :src="`${img.linkImage}`" height="150px" cover />
+                                        <iframe v-else-if="img.linkVideo.length > 0" :src="`${img.linkVideo}`" height="150px" class="w-full"></iframe>
+                                        <p v-else>No media available</p>
+                                        <v-container class="d-flex justify-center">
+                                            <v-btn @click="confirmDelete(img._id, index)" color="error" icon>
+                                                <v-icon>mdi-delete</v-icon>
+                                            </v-btn>
+                                        </v-container>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </v-window-item>
+                    </v-window>
+                </v-container>
+
+                <v-dialog v-model="dialog" max-width="400">
+                    <v-card class="rounded-xl py-2 px-2">
+                        <v-card-title class="headline text-red-800 text-2xl">ยืนยันการลบ</v-card-title>
+                        <v-card-text>
+                            คุณแน่ใจหรือไม่ว่าต้องการลบรูปภาพนี้?
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="red darken-1" variant="tonal" text @click="cancelDelete">ยกเลิก</v-btn>
+                            <v-btn color="green darken-1" variant="tonal" @click="deleteImage">ยืนยัน</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+            </staff-layout>
+        </v-main>
+
+        <div class="text-center">
+            <v-snackbar v-model="snackbar.show" :color="snackbar.color" vertical>
+                <div class="text-subtitle-1 pb-2"></div>
+                <p>{{ snackbar.message }}</p>
+                <template v-slot:actions>
+                    <v-btn color="white" variant="text" @click="snackbar.show = false">
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+        </div>
+    </v-app>
+</template>
+
+<script>
+import StaffLayout from "@/layouts/staff.vue";
+import api from '@/stores/axios-config';
+const baseURL = import.meta.env.VITE_BASE_URL;
+
+export default {
+    name: "staff-newPost-page",
+    components: {
+        StaffLayout,
+    },
+    data() {
+        return {
+            baseUrl: baseURL,
+            snackbar: {
+                show: false,
+                message: "",
+                color: "success",
+            },
+            news: {
+                images: [],
+                linkVideo: [],
+                linkImage: [],
+                linkPage: "",
+            },
+            imgs: [],
+            currentSlide: 0,
+            dialog: false,
+            dialogNewpost: false,
+            activeField: '',
+            deleteIndex: -1,
+            deleteImgId: ''
+        };
+    },
+    methods: {
+        openDialog(field) {
+            this.activeField = field;
+            this.dialogNewpost = true;
+        },
+        convertToEmbedUrl(url) {
+            const videoId = url.split('v=')[1];
+            const ampersandPosition = videoId.indexOf('&');
+            if (ampersandPosition !== -1) {
+                return `https://www.youtube.com/embed/${videoId.substring(0, ampersandPosition)}`;
+            }
+            return `https://www.youtube.com/embed/${videoId}`;
+        },
+        async addNews() {
+            try {
+                if (!this.checkFileSizes()) {
+                    return;
+                }
+
+                const formData = new FormData();
+                this.news.images.forEach((image, index) => {
+                    if (image.size > 0) {
+                        formData.append(`images[${index}]`, image);
+                    }
+                });
+
+                if (this.news.linkVideo.length > 0) {
+                    formData.append('linkVideo', this.convertToEmbedUrl(this.news.linkVideo));
+                }
+
+                if (this.news.linkImage.length > 0) {
+                    formData.append('linkImage', this.news.linkImage);
+                }
+
+                if (this.news.linkPage.length > 0) {
+                    formData.append('linkPage', this.news.linkPage);
+                }
+
+                if (formData.has('images[0]') || formData.has('linkVideo') || formData.has('linkImage') || formData.has('linkPage')) {
+                    await api.post('/staff/addNews', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: localStorage.getItem("token"),
+                        }
+                    });
+
+                    this.fetchImg();
+                    this.news.images = [];
+                    this.news.linkPage = '';
+                    this.news.linkVideo = '';
+                    this.news.linkImage = '';
+                    this.snackbar.message = "News and images uploaded successfully!";
+                    this.snackbar.color = "success";
+                    this.snackbar.show = true;
+                    this.dialogNewpost = false;
+                } else {
+                    alert('No images selected or all selected images are empty.');
+                }
+            } catch (error) {
+                this.handleError(error);
+            }
+        },
+        async fetchImg() {
+            try {
+                const res = await api.get('/getsNews');
+                this.imgs = res.data.result;
+            } catch (error) {
+                this.handleError(error);
+            }
+        },
+        confirmDelete(imgId, index) {
+            this.deleteIndex = index;
+            this.deleteImgId = imgId;
+            this.dialog = true;
+        },
+        cancelDelete() {
+            this.dialog = false;
+        },
+        async deleteImage() {
+            try {
+                await api.delete(`/staff/deleteNews/news/${this.deleteImgId}`, {
+                    headers: {
+                        Authorization: localStorage.getItem("token"),
+                    }
+                });
+                this.fetchImg();
+                this.dialog = false;
+                this.snackbar.message = "Delete successfully";
+                this.snackbar.color = "success";
+                this.snackbar.show = true;
+            } catch (error) {
+                this.handleError(error);
+            }
+        },
+        checkFileSizes() {
+            const maxSize = 2 * 1024 * 1024;
+            for (const file of this.news.images) {
+                if (file.size > maxSize) {
+                    this.snackbar.message = `File ${file.name} is too large. Max size is 2MB.`;
+                    this.snackbar.color = "error";
+                    this.snackbar.show = true;
+                    return false;
+                }
+            }
+            return true;
+        },
+        fileSizeRule(value) {
+            if (value && value.length) {
+                const maxSize = 2 * 1024 * 1024;
+                for (const file of value) {
+                    if (file.size > maxSize) {
+                        return `File ${file.name} is too large. Max size is 2MB.`;
+                    }
+                }
+            }
+            return true;
+        },
+        handleError(error) {
+            let errorMessage = "An unexpected error occurred";
+            let errorCode = "Unknown";
+            if (error.response) {
+                const errorDesc = error.response.data.description;
+                if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
+                    errorMessage = errorDesc.description;
+                    errorCode = errorDesc.code;
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    errorMessage = errorDesc?.description || error.response.data.message || "Server error";
+                    errorCode = error.response.status;
+                }
+            } else if (error.request) {
+                errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
+            } else if (error.code === 'ERR_NETWORK') {
+                errorMessage = "Network Error";
+                errorCode = error.code;
+            } else {
+                errorMessage = error.message;
+            }
+            console.error(`Error: ${error.name}: ${error.message}`, error);
+            this.snackbar = {
+                message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
+                color: "error",
+                show: true
+            };
+        }
+    },
+    mounted() {
+        this.fetchImg();
+    }
+};
+</script>
+
+<style scoped>
+.youtubeContainer {
+    justify-content: end;
+}
+
+@media (max-width: 1295px) {
+    .containerPost {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .imageUpload {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .youtubeContainer {
+        display: flex;
+        justify-content: center;
+    }
+
+    .titleNews {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .youtubeBtn {
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 465px) {
+    .containerPost .v-btn {
+        font-size: 10px;
+        padding: 4px 8px;
+        min-width: 50px;
+        height: 28px;
+    }
+}
+</style>
