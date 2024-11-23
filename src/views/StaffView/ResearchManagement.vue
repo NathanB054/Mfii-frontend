@@ -154,19 +154,6 @@
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-
-            <!-- Alert Snack bar -->
-            <div class="text-center">
-                <v-snackbar v-model="snackbar.show" :color="snackbar.color" vertical>
-                    <div class="text-subtitle-1 pb-2"></div>
-                    <p>{{ snackbar.message }}</p>
-                    <template v-slot:actions>
-                        <v-btn color="white" variant="text" @click="snackbar.show = false">
-                            Close
-                        </v-btn>
-                    </template>
-                </v-snackbar>
-            </div>
         </v-main>
     </v-app>
 </template>
@@ -174,6 +161,8 @@
 <script>
 import StaffLayout from "@/layouts/staff.vue";
 import api from '@/stores/axios-config';
+import { useErrorStore } from "@/stores/errorStore";
+const errorStore = useErrorStore();
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 export default {
@@ -191,11 +180,6 @@ export default {
             dialog: false,
             isEdit: false,
             dialogDelete: false,
-            snackbar: {
-                show: false,
-                message: "",
-                color: "success", // Default color
-            },
             headers: [
                 { title: 'ชื่อผลงาน', value: 'nameOnMedia' },
                 { title: 'หมวดหมู่', value: 'industryType' },
@@ -246,15 +230,17 @@ export default {
 
             // Send the updated status to the localhost
             try {
-                await api.patch(`/staff/updateResearchData/${item._id}`, { status: item.status }, {
-                    headers: {
-                        Authorization: localStorage.getItem('token'),
-                    },
-                }
+                await api.patch(`/staff/updateResearchData/${item._id}`, { status: item.status });
+                errorStore.show(
+                    item.status === "active" ? "เปิดแสดงผลงานวิจัย" : "ปิดแสดงผลงานวิจัย",
+                    {
+                        color: item.status === "active" ? "success" : "warning",
+                        icon: item.status === "active" ? "mdi-check-circle" : "mdi-alert-circle",
+                        timeout: 5000
+                    }
                 );
             } catch (error) {
-                console.error("Error updating visibility status:", error);
-
+                this.handleError(error);
             }
         },
         resetCurrentResearch() {
@@ -360,14 +346,9 @@ export default {
                             status: this.currentResearch.status,
                             ipType: this.currentResearch.ipType,
                             keyword: this.currentResearch.keyword,
-                        }, {
-                            headers: {
-                                Authorization: localStorage.getItem('token'),
-                            },
                         });
                         await api.patch(`/staff/addFileResearch/${this.currentResearch._id}`, formData, {
                             headers: {
-                                Authorization: localStorage.getItem('token'),
                                 'Content-Type': 'multipart/form-data'
                             },
                         });
@@ -376,29 +357,28 @@ export default {
                             const filePathsToDelete = this.markedForDeletion.map(index => this.currentResearch.filePath[index]);
                             await api.patch(`/staff/deleteFileResearch/research/${this.currentResearch._id}`, {
                                 filePath: filePathsToDelete
-                            }, {
-                                headers: {
-                                    Authorization: localStorage.getItem('token'),
-                                },
                             });
                         }
-
-                        this.snackbar.message = "Edit research successfully";
-                        this.snackbar.color = "success";
+                        errorStore.show("แก้ไขผลงานวิจัยสำเร็จ", {
+                            color: 'success',
+                            icon: 'mdi-check-circle',
+                            timeout: 5000
+                        });
                     } catch (error) {
                         this.handleError(error);
                     }
                 } else {
                     await api.post('/staff/addResearch', formData, {
                         headers: {
-                            Authorization: localStorage.getItem('token'),
                             'Content-Type': 'multipart/form-data'
                         },
                     });
-                    this.snackbar.message = "เพิ่มงานวิจัยเรียบร้อยแล้ว";
-                    this.snackbar.color = "success";
+                    errorStore.show("เพิ่มผลงานวิจัยเรียบร้อยแล้ว", {
+                        color: 'success',
+                        icon: 'mdi-check-circle',
+                        timeout: 5000
+                    });
                 }
-                this.snackbar.show = true;
                 this.fetchResearches();
 
             } catch (error) {
@@ -411,42 +391,12 @@ export default {
 
         },
 
-        handleError(error) {
-            let errorMessage = "An unexpected error occurred";
-            let errorCode = "Unknown";
-            let errorDetails = "";
-
-            if (error.response) {
-                const errorDesc = error.response.data.description;
-                if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                    errorMessage = errorDesc.description;
-                    errorCode = errorDesc.code;
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
-
-                } else {
-                    errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                    errorCode = error.response.status;
-                }
-            } else if (error.request) {
-                errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-            } else if (error.code === 'ERR_NETWORK') {
-                errorMessage = "Network Error";
-                errorCode = error.code;
-            } else {
-                errorMessage = error.message;
-            }
-
-            errorDetails = `${error.name}: ${error.message}`;
-            console.error(`Error : ${errorDetails}`, error);
-
-            this.snackbar = {
-                message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
+        handleError() {
+            errorStore.show("ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด", {
                 color: "error",
-                Errcode: errorCode,
-                show: true
-            };
+                icon: "mdi-alert-circle",
+                timeout: 5000
+            });
             this.dialog = false;
             this.resetCurrentResearch();
         },
@@ -465,58 +415,17 @@ export default {
 
         async deleteResearch() {
             try {
-                await api.delete(`/staff/deleteResearch/research/${this.currentResearch._id}`, {
-                    headers: {
-                        Authorization: localStorage.getItem('token'),
-                    },
-                });
+                await api.delete(`/staff/deleteResearch/research/${this.currentResearch._id}`);
                 this.dialogDelete = false;
                 this.fetchResearches();
-                this.snackbar.message = "research deleted successfully";
-                this.snackbar.color = "success";
-                this.snackbar.show = true;
+                errorStore.show("ลบผลงานวิจัยสำเร็จ", {
+                    color: 'success',
+                    icon: 'mdi-check-circle',
+                    timeout: 5000
+                });
 
             } catch (error) {
-                let errorMessage = "An unexpected error occurred";
-                let errorCode = "Unknown";
-                let errorDetails = "";
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    const errorDesc = error.response.data.description;
-                    if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                        // Handle specific error codes
-                        errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-                        errorCode = errorDesc.code;
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000);
-                    } else {
-                        errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                        errorCode = error.response.status;
-                    }
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-                } else if (error.code === 'ERR_NETWORK') {
-                    // Network error
-                    errorMessage = "Network Error";
-                    errorCode = error.code;
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    errorMessage = error.message;
-                }
-                // Add more detailed error information
-                errorDetails = `${error.name}: ${error.message}`;
-                // Log the error
-                console.error(`Error : ${errorDetails}`, error);
-
-                this.snackbar = {
-                    message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-                    color: "error",
-                    Errcode: errorCode,
-                    show: true
-                };
+                this.handleError(error);
             }
         },
         markForDeletion(index) {
@@ -537,46 +446,7 @@ export default {
                 this.researchesRevert = [...response.data.result].reverse();
 
             } catch (error) {
-                let errorMessage = "An unexpected error occurred";
-                let errorCode = "Unknown";
-                let errorDetails = "";
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    const errorDesc = error.response.data.description;
-                    if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                        // Handle specific error codes
-                        errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-                        errorCode = errorDesc.code;
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000);
-                    } else {
-                        errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                        errorCode = error.response.status;
-                    }
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-                } else if (error.code === 'ERR_NETWORK') {
-                    // Network error
-                    errorMessage = "Network Error";
-                    errorCode = error.code;
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    errorMessage = error.message;
-                }
-                // Add more detailed error information
-                errorDetails = `${error.name}: ${error.message}`;
-                // Log the error
-                console.error(`Error : ${errorDetails}`, error);
-
-                this.snackbar = {
-                    message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-                    color: "error",
-                    Errcode: errorCode,
-                    show: true
-                };
+                this.handleError(error);
             }
         },
 
@@ -592,17 +462,21 @@ export default {
             if (this.currentResearch.img) {
                 for (const file of this.currentResearch.img) {
                     if (file.size > maxSizeImage) {
-                        this.snackbar.message = `File ${file.name} is too large. Max size is 2MB.`;
-                        this.snackbar.color = "error";
-                        this.snackbar.show = true;
+                        errorStore.show(`File ${file.name} is too large. Max size is 2MB.`, {
+                            color: "error",
+                            icon: "mdi-alert-circle",
+                            timeout: 5000
+                        });
                         return false;
                     }
                 }
             }
             if (this.currentResearch.pdfPath && this.currentResearch.pdfPath.size > maxSizePDF) {
-                this.snackbar.message = `File ${this.currentResearch.pdfPath.name} is too large. Max size is 10MB.`;
-                this.snackbar.color = "error";
-                this.snackbar.show = true;
+                errorStore.show(`File ${this.currentResearch.pdfPath.name} is too large. Max size is 10MB.`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000
+                });
                 return false;
             }
             return true;
