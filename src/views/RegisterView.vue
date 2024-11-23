@@ -21,6 +21,11 @@
             </v-radio-group>
           </div>
 
+          <div>
+            <p class="mb-2 text-warning"> <v-icon color="warning">mdi-alert-circle-outline</v-icon>
+              ถ้าไม่มีให้ใส่เครื่องหมาย -
+            </p>
+          </div>
           <v-text-field v-model="form.businessName" label="ระบุ ชื่อกิจการ" variant="outlined" outlined color="#BA984C"
             :rules="[(v) => !!v || 'กรุณากรอก ชื่อกิจการ']" required></v-text-field>
 
