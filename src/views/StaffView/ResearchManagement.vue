@@ -365,7 +365,10 @@ export default {
                             timeout: 5000
                         });
                     } catch (error) {
-                        this.handleError(error);
+                        this.dialog = false;
+                        this.resetCurrentResearch();
+                        throw error;
+
                     }
                 } else {
                     await api.post('/staff/addResearch', formData, {
@@ -382,7 +385,9 @@ export default {
                 this.fetchResearches();
 
             } catch (error) {
-                this.handleError(error);
+                this.dialog = false;
+                this.resetCurrentResearch();
+                throw error;
             } finally {
                 this.isUploading = false;
                 this.dialog = false;
@@ -390,17 +395,6 @@ export default {
             }
 
         },
-
-        handleError() {
-            errorStore.show("ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด", {
-                color: "error",
-                icon: "mdi-alert-circle",
-                timeout: 5000
-            });
-            this.dialog = false;
-            this.resetCurrentResearch();
-        },
-
         // =====================================================================================================
 
 
@@ -425,7 +419,9 @@ export default {
                 });
 
             } catch (error) {
-                this.handleError(error);
+                this.dialog = false;
+                this.resetCurrentResearch();
+                throw error;
             }
         },
         markForDeletion(index) {
@@ -446,7 +442,9 @@ export default {
                 this.researchesRevert = [...response.data.result].reverse();
 
             } catch (error) {
-                this.handleError(error);
+                this.dialog = false;
+                this.resetCurrentResearch();
+                throw error;
             }
         },
 

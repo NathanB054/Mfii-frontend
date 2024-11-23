@@ -288,7 +288,7 @@ export default {
         const response = await api.get("/admin/getsUser");
         this.users = response.data;
       } catch (error) {
-
+        throw error;
       }
     },
 
@@ -369,6 +369,7 @@ export default {
           } catch (error) {
             this.fectchUser();
             this.close();
+            throw error;
           }
         } else {
           this.users.resutl.push(this.editedItem);
@@ -410,6 +411,7 @@ export default {
             this.fectchUser();
           } catch (error) {
             this.fectchUser();
+            throw error;
           }
         } else {
           this.users.resutl.push(this.editedItem);
