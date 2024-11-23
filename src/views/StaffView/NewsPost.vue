@@ -12,16 +12,19 @@
                             <v-container class="imageUpload">
                                 <div>
                                     <div class="titleNews flex justify-center">
-                                        <v-chip class="ma-2 pa-5 text-10" elevation="2" style="border-radius: 50px; font-size: 1.2rem;">
+                                        <v-chip class="ma-2 pa-5 text-10" elevation="2"
+                                            style="border-radius: 50px; font-size: 1.2rem;">
                                             อัพโหลดรูปภาพข่าวสาร
                                         </v-chip>
                                     </div>
                                     <v-container class="imageUpload flex justify-center">
-                                        <v-btn color="blue" @click="openDialog('images')" prepend-icon="mdi-file-image">อัพโหลดไฟล์รูปภาพ</v-btn>
+                                        <v-btn color="blue" @click="openDialog('images')"
+                                            prepend-icon="mdi-file-image">อัพโหลดไฟล์รูปภาพ</v-btn>
                                         <div class="mx-4 flex align-center">
                                             <h1>หรือ</h1>
                                         </div>
-                                        <v-btn color="light-blue lighten-5" class="black--text" @click="openDialog('linkImage')" prepend-icon="mdi-web">
+                                        <v-btn color="light-blue lighten-5" class="black--text"
+                                            @click="openDialog('linkImage')" prepend-icon="mdi-web">
                                             อัพโหลดลิงค์รูปภาพ
                                         </v-btn>
                                     </v-container>
@@ -35,12 +38,14 @@
                             <v-container class="youtubeContainer flex align-center">
                                 <div>
                                     <div>
-                                        <v-chip class="ma-2 pa-5 text-h10" elevation="2" style="border-radius: 50px;font-size: 1.2rem;">
+                                        <v-chip class="ma-2 pa-5 text-h10" elevation="2"
+                                            style="border-radius: 50px;font-size: 1.2rem;">
                                             อัพโหลดลิงค์(Youtube) Success case
                                         </v-chip>
                                     </div>
                                     <v-container class="youtubeBtn d-flex justify-center">
-                                        <v-btn color="red" class="white--text" @click="openDialog('linkVideo')" prepend-icon="mdi-youtube">
+                                        <v-btn color="red" class="white--text" @click="openDialog('linkVideo')"
+                                            prepend-icon="mdi-youtube">
                                             อัพโหลดลิงค์ youtube
                                         </v-btn>
                                     </v-container>
@@ -52,7 +57,8 @@
                             <v-card class="rounded-xl py-2 px-2">
                                 <v-card-text>
                                     <v-form @submit.prevent="addNews">
-                                        <p class="ml-10 text-red-500 mb-2" v-if="activeField === 'linkImage' || activeField === 'images'">
+                                        <p class="ml-10 text-red-500 mb-2"
+                                            v-if="activeField === 'linkImage' || activeField === 'images'">
                                             อัพโหลดรูปภาพขนาดไม่เกิน 2048 X 800
                                         </p>
                                         <div v-if="activeField === 'images'">
@@ -61,16 +67,26 @@
                                                 อัพโหลดไฟล์รูปภาพไม่เกิน 2 MB
                                             </p>
                                         </div>
-                                        <v-text-field v-if="activeField === 'linkVideo'" v-model="news.linkVideo" label="URL video" clearable prepend-icon="mdi-youtube" variant="solo-filled"></v-text-field>
-                                        <v-text-field v-if="activeField === 'linkImage'" v-model="news.linkImage" label="URL Images" clearable prepend-icon="mdi-web" variant="solo-filled"></v-text-field>
-                                        <v-file-input v-if="activeField === 'images'" v-model="news.images" label="Upload Images" chips show-size variant="solo-filled" accept="image/*" :rules="[fileSizeRule]"></v-file-input>
+                                        <v-text-field v-if="activeField === 'linkVideo'" v-model="news.linkVideo"
+                                            label="URL video" clearable prepend-icon="mdi-youtube"
+                                            variant="solo-filled"></v-text-field>
+                                        <v-text-field v-if="activeField === 'linkImage'" v-model="news.linkImage"
+                                            label="URL Images" clearable prepend-icon="mdi-web"
+                                            variant="solo-filled"></v-text-field>
+                                        <v-file-input v-if="activeField === 'images'" v-model="news.images"
+                                            label="Upload Images" chips show-size variant="solo-filled" accept="image/*"
+                                            :rules="[fileSizeRule]"></v-file-input>
                                     </v-form>
-                                    <v-text-field v-if="activeField === 'images' || activeField === 'linkImage'" v-model="news.linkPage" label="URL PAGE" clearable prepend-icon="mdi-web" variant="solo-filled"></v-text-field>
+                                    <v-text-field v-if="activeField === 'images' || activeField === 'linkImage'"
+                                        v-model="news.linkPage" label="URL PAGE" clearable prepend-icon="mdi-web"
+                                        variant="solo-filled"></v-text-field>
                                 </v-card-text>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="red darken-1" variant="tonal" @click="dialogNewpost = false">ยกเลิก</v-btn>
-                                    <v-btn color="green darken-1" variant="tonal" type="submit" @click="addNews">บันทึก</v-btn>
+                                    <v-btn color="red darken-1" variant="tonal"
+                                        @click="dialogNewpost = false">ยกเลิก</v-btn>
+                                    <v-btn color="green darken-1" variant="tonal" type="submit"
+                                        @click="addNews">บันทึก</v-btn>
                                 </v-card-actions>
                             </v-card>
                         </v-dialog>
@@ -82,10 +98,14 @@
                         <v-window-item>
                             <v-row>
                                 <v-col v-for="(img, index) in imgs" :key="index" cols="12" md="4">
-                                    <v-card class="hover:shadow-lg transition-shadow rounded-lg my-1 mx-1" style="max-width: 400px">
-                                        <v-img v-if="img.filePath.length > 0" :src="`${baseUrl}/${img.filePath[0]}`" height="150px" cover />
-                                        <v-img v-else-if="img.linkImage.length > 0" :src="`${img.linkImage}`" height="150px" cover />
-                                        <iframe v-else-if="img.linkVideo.length > 0" :src="`${img.linkVideo}`" height="150px" class="w-full"></iframe>
+                                    <v-card class="hover:shadow-lg transition-shadow rounded-lg my-1 mx-1"
+                                        style="max-width: 400px">
+                                        <v-img v-if="img.filePath.length > 0" :src="`${baseUrl}/${img.filePath[0]}`"
+                                            height="150px" cover />
+                                        <v-img v-else-if="img.linkImage.length > 0" :src="`${img.linkImage}`"
+                                            height="150px" cover />
+                                        <iframe v-else-if="img.linkVideo.length > 0" :src="`${img.linkVideo}`"
+                                            height="150px" class="w-full"></iframe>
                                         <p v-else>No media available</p>
                                         <v-container class="d-flex justify-center">
                                             <v-btn @click="confirmDelete(img._id, index)" color="error" icon>
@@ -113,24 +133,14 @@
                 </v-dialog>
             </staff-layout>
         </v-main>
-
-        <div class="text-center">
-            <v-snackbar v-model="snackbar.show" :color="snackbar.color" vertical>
-                <div class="text-subtitle-1 pb-2"></div>
-                <p>{{ snackbar.message }}</p>
-                <template v-slot:actions>
-                    <v-btn color="white" variant="text" @click="snackbar.show = false">
-                        Close
-                    </v-btn>
-                </template>
-            </v-snackbar>
-        </div>
     </v-app>
 </template>
 
 <script>
 import StaffLayout from "@/layouts/staff.vue";
 import api from '@/stores/axios-config';
+import { useErrorStore } from "@/stores/errorStore";
+const errorStore = useErrorStore();
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 export default {
@@ -141,11 +151,6 @@ export default {
     data() {
         return {
             baseUrl: baseURL,
-            snackbar: {
-                show: false,
-                message: "",
-                color: "success",
-            },
             news: {
                 images: [],
                 linkVideo: [],
@@ -212,12 +217,18 @@ export default {
                     this.news.linkPage = '';
                     this.news.linkVideo = '';
                     this.news.linkImage = '';
-                    this.snackbar.message = "News and images uploaded successfully!";
-                    this.snackbar.color = "success";
-                    this.snackbar.show = true;
                     this.dialogNewpost = false;
+                    errorStore.show("อัพโหลดสำเร็จ", {
+                        color: 'success',
+                        icon: 'mdi-check-circle',
+                        timeout: 5000
+                    });
                 } else {
-                    alert('No images selected or all selected images are empty.');
+                    errorStore.show("ไม่ได้เลือกภาพ หรือ ภาพที่เลือกทั้งหมดว่างเปล่า", {
+                        color: "error",
+                        icon: "mdi-alert-circle",
+                        timeout: 5000
+                    });
                 }
             } catch (error) {
                 this.handleError(error);
@@ -248,9 +259,12 @@ export default {
                 });
                 this.fetchImg();
                 this.dialog = false;
-                this.snackbar.message = "Delete successfully";
-                this.snackbar.color = "success";
-                this.snackbar.show = true;
+                errorStore.show("ลบสำเร็จ", {
+                    color: 'success',
+                    icon: 'mdi-check-circle',
+                    timeout: 5000
+                });
+
             } catch (error) {
                 this.handleError(error);
             }
@@ -259,9 +273,11 @@ export default {
             const maxSize = 2 * 1024 * 1024;
             for (const file of this.news.images) {
                 if (file.size > maxSize) {
-                    this.snackbar.message = `File ${file.name} is too large. Max size is 2MB.`;
-                    this.snackbar.color = "error";
-                    this.snackbar.show = true;
+                    errorStore.show(`File ${file.name} is too large. Max size is 2MB.`, {
+                        color: "error",
+                        icon: "mdi-alert-circle",
+                        timeout: 5000
+                    });
                     return false;
                 }
             }
@@ -278,33 +294,12 @@ export default {
             }
             return true;
         },
-        handleError(error) {
-            let errorMessage = "An unexpected error occurred";
-            let errorCode = "Unknown";
-            if (error.response) {
-                const errorDesc = error.response.data.description;
-                if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                    errorMessage = errorDesc.description;
-                    errorCode = errorDesc.code;
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                    errorCode = error.response.status;
-                }
-            } else if (error.request) {
-                errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-            } else if (error.code === 'ERR_NETWORK') {
-                errorMessage = "Network Error";
-                errorCode = error.code;
-            } else {
-                errorMessage = error.message;
-            }
-            console.error(`Error: ${error.name}: ${error.message}`, error);
-            this.snackbar = {
-                message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
+        handleError() {
+            errorStore.show("ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด", {
                 color: "error",
-                show: true
-            };
+                icon: "mdi-alert-circle",
+                timeout: 5000
+            });
         }
     },
     mounted() {
