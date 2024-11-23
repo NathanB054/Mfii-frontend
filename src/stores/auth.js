@@ -29,20 +29,11 @@ export const useAuthStore = defineStore("auth", {
         return response.data.description;
       } catch (error) {
         console.error("Login failed:", error);
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
-          errorStore.show(errorMessage, {
-            color: 'error',
-            icon: 'mdi-alert-circle',
-            timeout: 5000
-          });
-        }
         throw error;
       }
     },
 
     async register(formData) {
-      const errorStore = useErrorStore();
       try {
         // Send registration data
         const response = await api.post("/register", formData); 
@@ -64,33 +55,16 @@ export const useAuthStore = defineStore("auth", {
         return response.data.description;
       } catch (error) {
         console.error("Registration failed:", error);
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
-          errorStore.show(errorMessage, {
-            color: 'error',
-            icon: 'mdi-alert-circle',
-            timeout: 5000
-          });
-        }
         throw error;
       }
     },
 
     async fetchUser() {
-      const errorStore = useErrorStore();
       try {
         const response = await api.get("/getUser");
         this.user = response.data.resutl;
       } catch (error) {
         console.error("Failed to fetch user:", error);
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.description.description + ' ' + error.response.data.description.code || 'Login failed';
-          errorStore.show(errorMessage, {
-            color: 'error',
-            icon: 'mdi-alert-circle',
-            timeout: 5000
-          });
-        }
         throw error;
       }
     },

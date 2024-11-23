@@ -63,7 +63,7 @@ const router = createRouter({
       meta: { showNavTop: true, showNavFooter: true }
     },
     {
-      path: '/user/profile',
+      path: '/profile',
       name: 'Profile',
       component: () => import('../views/UserView/ProfileView.vue'),
       meta: { showNavTop: true, showNavFooter: true, requiresAuth: true }

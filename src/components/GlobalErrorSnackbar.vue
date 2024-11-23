@@ -2,7 +2,7 @@
   <v-snackbar
     v-model="errorStore.isVisible"
     :color="errorStore.color"
-    location="top right"
+    location="middle"
     :timeout="errorStore.timeout"
   >
     <div class="d-flex align-center">

@@ -144,7 +144,7 @@ onMounted(async () => {
                                     <v-list-item-title>Staff Page</v-list-item-title>
                                 </v-list-item>
                             </router-link>
-                            <router-link v-if="authStore.user.role === 'user'" to="/user/profile">
+                            <router-link v-if="authStore.user.role === 'user'" to="/profile">
                                 <v-list-item>
                                     <v-list-item-title>แก้ไขข้อมูลส่วนตัว</v-list-item-title>
                                 </v-list-item>
