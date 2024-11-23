@@ -19,7 +19,7 @@
                                         }}</v-list-item-subtitle>
                                     <v-list-item-action class="my-2">
                                         <v-btn @click="openReplyDialog(message._id)"
-                                            class="bg-slate-800 text-white mr-2">ตอบกลับ</v-btn>
+                                            class="!bg-slate-800 text-white mr-2">ตอบกลับ</v-btn>
                                         <v-btn @click="deleteMessage(message._id)" color="error">ลบ</v-btn>
                                     </v-list-item-action>
                                 </v-list-item>
@@ -114,7 +114,7 @@ export default {
     data() {
         return {
             isDialogOpen: false,
-            selectedMessage: {},
+            selectedMessage: [],
             replyText: '',
             messages: [],
             user: {
@@ -128,6 +128,9 @@ export default {
         const authStore = useAuthStore();
         const user = computed(() => authStore.user);
         return { user };
+    },
+    mounted() {
+        this.fetchMessages();
     },
     methods: {
         sortMessages(messages) {
@@ -195,6 +198,7 @@ export default {
                         Authorization: localStorage.getItem("token"),
                     },
                 });
+                console.log(response.data); // ดูข้อมูลที่ได้รับจาก API
                 this.messages = response.data.result;
             } catch (error) {
                 this.handleError(error);
@@ -254,10 +258,8 @@ export default {
         filteredMessages() {
             return [...this.messages].reverse();
         }
-    }
+    },
 };
 </script>
 
-<style scoped>
-@import '../../styles/messageReply.css';
-</style>
+<style scoped></style>
