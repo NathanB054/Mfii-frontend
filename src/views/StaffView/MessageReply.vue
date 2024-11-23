@@ -198,7 +198,6 @@ export default {
                         Authorization: localStorage.getItem("token"),
                     },
                 });
-                console.log(response.data); // ดูข้อมูลที่ได้รับจาก API
                 this.messages = response.data.result;
             } catch (error) {
                 this.handleError(error);
