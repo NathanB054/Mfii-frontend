@@ -69,6 +69,12 @@ const router = createRouter({
       meta: { showNavTop: true, showNavFooter: true, requiresAuth: true }
     },
     {
+      path: '/message',
+      name: 'Message',
+      component: () => import('../views/UserView/MessageView.vue'),
+      meta: { showNavTop: true, showNavFooter: true, requiresAuth: true }
+    },
+    {
       path: '/admin/',
       name: 'Admin',
       component: () => import('../views/AdminView/index.vue'),
@@ -86,33 +92,33 @@ const router = createRouter({
       component: () => import('../views/AdminView/DocumentsView.vue'),
       meta: { requiresAuth: true, role: 'admin' },
     },
-    // {
-    //   path: '/staff/',
-    //   name: 'Staff',
-    //   component: Staff,
-    //   meta: {
-    //     requiresAuth: true,
-    //     roles: ['staff', 'admin']
-    //   },
-    // },
-    // {
-    //   path: '/staff/newPost',
-    //   name: 'New Post',
-    //   component: newPost,
-    //   meta: { requiresAuth: true, roles: ['staff', 'admin'] },
-    // },
-    // {
-    //   path: '/staff/researchManagement',
-    //   name: 'Research Management',
-    //   component: ResearchManagement,
-    //   meta: { requiresAuth: true, roles: ['staff', 'admin'] },
-    // },
-    // {
-    //   path: '/staff/messageReply',
-    //   name: 'Message Reply',
-    //   component: MessageReply,
-    //   meta: { requiresAuth: true, roles: ['staff', 'admin'] },
-    // },
+    {
+      path: '/staff/',
+      name: 'Staff',
+      component: () => import('../views/StaffView/index.vue'),
+      meta: {
+        requiresAuth: true,
+        roles: ['staff', 'admin']
+      },
+    },
+    {
+      path: '/staff/newPost',
+      name: 'New Post',
+      component: () => import('../views/StaffView/NewsPost.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/researchManagement',
+      name: 'Research Management',
+      component: () => import('../views/StaffView/ResearchManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/messageReply',
+      name: 'Message Reply',
+      component: () => import('../views/StaffView/MessageReply.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
 
    // catch all 404
   {

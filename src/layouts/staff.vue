@@ -1,11 +1,10 @@
 <template>
   <v-app>
     <!-- sidebar -->
-    <v-navigation-drawer app style="position: fixed; height: 100vh; overflow-y: auto;"
-      class="bg-slate-100">
+    <v-navigation-drawer app style="position: fixed; height: 100vh; overflow-y: auto;" class="!bg-slate-100">
       <div class="d-flex justify-center mt-4 mb-4">
         <a href="/staff">
-          <v-img src="../assets/mfu_logo.png" width="240px"></v-img>
+          <img src="../assets/images/mfu_logo.png" width="240px"></img>
         </a>
       </div>
       <div class="flex justify-center">
@@ -13,54 +12,39 @@
       </div>
       <v-list dense class="text-white">
         <v-list-item link to="/staff">
-          <v-list-item-icon>
-            <v-icon class="mr-2">mdi-view-dashboard</v-icon>
-          </v-list-item-icon>
+          <v-icon class="mr-2">mdi-view-dashboard</v-icon>
           <v-list-item-title class="inline">หน้าหลัก</v-list-item-title>
         </v-list-item>
 
         <v-list-item link to="/staff/newPost">
-          <v-list-item-icon>
-            <v-icon class="mr-2">mdi-plus-box</v-icon>
-          </v-list-item-icon>
+          <v-icon class="mr-2">mdi-plus-box</v-icon>
           <v-list-item-title class="inline">สร้างโพสข่าวสาร</v-list-item-title>
         </v-list-item>
 
         <v-list-item link to="/staff/ResearchManagement">
-          <v-list-item-icon>
-            <v-icon class="mr-2">mdi mdi-clipboard-edit</v-icon>
-          </v-list-item-icon>
+          <v-icon class="mr-2">mdi mdi-clipboard-edit</v-icon>
           <v-list-item-title class="inline">จัดการผลงานวิจัย</v-list-item-title>
         </v-list-item>
 
         <v-list-item link to="/staff/MessageReply">
-          <v-list-item-icon>
-            <v-icon class="mr-2">mdi mdi-forum</v-icon>
-          </v-list-item-icon>
+          <v-icon class="mr-2">mdi mdi-forum</v-icon>
           <v-list-item-title class="inline">ข้อความและการตอบกลับ</v-list-item-title>
         </v-list-item>
 
-          <v-list-item v-if="user.role === 'admin'" to="/admin">
-            <v-list-item-icon>
-              <v-icon class="mr-2">mdi-hand-pointing-right</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="inline">หน้าหลัก Admin</v-list-item-title>
-          </v-list-item>
+        <v-list-item v-if="user.role === 'admin'" to="/admin">
+          <v-icon class="mr-2">mdi-hand-pointing-right</v-icon>
+          <v-list-item-title class="inline">หน้าหลัก Admin</v-list-item-title>
+        </v-list-item>
 
-
-          <v-list-item to="/">
-            <v-list-item-icon>
-              <v-icon class="mr-2">mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="inline">Home page</v-list-item-title>
-          </v-list-item>
+        <v-list-item to="/">
+          <v-icon class="mr-2">mdi-home</v-icon>
+          <v-list-item-title class="inline">Home page</v-list-item-title>
+        </v-list-item>
       </v-list>
-
-      
 
       <!-- logout -->
       <template #append>
-        <div class="pa-4 d-flex justify-start">
+        <div class="pa-4 d-flex justify-center">
           <v-btn class="primary--text" rounded @click="logout()">
             <v-icon class="primary--text mr-2">mdi-logout</v-icon>Logout
           </v-btn>
@@ -96,7 +80,6 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user';
 export default {
   name: "StaffLayout",
   data: () => ({
@@ -109,20 +92,20 @@ export default {
     user: [],
   }),
 
-  async created() {
-    // get user info from pinia store/user.js
-    const userStore = useUserStore();
-    try {
-      if (!userStore.user) {
-        await userStore.fetchUser();
-      }
-      if (userStore.user) {
-        this.user = userStore.user.resutl;
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  },
+  // async created() {
+  //   // get user info from pinia store/user.js
+  //   const userStore = useUserStore();
+  //   try {
+  //     if (!userStore.user) {
+  //       await userStore.fetchUser();
+  //     }
+  //     if (userStore.user) {
+  //       this.user = userStore.user.resutl;
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // },
 
   methods: {
     logout() {
@@ -139,7 +122,7 @@ export default {
 .v-list-item:focus {
   color: black;
 } */
-.v-list-item{
+.v-list-item {
   color: black;
 }
 </style>
