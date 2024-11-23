@@ -208,7 +208,6 @@ export default {
                     await api.post('/staff/addNews', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
-                            Authorization: localStorage.getItem("token"),
                         }
                     });
 
@@ -252,11 +251,7 @@ export default {
         },
         async deleteImage() {
             try {
-                await api.delete(`/staff/deleteNews/news/${this.deleteImgId}`, {
-                    headers: {
-                        Authorization: localStorage.getItem("token"),
-                    }
-                });
+                await api.delete(`/staff/deleteNews/news/${this.deleteImgId}`);
                 this.fetchImg();
                 this.dialog = false;
                 errorStore.show("ลบสำเร็จ", {
