@@ -140,7 +140,8 @@
 <script>
 import AdminLayout from "@/layouts/admin.vue";
 import api from '@/stores/axios-config';
-
+import { useErrorStore } from "@/stores/errorStore";
+const errorStore = useErrorStore();
 export default {
   components: {
     AdminLayout,
@@ -284,53 +285,10 @@ export default {
     // fetch users =============================================================
     async fectchUser() {
       try {
-        const response = await api.get("/admin/getsUser", {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        });
+        const response = await api.get("/admin/getsUser");
         this.users = response.data;
       } catch (error) {
-        let errorMessage = "An unexpected error occurred";
-        let errorCode = "Unknown";
-        let errorDetails = "";
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          const errorDesc = error.response.data.description;
-          if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-            // Handle specific error codes
-            errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-            errorCode = errorDesc.code;
-            setTimeout(function () {
-              window.location.reload();
-            }, 1000);
-          } else {
-            errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-            errorCode = error.response.status;
-          }
-        } else if (error.request) {
-          // The request was made but no response was received
-          errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-        } else if (error.code === 'ERR_NETWORK') {
-          // Network error
-          errorMessage = "Network Error";
-          errorCode = error.code;
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          errorMessage = error.message;
-        }
-        // Add more detailed error information
-        errorDetails = `${error.name}: ${error.message}`;
-        // Log the error
-        console.error(`Error : ${errorDetails}`, error);
 
-        this.snackbar = {
-          message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-          color: "error",
-          Errcode: errorCode,
-          show: true
-        };
       }
     },
 
@@ -345,57 +303,17 @@ export default {
       this.users.resutl.splice(this.editedIndex, 1);
       try {
         const res = await api.delete(
-          "/admin/deleteUser/" + this.editedItem._id, {
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        }
+          "/admin/deleteUser/" + this.editedItem._id
         );
-        this.snackbar.message = "User deleted successfully";
-        this.snackbar.color = "success"; // Set success color
-        this.snackbar.show = true;
+        errorStore.show("ลบข้อมูลผู้ใช้งานสําเร็จ", {
+          color: 'success',
+          icon: 'mdi-check-circle',
+          timeout: 5000
+        });
         this.fectchUser();
       } catch (error) {
-        let errorMessage = "An unexpected error occurred";
-        let errorCode = "Unknown";
-        let errorDetails = "";
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          const errorDesc = error.response.data.description;
-          if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-            // Handle specific error codes
-            errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-            errorCode = errorDesc.code;
-            setTimeout(function () {
-              window.location.reload();
-            }, 1000);
-          } else {
-            errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-            errorCode = error.response.status;
-          }
-        } else if (error.request) {
-          // The request was made but no response was received
-          errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-        } else if (error.code === 'ERR_NETWORK') {
-          // Network error
-          errorMessage = "Network Error";
-          errorCode = error.code;
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          errorMessage = error.message;
-        }
-        // Add more detailed error information
-        errorDetails = `${error.name}: ${error.message}`;
-        // Log the error
-        console.error(`Error : ${errorDetails}`, error);
-
-        this.snackbar = {
-          message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-          color: "error",
-          Errcode: errorCode,
-          show: true
-        };
+        this.fectchUser();
+        throw error;
       }
       this.closeDelete();
     },
@@ -439,67 +357,28 @@ export default {
               phoneNumber: this.editedItem.phoneNumber.trim(),
               role: this.editedItem.role,
               status: this.editedItem.status,
-            }, {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
             }
             );
-            this.snackbar.message = "User Edited successfully";
-            this.snackbar.color = "success"; // Set success color
-            this.snackbar.show = true;
+            errorStore.show("แก้ไขข้อมูลผู้ใช้งานสําเร็จ", {
+              color: 'success',
+              icon: 'mdi-check-circle',
+              timeout: 5000
+            });
             this.fectchUser();
+            this.close();
           } catch (error) {
-            let errorMessage = "An unexpected error occurred";
-            let errorCode = "Unknown";
-            let errorDetails = "";
-            if (error.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              const errorDesc = error.response.data.description;
-              if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                // Handle specific error codes
-                errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-                errorCode = errorDesc.code;
-                setTimeout(function () {
-                  window.location.reload();
-                }, 1000);
-              } else {
-                errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                errorCode = error.response.status;
-              }
-            } else if (error.request) {
-              // The request was made but no response was received
-              errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-            } else if (error.code === 'ERR_NETWORK') {
-              // Network error
-              errorMessage = "Network Error";
-              errorCode = error.code;
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              errorMessage = error.message;
-            }
-            // Add more detailed error information
-            errorDetails = `${error.name}: ${error.message}`;
-            // Log the error
-            console.error(`Error : ${errorDetails}`, error);
-
-            this.snackbar = {
-              message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-              color: "error",
-              Errcode: errorCode,
-              show: true
-            };
+            this.fectchUser();
+            this.close();
           }
         } else {
           this.users.resutl.push(this.editedItem);
         }
-        this.close();
-      }
-      else {
-        this.snackbar.message = "กรอกข้อมูลให้ครบถ้วนและถูกต้อง"
-        this.snackbar.color = "error"; // Set error color
-        this.snackbar.show = true;
+      } else {
+        errorStore.show("กรอกข้อมูลไม่ครบ", {
+          color: 'warning',
+          icon: 'mdi-alert-circle',
+          timeout: 5000
+        });
       }
     },
 
@@ -523,51 +402,14 @@ export default {
               // createDate: createDate,
             },
             );
-            this.snackbar.message = "User Added successfully";
-            this.snackbar.color = "success"; // Set success color
-            this.snackbar.show = true;
+            errorStore.show("เพิ่มข้อมูลผู้ใช้งานสําเร็จ", {
+              color: 'success',
+              icon: 'mdi-check-circle',
+              timeout: 5000
+            });
             this.fectchUser();
           } catch (error) {
-            let errorMessage = "An unexpected error occurred";
-            let errorCode = "Unknown";
-            let errorDetails = "";
-            if (error.response) {
-              // The request was made and the server responded with a status code
-              // that falls out of the range of 2xx
-              const errorDesc = error.response.data.description;
-              if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                // Handle specific error codes
-                errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-                errorCode = errorDesc.code;
-                setTimeout(function () {
-                  window.location.reload();
-                }, 1000);
-              } else {
-                errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                errorCode = error.response.status;
-              }
-            } else if (error.request) {
-              // The request was made but no response was received
-              errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-            } else if (error.code === 'ERR_NETWORK') {
-              // Network error
-              errorMessage = "Network Error";
-              errorCode = error.code;
-            } else {
-              // Something happened in setting up the request that triggered an Error
-              errorMessage = error.message;
-            }
-            // Add more detailed error information
-            errorDetails = `${error.name}: ${error.message}`;
-            // Log the error
-            console.error(`Error : ${errorDetails}`, error);
-
-            this.snackbar = {
-              message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-              color: "error",
-              Errcode: errorCode,
-              show: true
-            };
+            this.fectchUser();
           }
         } else {
           this.users.resutl.push(this.editedItem);
@@ -575,9 +417,11 @@ export default {
         this.close();
       }
       else {
-        this.snackbar.message = "กรอกข้อมูลให้ครบถ้วนและถูกต้อง"
-        this.snackbar.color = "error"; // Set error color
-        this.snackbar.show = true;
+        errorStore.show("กรอกข้อมูลไม่ครบ", {
+          color: 'warning',
+          icon: 'mdi-alert-circle',
+          timeout: 5000
+        });
       }
 
     }
