@@ -69,6 +69,12 @@ const router = createRouter({
       meta: { showNavTop: true, showNavFooter: true, requiresAuth: true }
     },
     {
+      path: '/message',
+      name: 'Message',
+      component: () => import('../views/UserView/MessageView.vue'),
+      meta: { showNavTop: true, showNavFooter: true, requiresAuth: true }
+    },
+    {
       path: '/admin/',
       name: 'Admin',
       component: () => import('../views/AdminView/index.vue'),
