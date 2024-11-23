@@ -4,6 +4,11 @@
             <v-card-title class="d-flex align-center my-2 !text-2xl">
                 <v-icon icon="mdi-text-box-search"></v-icon>&nbsp; สืบค้นข้อมูลทรัพย์สินทางปัญญา
                 <v-spacer></v-spacer>
+                <div>
+                    <p class="mb-2 text-warning !text-sm"> <v-icon color="warning">mdi-alert-circle-outline</v-icon>
+                        บุคลากร มฟล เข้าสู่ระบบเพื่อเข้าถึงข้อมูลมากขึ้น!
+                    </p>
+                </div>
             </v-card-title>
             <v-card-text class="rounded-xl">
                 <v-data-table :headers="filteredHeaders" :items="data" :items-per-page="-1" :fixed-header="true"
