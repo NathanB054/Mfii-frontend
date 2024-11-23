@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-
 
 const isOpen = ref(false);
 const activeDropdown = ref(null);
@@ -10,38 +9,50 @@ const mobileActiveDropdown = ref(null);
 const route = useRoute();
 const authStore = useAuthStore();
 
-
 const mobileSections = [
     {
         name: 'บริการของเรา',
-        items: [{ label: 'สร้างความตระหนักด้านทรัพย์สินทางปัญญา', to: '/services/awa' }, { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' }, { label: 'การนำไปใช้ประโยชน์', to: 'services/uti' }, { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/ups' }, { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' }],
-        isActive: (route) => route.path.startsWith('/service')
+        items: [
+            { label: 'สร้างความตระหนักด้านทรัพย์สินทางปัญญา', to: '/services/awa' },
+            { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' },
+            { label: 'การนำไปใช้ประโยชน์', to: 'services/uti' },
+            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/ups' },
+            { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' }
+        ],
+        isActive: (route) => route.path.startsWith('/service'),
     },
     {
         name: 'ผลงานพร้อมถ่ายทอด',
         to: '/innovation',
-        isActive: (route) => route.path === '/innovation'
+        isActive: (route) => route.path === '/innovation',
     },
     {
         name: 'ข้อมูลแนะนำ',
-        items: [{ label: 'Info 1', to: '/info1' }, { label: 'Info 2', to: '/info2' }],
-        isActive: (route) => route.path.startsWith('/info')
+        items: [
+            { label: 'Info 1', to: '/info1' },
+            { label: 'Info 2', to: '/info2' }
+        ],
+        isActive: (route) => route.path.startsWith('/info'),
     },
     {
         name: 'ฐานข้อมูล IP มฟล',
         to: '/database',
-        isActive: (route) => route.path === '/database'
+        isActive: (route) => route.path === '/database',
     },
     {
         name: 'ระเบียบทรัพย์สินทางปัญญา',
         to: '/regulation',
-        isActive: (route) => route.path === '/regulation'
+        isActive: (route) => route.path === '/regulation',
     },
     {
         name: 'เกี่ยวกับเรา',
-        items: [{ label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true }, { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true }, { label: 'ติดต่อเรา', to: '/contact', external: false }],
-        isActive: (route) => route.path.startsWith('/about')
-    }
+        items: [
+            { label: 'โครงสร้างองค์กร', to: 'https://mfii.mfu.ac.th/mfii-about/mfii-structure.html', external: true },
+            { label: 'บุคลากร', to: 'https://mfii.mfu.ac.th/mfii-ip-staff.html', external: true },
+            { label: 'ติดต่อเรา', to: '/contact', external: false }
+        ],
+        isActive: (route) => route.path.startsWith('/about'),
+    },
 ];
 
 const toggleDropdown = (dropdown) => {
@@ -49,18 +60,15 @@ const toggleDropdown = (dropdown) => {
 };
 
 const toggleMobileMenu = (event) => {
-    // Prevent event from bubbling up to document
     event.stopPropagation();
     isOpen.value = !isOpen.value;
 };
 
 const toggleMobileDropdown = (dropdown, event) => {
-    // Prevent event from bubbling up to document
     event.stopPropagation();
     mobileActiveDropdown.value = mobileActiveDropdown.value === dropdown ? null : dropdown;
 };
 
-// Updated click outside handler
 const handleClickOutside = (event) => {
     const navElement = event.target.closest('nav');
     const dropdownButtons = document.querySelectorAll('.desktop-dropdown-button');
@@ -68,12 +76,10 @@ const handleClickOutside = (event) => {
     const dropdownContent = event.target.closest('.desktop-dropdown-content');
     const mobileMenuButton = event.target.closest('button[aria-label="Toggle menu"]');
 
-    // Handle desktop menu dropdowns
     if (!navElement || (!isClickOnButton && !dropdownContent)) {
         activeDropdown.value = null;
     }
 
-    // Handle mobile menu - close when clicking outside
     if (!navElement && !mobileMenuButton) {
         isOpen.value = false;
         mobileActiveDropdown.value = null;
@@ -88,20 +94,29 @@ onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside);
 });
 
-
-// Fetch user information when the component is mounted
 onMounted(async () => {
     try {
         if (authStore.token && !authStore.user) {
-            await authStore.fetchUser(); // Ensure the user is fetched and stored in authStore.user
+            await authStore.fetchUser();
         }
     } catch (error) {
-        console.error("Failed to fetch user:", error);
+        console.error('Failed to fetch user:', error);
     }
 });
 
-
+// logout then reload
+const handleLogout = async () => {
+    try {
+        await authStore.logout();
+        nextTick(() => {
+            window.location.reload();
+        });
+    } catch (error) {
+        console.error('Logout failed:', error);
+    }
+};
 </script>
+
 
 <template>
     <div class="w-full h-40 flex items-center justify-between">
@@ -128,7 +143,8 @@ onMounted(async () => {
                             <v-btn v-bind="props" icon size="48px" class="hover:bg-gray-200">
                                 <v-avatar size="48px">
                                     <v-icon v-if="!authStore.user.img" icon="mdi-account-circle" size="58px"></v-icon>
-                                    <v-img v-else alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg" cover></v-img>
+                                    <v-img v-else alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"
+                                        cover></v-img>
                                 </v-avatar>
                             </v-btn>
                         </template>
@@ -155,7 +171,7 @@ onMounted(async () => {
                                     <v-list-item-title>ข้อความ</v-list-item-title>
                                 </v-list-item>
                             </router-link>
-                            <v-list-item @click="authStore.logout()">
+                            <v-list-item @click="handleLogout">
                                 <v-list-item-title>ออกจากระบบ</v-list-item-title>
                             </v-list-item>
                         </v-list>
