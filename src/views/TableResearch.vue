@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-main class="bg-gray-100 font-noto-sans-thai">
+        <v-main class="bg-gray-100">
             <Filters />
             <Table />
         </v-main>

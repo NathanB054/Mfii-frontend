@@ -1,18 +1,22 @@
 <template>
-    <v-container>
+    <v-container fluid>
         <v-card class="rounded-lg pa-4 mb-4 !bg-gray-200">
-            <v-card-title class="d-flex align-center my-2 !text-2xl">
-                <v-icon icon="mdi-text-box-search"></v-icon>&nbsp; สืบค้นข้อมูลทรัพย์สินทางปัญญา
-                <v-spacer></v-spacer>
-                <div>
-                    <p class="mb-2 text-warning !text-sm"> <v-icon color="warning">mdi-alert-circle-outline</v-icon>
-                        บุคลากร มฟล เข้าสู่ระบบเพื่อเข้าถึงข้อมูลมากขึ้น!
-                    </p>
+            <v-card-title class="d-flex flex-column flex-md-row align-start align-md-center my-2 !text-2xl">
+                <div class="d-flex align-center">
+                    <v-icon icon="mdi-text-box-search" />
+                    <span class="text-start text-xl sm:text-xl md:text-2xl lg:text-3xl ml-2">
+                        สืบค้นข้อมูลทรัพย์สินทางปัญญา
+                    </span>
                 </div>
+                <v-spacer></v-spacer>
+                <span class="mt-2 mt-md-0 text-warning !text-sm d-flex align-center">
+                    <v-icon color="warning" class="mr-1">mdi-alert-circle-outline</v-icon>
+                    บุคลากร มฟล เข้าสู่ระบบเพื่อเข้าถึงข้อมูลมากขึ้น!
+                </span>
             </v-card-title>
             <v-card-text class="rounded-xl">
                 <v-data-table :headers="filteredHeaders" :items="data" :items-per-page="-1" :fixed-header="true"
-                    height="400" class="elevation-0">
+                    height="450" class="elevation-0">
                     <template v-for="header in filteredHeaders" v-slot:[`item.${header.key}`]="{ item }">
                         <div :style="{
                             width: ['intelProp', 'editMore', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'major', 'holder', 'other', 'industryType', 'utilization', 'note'].includes(header.key) ? '250px' : 'auto',
@@ -35,7 +39,6 @@
 </template>
 
 <script>
-// import { useErrorStore } from '@/stores/errorStore'
 import api from '@/stores/axios-config';
 
 export default {
@@ -90,11 +93,10 @@ export default {
         },
     },
     async mounted() {
-        // const errorStore = useErrorStore(); // เรียกใช้งาน error store
         try {
             // ดึงข้อมูลจาก '/getsResearch/all/all/all/all' สำหรับแสดงผลก่อน
             const researchResponse = await api.get("/getsResearch/all/all/all/all");
-            console.log("Research data:", researchResponse.data); // ดูข้อมูลที่ได้รับจาก API
+            // console.log("Research data:", researchResponse.data); // ดูข้อมูลที่ได้รับจาก API
 
             // เข้าถึงข้อมูลจาก result และทำการปรับโครงสร้าง
             const researchData = researchResponse.data.result || [];
@@ -109,7 +111,7 @@ export default {
                 const userResponse = await api.get("/getUser");
                 this.isLoggedIn = userResponse.data.isLoggedIn;
                 this.businessType = userResponse.data.resutl.businessType;
-                console.log("businessType:", this.businessType);
+                // console.log("businessType:", this.businessType);
             } else {
                 console.error("No data found from research API.");
             }

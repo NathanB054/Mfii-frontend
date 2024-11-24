@@ -1,25 +1,21 @@
 <template>
     <!-- Filters Section -->
-    <v-container>
-        <v-card class="rounded-lg p-4 pt-10 px-4">
-            <v-row>
+    <v-container fluid>
+        <v-card class="rounded-lg py-6 px-4">
+            <v-row class="d-flex justify-center">
                 <v-col cols="12" sm="6" md="4" lg="3">
                     <v-combobox v-model="Industry_type" :items="indust" item-value="value" item-title="text" clearable
-                        chips variant="outlined" label="ประเภทอุตสาหกรรม"></v-combobox>
+                        chips density="comfortable" variant="outlined" label="ประเภทอุตสาหกรรม"></v-combobox>
                 </v-col>
                 <v-col cols="12" sm="6" md="4" lg="3">
                     <v-combobox v-model="Intellectual_property_type" :items="prop" item-value="value" item-title="text"
-                        clearable chips variant="outlined" label="ทรัพย์สินทางปัญญา"></v-combobox>
-                </v-col>
-                <v-col cols="12" sm="6" md="4" lg="3">
-                    <v-combobox v-model="Technology_type" :items="tech" item-value="value" item-title="text" clearable
-                        chips variant="outlined" label="ความพร้อมของเทคโนโลยี"></v-combobox>
+                        clearable chips density="comfortable" variant="outlined" label="ประเภทผลงาน"></v-combobox>
                 </v-col>
                 <v-col cols="12" sm="6" md="4" lg="3">
                     <!-- search -->
                     <v-text-field v-model="search" density="comfortable" placeholder="Search"
                         prepend-inner-icon="mdi-magnify" style="max-width: 300px" variant="solo" clearable hide-details
-                        rounded class="pb-6">
+                        rounded  >
                     </v-text-field>
                 </v-col>
             </v-row>
@@ -34,7 +30,6 @@ export default {
             search: "",
             Industry_type: "ทั้งหมด",
             Intellectual_property_type: "ทั้งหมด",
-            Technology_type: "ทั้งหมด",
             indust: [
                 { value: "cosme", text: "เครื่องสำอาง" },
                 { value: "agtech", text: "การเกษตรและเทคโนโลยีชีวภาพ" },
@@ -61,11 +56,6 @@ export default {
                 { value: "khw", text: "ผลงานวิจัย" },
                 { value: "pte", text: "ต้นแบบ" },
                 { value: "oth", text: "อื่น ๆ" },
-            ],
-            tech: [
-                { value: "lab", text: "ระดับการทดลอง" },
-                { value: "pty", text: "ระดับต้นแบบ" },
-                { value: "ids", text: "ระดับถ่ายทอด" },
             ],
         }
     },
