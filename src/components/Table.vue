@@ -15,7 +15,7 @@
                     height="400" class="elevation-0">
                     <template v-for="header in filteredHeaders" v-slot:[`item.${header.key}`]="{ item }">
                         <div :style="{
-                            width: ['intelProp', 'editMore', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'major', 'holder', 'other', 'indust', 'utilization', 'note'].includes(header.key) ? '250px' : 'auto',
+                            width: ['intelProp', 'editMore', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'major', 'holder', 'other', 'industryType', 'utilization', 'note'].includes(header.key) ? '250px' : 'auto',
                             padding: '8px'
                         }">
                             <template v-if="header.key === 'inventor'">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { useErrorStore } from '@/stores/errorStore'
+// import { useErrorStore } from '@/stores/errorStore'
 import api from '@/stores/axios-config';
 
 export default {
@@ -52,18 +52,18 @@ export default {
                 { title: "ประเภทผลงาน", key: "intelProp" },
                 { title: "เลขที่คำขอ", key: "numberReq" },
                 { title: "วันที่ยื่นคำขอ", key: "dateReq" },
-                { title: "ปีงบประมาณ", key: "year" },
+                { title: "ปีงบประมาณ", key: "budgetYear" },
                 { title: "แก้ไขเพิ่มเติม", key: "editMore" },
                 { title: "เลขที่ประกาศโฆษณา", key: "numberAds" },
                 { title: "วันที่ประกาศโฆษณา", key: "dateAds" },
-                { title: "สถานะสุดท้าย", key: "status" },
+                { title: "สถานะสุดท้าย", key: "lastStatus" },
                 { title: "เลขที่รับจดทะเบียน", key: "numberRegister" },
                 { title: "วันที่รับจดทะเบียน", key: "dateRegister" },
                 { title: "วันที่หมดอายุ", key: "exp" },
                 { title: "ครบกำหนดชำระค่าธรรมเนียมรายปี", key: "dueFee" },
                 { title: "แจ้งเตือนชำระค่าธรรมเนียมรายปี", key: "notiFee" },
                 { title: "อื่นๆ", key: "other" },
-                { title: "ประเภทอุตสาหกรรม", key: "indust" },
+                { title: "ประเภทอุตสาหกรรม", key: "industryType" },
                 { title: "ลักษณะผลงาน", key: "workType" },
                 { title: "การใช้ประโยชน์", key: "utilization" },
                 { title: "หมายเหตุ", key: "note" },
@@ -84,13 +84,13 @@ export default {
             // แสดงคอลัมน์บางส่วนเมื่อไม่ได้ล็อกอิน หรือ businessType เป็น "นิติบุคคล" หรือ "บุคคลธรรมดา"
             else {
                 return this.headers.filter((header) =>
-                    ["id", "nameOnMedia", "inventor", "major", "intelProp", "indust"].includes(header.key)
+                    ["id", "nameOnMedia", "inventor", "major", "intelProp", "industryType"].includes(header.key)
                 );
             }
         },
     },
     async mounted() {
-        const errorStore = useErrorStore(); // เรียกใช้งาน error store
+        // const errorStore = useErrorStore(); // เรียกใช้งาน error store
         try {
             // ดึงข้อมูลจาก '/getsResearch/all/all/all/all' สำหรับแสดงผลก่อน
             const researchResponse = await api.get("/getsResearch/all/all/all/all");
@@ -115,17 +115,8 @@ export default {
             }
 
         } catch (error) {
-            // ปิดการแสดง error snackbar ในหน้านี้
-            errorStore.handleApiError(error, { hideSnackbar: true });
+            throw error;
         }
-
-        // const errorStore = useErrorStore(); // Initialize error store
-        // // แสดงข้อผิดพลาดจาก errorStore
-        //  errorStore.show('บุคลากร มฟล เข้าสู่ระบบเพื่อเข้าถึงข้อมูลมากขึ้น!', {
-        //     color: 'warning',
-        //     icon: 'mdi-alert-circle',
-        //     timeout: 5000,});
-
     }
 };
 </script>
