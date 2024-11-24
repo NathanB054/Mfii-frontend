@@ -13,11 +13,12 @@ const mobileSections = [
     {
         name: 'บริการของเรา',
         items: [
-            { label: 'สร้างความตระหนักด้านทรัพย์สินทางปัญญา', to: '/services/awa' },
+            { label: 'งานสร้างความตระหนักทรัพย์สินทางปัญญา', to: '/services/aai' },
             { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' },
             { label: 'การนำไปใช้ประโยชน์', to: 'services/uti' },
-            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/ups' },
-            { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' }
+            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/upi' },
+            { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' },
+            { label: 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', to: '/services/abi' }
         ],
         isActive: (route) => route.path.startsWith('/service'),
     },

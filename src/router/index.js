@@ -127,6 +127,24 @@ const router = createRouter({
     component: () => import('../views/NotFound.vue'),
     meta: { showNavTop: true }
   },
+  {
+    path: '/services/aai',
+    name: 'AwareAsset',
+    component: () => import('../views/AwareAssetInfo.vue'),
+    meta: { showNavTop: true, showNavFooter: true }
+  },
+  {
+    path: '/services/abi',
+    name: 'AssetBenefit',
+    component: () => import('../views/AssetBenefitInfo.vue'),
+    meta: { showNavTop: true, showNavFooter: true }
+  },
+  {
+    path: '/services/upi',
+    name: 'UpdateInnovation',
+    component: () => import('../views/UpdateInnovation.vue'),
+    meta: { showNavTop: true, showNavFooter: true }
+  },
 
   ],
 })
