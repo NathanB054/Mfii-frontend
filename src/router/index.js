@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth';
 import HomeView from '../views/HomeView.vue'
-import InnovaionDetail from '@/views/InnovationDetailView.vue'
+import InnovationDetail from '@/views/InnovationDetailView.vue';
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -58,7 +58,7 @@ const router = createRouter({
     {
       path: '/detail/:id',
       name: 'Innovation Detail',
-      component: InnovaionDetail,
+      component: InnovationDetail,
       props: true,
       meta: { showNavTop: true, showNavFooter: true }
     },
@@ -148,6 +148,9 @@ const router = createRouter({
 
   ],
 })
+
+
+
 
 // requiresAuth: true 
 

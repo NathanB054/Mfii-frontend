@@ -5,7 +5,7 @@
                 <v-container class="font-noto-sans-thai">
                     <!-- Message list -->
                     <v-card class="rounded-xl pa-2 mb-2 !bg-gray-200">
-                        <v-card-title>ข้อความและการตอบกลับ</v-card-title>
+                        <v-card-title>ข้อความและการตอบกลับ </v-card-title>
                         <v-card-text>
                             <v-list class="rounded-lg">
                                 <v-container v-if="filteredMessages.length <= 0">
@@ -104,10 +104,10 @@
 import StaffLayout from "@/layouts/staff.vue";
 import api from '@/stores/axios-config';
 import { useAuthStore } from "@/stores/auth";
-import { computed } from "vue";
+import { computed,onMounted } from "vue";
 import { useErrorStore } from "@/stores/errorStore";
 const errorStore = useErrorStore();
-
+const authStore = useAuthStore();
 export default {
     name: "staff-MessageReply-page",
     components: {
@@ -119,18 +119,12 @@ export default {
             selectedMessage: [],
             replyText: '',
             messages: [],
-            user: {
-                _id: ''
-            },
+            user: "",
             confirmDialog: false,
             messageToDelete: null,
         };
     },
-    setup() {
-        const authStore = useAuthStore();
-        const user = computed(() => authStore.user);
-        return { user };
-    },
+  
     mounted() {
         this.fetchMessages();
     },
@@ -155,11 +149,7 @@ export default {
 
         async openReplyDialog(id) {
             try {
-                const response = await api.get('/mesDetail/' + id, {
-                    headers: {
-                        Authorization: localStorage.getItem("token"),
-                    },
-                });
+                const response = await api.get('/mesDetail/' + id);
                 this.selectedMessage = response.data.result;
                 this.replyText = '';
                 this.isDialogOpen = true;
@@ -175,6 +165,7 @@ export default {
             }
         },
         async replyMessage(message, id) {
+            console.log(message, this.user)
             try {
                 await api.patch('/mesReplyUpdate/' + id, {
                     messages: message,
@@ -227,8 +218,13 @@ export default {
                 this.messageToDelete = null;
             }
         },
-       
+ 
     },
+    setup() {
+    const user = computed(() => authStore.user);  
+    return { user };
+  },
+  
     computed: {
         filteredMessages() {
             return [...this.messages].reverse();

@@ -16,7 +16,9 @@
 import StaffLayout from "@/layouts/staff.vue";
 import UserStatistics from "@/views/UserStatistics.vue";
 import ResearchStatistics from "@/views/ResearchStatistics.vue";
-
+import { useAuthStore } from "@/stores/auth";
+import { computed, onMounted } from "vue";
+const authStore = useAuthStore();
 export default {
     name: "staff-index-page",
     components: {
@@ -25,8 +27,18 @@ export default {
         ResearchStatistics,
     },
     data() {
-        return {};
+        return {
+
+        };
     },
+
+    setup() {
+    onMounted(() => {
+      if (!authStore.user) {
+        authStore.fetchUser(); 
+      }
+    });
+  },
 };
 </script>
 
