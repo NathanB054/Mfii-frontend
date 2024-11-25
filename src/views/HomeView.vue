@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="flex justify-center items-center mt-5">
-      <div class="w-[90%] bg-gray-200">
+      <div class="w-[90%]">
         <Carousel />
       </div>
     </div>
