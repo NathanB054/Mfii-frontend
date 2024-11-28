@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import NavSearch from './NavSearch.vue';
 
 const isOpen = ref(false);
 const activeDropdown = ref(null);
@@ -132,9 +133,7 @@ const handleLogout = async () => {
 
         <!-- End content -->
         <div class="items-center mr-10">
-            <div>
-                <input type="text" placeholder="Search" class="border border-gray-300 rounded-md px-4 py-2">
-            </div>
+            <NavSearch />
             <div v-if="authStore.user" class="flex items-center justify-center mt-4">
                 <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
                 <div>

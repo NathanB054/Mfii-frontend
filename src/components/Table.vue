@@ -119,7 +119,7 @@ export default {
                     throw error;
                    }
                 } else {
-                    errorStore.show("โปรดเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม", {
+                    errorStore.show("บุคลากร โปรดเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม", {
                         color: 'warning',
                         icon: 'mdi-alert-circle',
                         timeout: 5000
