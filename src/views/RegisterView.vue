@@ -134,6 +134,7 @@ export default {
         router.push('/'); // เปลี่ยนเส้นทางตามต้องการ
       } catch (error) {
         console.error("Registration failed:", error);
+        throw error;
       }
     };
 

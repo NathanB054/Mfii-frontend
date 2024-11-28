@@ -62,35 +62,21 @@
                 </v-container>
             </v-container>
 
-            <div class="text-center">
-                <v-snackbar v-model="snackbar.show" :color="snackbar.color">
-                    <p>{{ snackbar.message }}</p>
-
-                    <template v-slot:actions>
-                        <v-btn color="white" variant="text" @click="snackbar.show = false">
-                            Close
-                        </v-btn>
-                    </template>
-                </v-snackbar>
-            </div>
-
         </v-main>
     </v-app>
 </template>
 
 <script>
 import api from '@/stores/axios-config';
+import { useErrorStore } from '@/stores/errorStore';
 const baseURL = import.meta.env.VITE_BASE_URL;
+
 export default {
     name: "innovation-page",
     props: ["id"],
     data() {
         return {
-            snackbar: {
-                show: false,
-                message: "",
-                color: "success", // Default color
-            },
+         
             research: null,
             isLoading: true,
             baseUrl: '',
@@ -107,64 +93,33 @@ export default {
                 const response = await api.get(`/getResearch?researchId=${this.id}`); // Replace with your API endpoint
                 this.research = response.data.result;
             } catch (error) {
-                let errorMessage = "An unexpected error occurred";
-                let errorCode = "Unknown";
-                let errorDetails = "";
-                if (error.response) {
-                    // The request was made and the server responded with a status code
-                    // that falls out of the range of 2xx
-                    const errorDesc = error.response.data.description;
-                    if (errorDesc && (errorDesc.code === 40107 || errorDesc.code === 40102)) {
-                        // Handle specific error codes
-                        errorMessage = errorDesc.code === 40107 ? errorDesc.description : errorDesc.description;
-                        errorCode = errorDesc.code;
-                    } else {
-                        errorMessage = errorDesc?.description || error.response.data.message || "Server error";
-                        errorCode = error.response.status;
-                    }
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    errorMessage = "ไม่มีการตอบกลับจากเซิฟเวอร์ หรือ เซิฟเวอร์ผิดผลาด";
-                } else if (error.code === 'ERR_NETWORK') {
-                    // Network error
-                    errorMessage = "Network Error";
-                    errorCode = error.code;
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    errorMessage = error.message;
-                }
-                // Add more detailed error information
-                errorDetails = `${error.name}: ${error.message}`;
-                // Log the error
-                console.error(`Error : ${errorDetails}`, error);
-
-                this.snackbar = {
-                    message: `Error: ${errorMessage}${errorCode !== "Unknown" ? ` (Code: ${errorCode})` : ''}`,
-                    color: "error",
-                    Errcode: errorCode,
-                    show: true
-                };
+                throw error;
             } finally {
                 this.isLoading = false;
             }
         },
 
         downloadPdf() {
+            const errorStore = useErrorStore();
             if (this.research.filePath && this.research.filePath.length > 0) {
                 const pdfPath = this.research.filePath.find(path => path.toLowerCase().endsWith('.pdf'));
                 if (pdfPath) {
                     window.open(`${baseURL}/${pdfPath}`, '_blank');
                 } else {
                     // Handle case where no PDF file is found
-                    this.snackbar.message = 'No PDF file';
-                    this.snackbar.color = 'default';
-                    this.snackbar.show = true;
+                    errorStore.show("ไม่มีไฟล์ PDF", {
+                        color: 'warning',
+                        icon: 'mdi-alert-circle',
+                        timeout: 5000
+                    });
                 }
             } else {
                 // Handle case where research data or file paths are not loaded
-                this.snackbar.message = 'No research data loaded.';
-                this.snackbar.color = 'error';
-                this.snackbar.show = true;
+                errorStore.show("No research data loaded.", {
+                        color: 'error',
+                        icon: 'mdi-alert-circle',
+                        timeout: 5000
+                    });
             }
         },
     },
