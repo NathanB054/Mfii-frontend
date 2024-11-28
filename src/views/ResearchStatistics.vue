@@ -27,6 +27,7 @@
 <script>
 import  api  from '@/stores/axios-config';
 import { ref, reactive, computed } from "vue";
+import { useErrorStore } from "@/stores/errorStore";
 
 export default {
     setup() {
@@ -54,6 +55,7 @@ export default {
         };
 
         const fetchResearchCounts = async () => {
+            const errorStore = useErrorStore();
             try {
                 const response = await api.get('/getStatProduct');
                 Object.assign(productCounts, response.data.result);

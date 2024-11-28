@@ -40,6 +40,7 @@
 
 <script>
 import api from '@/stores/axios-config';
+import { useErrorStore } from '@/stores/errorStore';
 
 export default {
     name: "Table",
@@ -107,11 +108,24 @@ export default {
 
             // ตรวจสอบว่ามีข้อมูลใน this.data หรือไม่
             if (this.data.length > 0) {
+                const errorStore = useErrorStore();
                 // ถ้ามีข้อมูลใน this.data ให้เรียก /getUser
-                const userResponse = await api.get("/getUser");
-                this.isLoggedIn = userResponse.data.isLoggedIn;
-                this.businessType = userResponse.data.resutl.businessType;
-                // console.log("businessType:", this.businessType);
+                if (localStorage.getItem('token')) {
+                   try {
+                    const userResponse = await api.get("/getUser");
+                    this.businessType = userResponse.data.resutl.businessType;
+                    // this.isLoggedIn = userResponse.data.isLoggedIn;
+                   } catch (error) {
+                    throw error;
+                   }
+                } else {
+                    errorStore.show("โปรดเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม", {
+                        color: 'warning',
+                        icon: 'mdi-alert-circle',
+                        timeout: 5000
+                    });
+                }
+                //  console.log("businessType:", this.businessType);
             } else {
                 console.error("No data found from research API.");
             }
