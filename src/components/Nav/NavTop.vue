@@ -120,24 +120,24 @@ const handleLogout = async () => {
 
 
 <template>
-    <div class="w-full h-40 flex items-center justify-between">
+    <div class="title-bar w-full h-40 flex items-center justify-between">
         <!-- Start of content -->
-        <div class="flex items-center">
-            <img src="@/assets/images/mfu_logo.png" alt="mfu logo" width="150px">
+        <div class="start-content flex items-center">
+            <img src="@/assets/images/mfu_logo.png" class="logo-img" alt="mfu logo" width="150px">
             <div class="text-title ml-4">
-                <h1 class="text-3xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
-                <h2 class="text-2xl">MFU Intellectual Property Management and Technology Transfer</h2>
+                <h1 class="text-2xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
+                <h1 class="text-2xl font-bold">MFU Intellectual Property Management and Technology Transfer</h1>
             </div>
         </div>
 
 
         <!-- End content -->
-        <div class="items-center mr-10">
+        <div class="end-content items-center mr-10">
             <NavSearch />
-            <div v-if="authStore.user" class="flex items-center justify-center mt-4">
-                <p>Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
+            <div v-if="authStore.user" class="user flex items-center justify-center mt-4">
+                <p class="mr-2">Welcome, {{ authStore.user.firstName }} {{ authStore.user.lastName }}</p>
                 <div>
-                    <v-menu transition="slide-x-transition">
+                    <v-menu transition="menu slide-x-transition">
                         <template v-slot:activator="{ props }">
                             <v-btn v-bind="props" icon size="48px" class="hover:bg-gray-200">
                                 <v-avatar size="48px">
@@ -150,7 +150,9 @@ const handleLogout = async () => {
                         <v-list class="font-noto-sans-thai">
                             <router-link v-if="authStore.user.role === 'admin'" to="/admin">
                                 <v-list-item>
-                                    <v-list-item-title>Admin Page</v-list-item-title>
+                                    <v-list-item-title>
+                                       
+                                        Admin Page</v-list-item-title>
                                 </v-list-item>
                             </router-link>
                             <router-link v-if="authStore.user.role === 'staff' || authStore.user.role === 'admin'"
@@ -171,7 +173,10 @@ const handleLogout = async () => {
                                 </v-list-item>
                             </router-link>
                             <v-list-item @click="handleLogout">
-                                <v-list-item-title>ออกจากระบบ</v-list-item-title>
+                                <v-list-item-title>
+                                    <v-icon icon="mdi-logout" />
+                                    ออกจากระบบ
+                                </v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
@@ -396,5 +401,94 @@ const handleLogout = async () => {
 <style scoped>
 .transition-all {
     transition-property: all;
+}
+
+@media (max-width: 1024px) {
+    .end-content {
+        margin-right: 0 !important;
+    }
+
+    .title-bar {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25%;
+    }
+
+    .start-content {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    .text-title {
+        justify-items: center !important;
+    }
+}
+
+@media (max-width: 870px) {
+
+    .start-content {
+        margin-bottom: 1%;
+    }
+
+    .text-title h1 {
+        font-size: larger;
+    }
+}
+
+@media (max-width: 800px) {
+    .title-bar {
+        margin-bottom: 30%;
+    }
+}
+
+@media (max-width: 660px) {
+    .title-bar {
+        margin-bottom: 35%;
+    }
+}
+
+@media (max-width: 604px) {
+    .user {
+        margin-bottom: 40%;
+    }
+
+    .title-bar {
+        margin-bottom: 40%;
+    }
+
+    .text-title h1 {
+        font-size: medium;
+    }
+}
+
+@media (max-width: 506px) {
+    .title-bar {
+        margin-bottom: 45%;
+    }
+
+    .text-title h1 {
+        font-size: small;
+    }
+}
+
+@media (max-width: 446px) {
+    .title-bar {
+        margin-bottom: 50%;
+    }
+
+    .text-title h1 {
+        font-size: x-small;
+    }
+}
+
+@media (max-width: 400px) {
+    .title-bar {
+        margin-bottom: 55%;
+    }
+
+    .text-title h1 {
+        font-size: xx-small;
+    }
 }
 </style>
