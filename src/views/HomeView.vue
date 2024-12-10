@@ -21,7 +21,7 @@
         <v-container class="flex justify-center items-center bg-gray-100 rounded">
           <v-row v-if="paginatedItems" class="flex flex-wrap justify-center">
             <v-col v-for="(item, index) in paginatedItems" :key="index" cols="12" sm="6" md="6" lg="3" class="p-2">
-              <router-link :to="{ name: 'Innovation', params: { id: item._id } }">
+              <router-link :to="{ name: 'Innovation Detail', params: { id: item._id } }">
                 <v-card class="researchCard hover:shadow-lg transition-shadow rounded-xl">
                   <v-img v-if="item.filePath[0].toLowerCase().endsWith('.pdf')" :src="`${baseUrl}/${item.filePath[1]}`"
                     cover height="200px">
@@ -81,7 +81,7 @@
 <script>
 import Carousel from '../components/carousel.vue';
 import quickmenu from '@/components/quickmenu.vue';
-import YtVideos from '@/components/ytVideos.vue';
+import YtVideos from '@/components/ytvideos.vue';
 import api from '@/stores/axios-config';
 const baseURL = import.meta.env.VITE_BASE_URL;
 
