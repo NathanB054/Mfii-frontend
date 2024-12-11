@@ -44,6 +44,12 @@ const router = createRouter({
       meta: { showNavTop: true, showNavFooter: true }
     },
     {
+      path: '/regulation',
+      name: 'Regulation',
+      component: () => import('../views/RegulationDemo.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
       path: '/database',
       name: 'Database IP MFU',
       component: () => import('../views/DataIpView.vue'),
