@@ -63,7 +63,7 @@ export default {
                 { title: "สถานะสุดท้าย", key: "lastStatus" },
                 { title: "เลขที่รับจดทะเบียน", key: "numberRegister" },
                 { title: "วันที่รับจดทะเบียน", key: "dateRegister" },
-                { title: "วันที่หมดอายุ", key: "exp" },
+                { title: "วันที่หมดอายุ", key: "dateExp" },
                 { title: "ครบกำหนดชำระค่าธรรมเนียมรายปี", key: "dueFee" },
                 { title: "แจ้งเตือนชำระค่าธรรมเนียมรายปี", key: "notiFee" },
                 { title: "อื่นๆ", key: "other" },
