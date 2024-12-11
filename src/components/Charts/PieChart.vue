@@ -7,6 +7,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { Chart, registerables } from 'chart.js';
+import api from '@/stores/axios-config';
 
 Chart.register(...registerables);
 
@@ -22,15 +23,15 @@ export default {
   setup(props) {
     const pieChart = ref(null);
 
-    // กำหนดสีพื้นฐานสำหรับแต่ละประเภท
+    // Define base colors for each chart type
     const baseColors = {
-      patent: '#FF6B6B',       // สีแดง
-      pettyPatent: '#4ECDC4',  // สีเขียว
-      designPatent: '#45B7D1', // สีฟ้า
-      copyright: '#96CEB4'     // สีเขียวอ่อน
+      patent: '#2B3349',
+      pettyPatent: '#294A8F',
+      designPatent: '#9FB7E3',
+      copyright: '#D8D0E7'
     };
 
-    // ฟังก์ชันสร้างเฉดสี
+    // Generate color shades
     const generateShades = (baseColor) => {
       return [
         `${baseColor}FF`, // 100% opacity
@@ -41,35 +42,75 @@ export default {
       ];
     };
 
-    onMounted(() => {
-      const baseColor = baseColors[props.chartType];
-      const shades = generateShades(baseColor);
+    const fetchResearchData = async () => {
+      try {
+        const response = await api.get('/getsResearch/all/all/all/all');
+        const data = response.data.result;
+        
+        // Filter data based on chartType
+        const filteredData = data.filter(item => {
+          switch(props.chartType) {
+            case 'patent':
+              return item.intelProp === 'สิทธิบัตรการประดิษฐ์';
+            case 'pettyPatent':
+              return item.intelProp === 'อนุสิทธิบัตร';
+            case 'designPatent': 
+              return item.intelProp === 'สิทธิบัตรออกแบบ';
+            case 'copyright':
+              return item.intelProp === 'ลิขสิทธิ์' || item.intelProp === 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์';
+            default:
+              return false;
+          }
+        });
 
-      new Chart(pieChart.value, {
-        type: 'pie',
-        data: {
-          labels: ['ยื่นคำขอ', 'อยู่ระหว่างตรวจสอบ', 'ได้รับการจดทะเบียน', 'ถูกปฏิเสธ', 'ยกเลิก/ถูกเพิกถอน'],
-          datasets: [{
-            data: [30, 25, 20, 15, 10], // ตัวอย่างข้อมูล
-            backgroundColor: shades,
-            borderColor: 'white',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                font: {
-                  size: 12
+        // Group data by techReadiness
+        const techReadinessGroups = {
+          'ระดับการทดลอง': 0,
+          'ระดับต้นแบบ': 0,
+          'ระดับถ่ายทอด': 0
+        };
+
+        filteredData.forEach(item => {
+          if (techReadinessGroups[item.techReadiness] !== undefined) {
+            techReadinessGroups[item.techReadiness]++;
+          }
+        });
+
+        // Create Chart
+        if (pieChart.value) {
+          const ctx = pieChart.value.getContext('2d');
+          new Chart(ctx, {
+            type: 'pie',
+            data: {
+              labels: Object.keys(techReadinessGroups),
+              datasets: [{
+                data: Object.values(techReadinessGroups),
+                backgroundColor: generateShades(baseColors[props.chartType]),
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                  labels: {
+                    font: {
+                      size: 12
+                    }
+                  }
                 }
               }
             }
-          }
+          });
         }
-      });
+      } catch (error) {
+        console.error('Error fetching research data:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchResearchData();
     });
 
     return {
