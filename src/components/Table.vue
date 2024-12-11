@@ -118,13 +118,7 @@ export default {
                    } catch (error) {
                     throw error;
                    }
-                } else {
-                    errorStore.show("บุคลากร โปรดเข้าสู่ระบบเพื่อดูข้อมูลเพิ่มเติม", {
-                        color: 'warning',
-                        icon: 'mdi-alert-circle',
-                        timeout: 5000
-                    });
-                }
+                } 
                 //  console.log("businessType:", this.businessType);
             } else {
                 console.error("No data found from research API.");
