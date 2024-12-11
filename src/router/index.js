@@ -44,6 +44,12 @@ const router = createRouter({
       meta: { showNavTop: true, showNavFooter: true }
     },
     {
+      path: '/services/ipa',
+      name: 'Request for Coverage',
+      component: () => import('../views/RequestCoverageView.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
       path: '/database',
       name: 'Database IP MFU',
       component: () => import('../views/DataIpView.vue'),
