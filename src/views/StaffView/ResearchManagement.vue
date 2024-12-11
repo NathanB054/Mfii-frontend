@@ -45,6 +45,8 @@
                                         v-model="currentResearch.major"
                                         :items="['สำนักวิชาศิลปศาสตร์', 'สำนักวิชาวิทยาศาสตร์', 'สำนักวิชาการจัดการ', 'สำนักวิชาเทคโนโลยีสารสนเทศ', 'สำนักวิชาอุตสาหกรรมเกษตร', 'สำนักวิชานิติศาสตร์', 'สำนักวิชาวิทยาศาสตร์เครื่องสำอาง', 'สำนักวิชาวิทยาศาสตร์สุขภาพ', 'สำนักวิชาพยาบาลศาสตร์', 'สำนักวิชาเวชศาสตร์ชะลอวัยและฟื้นฟูสุขภาพ', 'สำนักวิชาแพทยศาสตร์', 'สำนักวิชาทันตแพทยศาสตร์', 'สำนักวิชานวัตกรรมสังคม', 'สำนักวิชาจีนวิทยา', 'สำนักวิชาการแพทย์บูรณาการ', 'อื่นๆ']"
                                         :rules="[rules.required]" required></v-autocomplete>
+                                    <v-combobox variant="solo-filled" flat label="ผู้ทรงสิทธิ"
+                                        v-model="currentResearch.holder" :rules="[rules.required]"></v-combobox>
                                     <v-autocomplete variant="solo-filled" flat label="ทรัพย์สินทางปัญญา"
                                         v-model="currentResearch.intelProp"
                                         :items="['สิทธิบัตรการประดิษฐ์', 'อนุสิทธิบัตร', 'สิทธิบัตรออกแบบ', 'ลิขสิทธิ์', 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์', 'ผลงานวิจัย', 'ต้นแบบ', 'อื่น ๆ']"
@@ -64,9 +66,154 @@
                                         v-model="currentResearch.highlight"></v-textarea>
                                     <v-combobox v-model="currentResearch.coop" label="ความร่วมมือที่เสาะหา" chips
                                         multiple variant="solo-filled" :rules="[rules.required]" required></v-combobox>
+
+                                    <v-container>
+                                        <v-row>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <v-text-field label="เลขที่คำขอ" variant="solo-filled"
+                                                    v-model="currentResearch.numberReq"
+                                                    :rules="[rules.required]"></v-text-field>
+
+                                                <!-- Date Picker วันที่ยื่นคำขอ -->
+                                                <v-menu v-model="dateReq" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props" label="วันที่ยื่นคำขอ"
+                                                            v-model="formattedDateReq" readonly variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.dateReq"
+                                                        @update:modelValue="dateReq = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <v-text-field label="เลขที่ประกาศโฆษณา"
+                                                    v-model="currentResearch.numberAds" :rules="[rules.required]"
+                                                    variant="solo-filled"></v-text-field>
+
+                                                <!-- Date Picker วันที่ประกาศโฆษณา -->
+                                                <v-menu v-model="dateAds" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props" label="วันที่ประกาศโฆษณา"
+                                                            v-model="formattedDateAds" readonly variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.dateAds"
+                                                        @update:modelValue="dateAds = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <v-text-field label="เลขที่รับจดทะเบียน" variant="solo-filled"
+                                                    v-model="currentResearch.numberRegister"
+                                                    :rules="[rules.required]"></v-text-field>
+
+                                                <!-- Date Picker วันที่รับจดทะเบียน -->
+                                                <v-menu v-model="dateRegister" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props" label="วันที่รับจดทะเบียน"
+                                                            v-model="formattedDateRegister" readonly
+                                                            variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.dateRegister"
+                                                        @update:modelValue="dateRegister = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                        </v-row>
+
+                                        <v-row>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <!-- Date Picker วันที่หมดอายุ -->
+                                                <v-menu v-model="dateExp" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props" label="วันที่หมดอายุ"
+                                                            v-model="formattedDateExp" readonly variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.dateExp"
+                                                        @update:modelValue="dateExp = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <v-menu v-model="dueFee" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props"
+                                                            label="ครบกำหนดชำระค่าธรรมเนียมรายปี"
+                                                            v-model="formatteddueFee" readonly variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.dueFee"
+                                                        @update:modelValue="dueFee = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="12" lg="4">
+                                                <!-- Date Picker แจ้งเตือนชำระค่าธรรมเนียมรายปี -->
+                                                <v-menu v-model="notifyFee" :close-on-content-click="false"
+                                                    :nudge-right="40" transition="scale-transition" offset-y
+                                                    min-width="290px">
+                                                    <template #activator="{ props }">
+                                                        <v-text-field v-bind="props"
+                                                            label="แจ้งเตือนชำระค่าธรรมเนียมรายปี"
+                                                            v-model="formattednotifyFee" readonly variant="solo-filled"
+                                                            prepend-inner-icon="mdi-calendar-range"
+                                                            :rules="[rules.requiredDate]">
+                                                        </v-text-field>
+                                                    </template>
+                                                    <v-date-picker v-model="currentResearch.notifyFee"
+                                                        @update:modelValue="notifyFee = false" locale="th-TH">
+                                                    </v-date-picker>
+                                                </v-menu>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+
                                     <v-text-field label="ปีงบประมาณ" variant="solo-filled"
                                         v-model="currentResearch.budgetYear" :rules="[rules.required]"
                                         required></v-text-field>
+
+                                    <v-text-field label="แก้ไขเพิ่มเติม" variant="solo-filled"
+                                        v-model="currentResearch.editMore"></v-text-field>
+
+                                    <v-text-field label="สถานะสุดท้าย" variant="solo-filled"
+                                        v-model="currentResearch.lastStatus" :rules="[rules.required]"></v-text-field>
+
+                                    <v-text-field label="ลักษณะผลงาน" variant="solo-filled"
+                                        v-model="currentResearch.workType" :rules="[rules.required]"></v-text-field>
+
+                                    <v-text-field label="การใช้ประโยชน์" variant="solo-filled"
+                                        v-model="currentResearch.utilization" :rules="[rules.required]"></v-text-field>
+
+                                    <v-text-field label="อื่นๆ" variant="solo-filled"
+                                        v-model="currentResearch.other"></v-text-field>
+
+                                    <v-text-field label="หมายเหตุ" variant="solo-filled"
+                                        v-model="currentResearch.note"></v-text-field>
+
                                     <v-combobox label="Keyword" variant="solo-filled" chips multiple
                                         v-model="currentResearch.keyword"></v-combobox>
                                     <v-container class="flex">
@@ -137,7 +284,6 @@
                 </v-container>
             </staff-layout>
 
-
             <!-- Dialog delete research -->
             <v-dialog v-model="dialogDelete" max-width="800px">
                 <v-card class="rounded-xl pa-4">
@@ -162,6 +308,8 @@
 import StaffLayout from "@/layouts/staff.vue";
 import api from '@/stores/axios-config';
 import { useErrorStore } from "@/stores/errorStore";
+import dayjs from "dayjs";
+import "dayjs/locale/th";
 const errorStore = useErrorStore();
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -186,9 +334,30 @@ export default {
                 { title: 'ผู้จัดทำ', value: 'inventor' },
                 { title: 'Actions', align: 'center', value: 'actions', sortable: false }
             ],
+            dateReq: false,
+            dateAds: false,
+            dateRegister: false,
+            dateExp: false,
+            dueFee: false,
+            notifyFee: false,
             researches: [],
             researchesRevert: [],
             currentResearch: {
+                dateReq: null,
+                dateAds: null,
+                dateRegister: null,
+                dateExp: null,
+                dueFee: null,
+                notifyFee: null,
+                numberReq: '',
+                numberAds: '',
+                numberRegister: '',
+                editMore: '',
+                lastStatus: '',
+                workType: '',
+                utilization: '',
+                other: '',
+                note: '',
                 budgetYear: '',
                 nameOnMedia: '',
                 inventor: [],
@@ -207,13 +376,17 @@ export default {
                 keyword: null
             },
             rules: {
-                required: value => !!value || 'กรุณากรอกข้อมูลในช่อง'
+                required: value => !!value || 'กรุณากรอกข้อมูลในช่อง',
+                requiredDate: value => !!value || 'กรุณาเลือกวันที่',
             }
         }
     },
 
 
     methods: {
+        closeMenu() {
+            this.menu = false;  // ปิดเมนูเมื่อเลือกวันที่
+        },
         createResearch() {
             this.resetCurrentResearch();
             this.isEdit = false;
@@ -296,6 +469,21 @@ export default {
             this.isUploading = true
             try {
                 const formData = new FormData();
+                formData.append('numberReq', this.currentResearch.numberReq);
+                formData.append('numberAds', this.currentResearch.numberAds);
+                formData.append('numberRegister', this.currentResearch.numberRegister);
+                formData.append('dateReq', this.currentResearch.dateReq);
+                formData.append('dateAds', this.currentResearch.dateAds);
+                formData.append('dateRegister', this.currentResearch.dateRegister);
+                formData.append('dateExp', this.currentResearch.dateExp);
+                formData.append('dueFee', this.currentResearch.dueFee);
+                formData.append('notifyFee', this.currentResearch.notifyFee);
+                formData.append('editMore', this.currentResearch.editMore);
+                formData.append('lastStatus', this.currentResearch.lastStatus);
+                formData.append('workType', this.currentResearch.workType);
+                formData.append('utilization', this.currentResearch.utilization);
+                formData.append('other', this.currentResearch.other);
+                formData.append('note', this.currentResearch.note);
                 formData.append('budgetYear', this.currentResearch.budgetYear);
                 formData.append('nameOnMedia', this.currentResearch.nameOnMedia);
                 formData.append('inventor', this.currentResearch.inventor);
@@ -332,6 +520,21 @@ export default {
                 if (this.isEdit) {
                     try {
                         await api.patch(`/staff/updateResearchData/${this.currentResearch._id}`, {
+                            numberReq: this.currentResearch.numberReq,
+                            numberAds: this.currentResearch.numberAds,
+                            numberRegister: this.currentResearch.numberRegister,
+                            dateReq: this.currentResearch.dateReq,
+                            dateAds: this.currentResearch.dateAds,
+                            dateRegister: this.currentResearch.dateRegister,
+                            dateExp: this.currentResearch.dateExp,
+                            dueFee: this.currentResearch.dueFee,
+                            notifyFee: this.currentResearch.notifyFee,
+                            editMore: this.currentResearch.editMore,
+                            lastStatus: this.currentResearch.lastStatus,
+                            workType: this.currentResearch.workType,
+                            utilization: this.currentResearch.utilization,
+                            other: this.currentResearch.other,
+                            note: this.currentResearch.note,
                             budgetYear: this.currentResearch.budgetYear,
                             nameOnMedia: this.currentResearch.nameOnMedia,
                             inventor: this.currentResearch.inventor,
@@ -495,8 +698,33 @@ export default {
                 }
             }
             return true;
-        }
+        },
 
+        // Date Picker
+        formatThaiDate: (date) => date
+            ? dayjs(date).locale("th").format("DD MMMM YYYY")
+            : ""
+    },
+
+    computed: {
+        formattedDateReq() {
+            return this.formatThaiDate(this.currentResearch.dateReq);
+        },
+        formattedDateAds() {
+            return this.formatThaiDate(this.currentResearch.dateAds);
+        },
+        formattedDateRegister() {
+            return this.formatThaiDate(this.currentResearch.dateRegister);
+        },
+        formattedDateExp() {
+            return this.formatThaiDate(this.currentResearch.dateExp);
+        },
+        formatteddueFee() {
+            return this.formatThaiDate(this.currentResearch.dueFee);
+        },
+        formattednotifyFee() {
+            return this.formatThaiDate(this.currentResearch.notifyFee);
+        }
     },
 
     watch: {
@@ -511,8 +739,6 @@ export default {
         this.fetchResearches();
         this.baseUrl = baseURL;
     },
-
-
 }
 
 </script>
