@@ -40,7 +40,13 @@ const router = createRouter({
     {
       path: '/services/ipp',
       name: 'Table Research',
-      component: () => import('../views/TableResearch.vue'),
+      component: () => import('../views/TableResearchView.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/regulation',
+      name: 'Regulation',
+      component: () => import('../views/RegulationDemo.vue'),
       meta: { showNavTop: true, showNavFooter: true }
     },
     {

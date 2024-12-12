@@ -1,4 +1,28 @@
 <template>
+    <!-- Filters Section -->
+    <v-container fluid>
+        <v-card class="rounded-lg py-6 px-4">
+            <v-row class="d-flex justify-center">
+                <v-col cols="12" sm="6" md="4" lg="3">
+                    <v-combobox v-model="Industry_type" :items="indust" item-value="value" item-title="text" clearable
+                        chips density="comfortable" variant="outlined" label="ประเภทอุตสาหกรรม"></v-combobox>
+                </v-col>
+                <v-col cols="12" sm="6" md="4" lg="3">
+                    <v-combobox v-model="Intellectual_property_type" :items="prop" item-value="value" item-title="text"
+                        clearable chips density="comfortable" variant="outlined" label="ประเภทผลงาน"></v-combobox>
+                </v-col>
+                <v-col cols="12" sm="6" md="4" lg="3">
+                    <!-- search -->
+                    <v-text-field v-model="search" density="comfortable" placeholder="Search"
+                        prepend-inner-icon="mdi-magnify" style="max-width: 300px" variant="solo" clearable hide-details
+                        rounded>
+                    </v-text-field>
+                </v-col>
+            </v-row>
+        </v-card>
+    </v-container>
+
+    <!-- Data Section -->
     <v-container fluid>
         <v-card class="rounded-lg pa-4 mb-4 !bg-gray-200">
             <v-card-title class="d-flex flex-column flex-md-row align-start align-md-center my-2 !text-2xl">
@@ -46,6 +70,37 @@ export default {
     name: "Table",
     data() {
         return {
+            search: "",
+            Industry_type: "ทั้งหมด",
+            Intellectual_property_type: "ทั้งหมด",
+            indust: [
+                { value: "cosme", text: "เครื่องสำอาง" },
+                { value: "agtech", text: "การเกษตรและเทคโนโลยีชีวภาพ" },
+                { value: "f4f", text: "การแปรรูปอาหาร" },
+                { value: "biofc", text: "เชื้อเพลิงชีวภาพและเคมีชีวภาพ" },
+                { value: "medhub", text: "การแพทย์ครบวงจร" },
+                { value: "arts", text: "สร้างสรรค์" },
+                { value: "smeln", text: "อิเล็กทรอนิกส์อัจฉริยะ" },
+                { value: "robot", text: "หุ่นยนต์" },
+                { value: "digit", text: "ดิจิทัล" },
+                {
+                    value: "amwt",
+                    text: "การท่องเที่ยวกลุ่มรายได้ดีและการท่องเที่ยวเชิงสุขภาพ",
+                },
+                { value: "alois", text: "การบินและโลจิสติกส์" },
+                { value: "nxato", text: "ยานยนต์สมัยใหม่" },
+            ],
+            prop: [
+                { value: "ptn", text: "สิทธิบัตรการประดิษฐ์" },
+                { value: "ppt", text: "อนุสิทธิบัตร" },
+                { value: "dsp", text: "สิทธิบัตรออกแบบ" },
+                { value: "cpr", text: "ลิขสิทธิ์" },
+                { value: "cpp", text: "ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์" },
+                { value: "khw", text: "ผลงานวิจัย" },
+                { value: "pte", text: "ต้นแบบ" },
+                { value: "oth", text: "อื่น ๆ" },
+            ],
+
             businessType: "", // ประเภทผู้ใช้
             headers: [
                 { title: "ลำดับ", key: "id" },
@@ -63,7 +118,7 @@ export default {
                 { title: "สถานะสุดท้าย", key: "lastStatus" },
                 { title: "เลขที่รับจดทะเบียน", key: "numberRegister" },
                 { title: "วันที่รับจดทะเบียน", key: "dateRegister" },
-                { title: "วันที่หมดอายุ", key: "exp" },
+                { title: "วันที่หมดอายุ", key: "dateExp" },
                 { title: "ครบกำหนดชำระค่าธรรมเนียมรายปี", key: "dueFee" },
                 { title: "แจ้งเตือนชำระค่าธรรมเนียมรายปี", key: "notiFee" },
                 { title: "อื่นๆ", key: "other" },
@@ -78,8 +133,30 @@ export default {
             data: [], // เก็บข้อมูลจาก API
         };
     },
+    methods: {
+        // Search ResearchData
+        fetchResearchData() {
+            const indust = this.Industry_type?.value || "all";
+            const prop = this.Intellectual_property_type?.value || "all";
+            const descript = (this.search ? this.search.trim() : "all");
+            api.get(`/getsResearch/${indust}/${prop}/all/${descript}`).then((response) => {
+                if (response.status == 200) {
+                    this.data = response.data.result.map((item, index) => ({
+                        ...item,
+                        id: index + 1,
+                    }));
+                } else {
+                    this.error = new Error("Error fetching data");
+                }
+            })
+                .catch((error) => {
+                    throw error;
+                });
+        },
+    },
     computed: {
         filteredHeaders() {
+            this.fetchResearchData();
 
             // แสดงคอลัมน์ทั้งหมดเมื่อ businessType เป็น "บุคลากร มฟล"
             if (this.businessType === "บุคลากร มฟล") {
@@ -94,6 +171,7 @@ export default {
         },
     },
     async mounted() {
+        this.fetchResearchData();
         try {
             // ดึงข้อมูลจาก '/getsResearch/all/all/all/all' สำหรับแสดงผลก่อน
             const researchResponse = await api.get("/getsResearch/all/all/all/all");
