@@ -49,10 +49,10 @@
                                     :items="['งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา', 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', 'งานยกระดับงานวิจัยและนวัตกรรม']"
                                     :rules="[rules.required]" required></v-autocomplete>
                                 <v-text-field v-model="imageTitle" label="ชื่อหัวข้อ" variant="outlined" class="mb-4"
-                                    :rules="rules.topic" required></v-text-field>
+                                    :rules="[rules.topic]" required></v-text-field>
 
                                 <v-textarea v-model="imageDescription" label="คำอธิบาย" variant="outlined" class="mb-4"
-                                    :rules="rules.description" required rows="4" auto-grow></v-textarea>
+                                    :rules="[rules.description]" required rows="4" auto-grow></v-textarea>
 
                                 <div class="flex space-x-4">
                                     <v-btn type="submit" color="green darken-1" variant="elevated"
@@ -60,7 +60,8 @@
                                         class="flex-grow">
                                         อัพโหลดข้อมูล
                                     </v-btn>
-                                    <v-btn v-if="imagePreview" @click="clearImage" color="red darken-1" variant="outlined">
+                                    <v-btn v-if="imagePreview" @click="clearImage" color="red darken-1"
+                                        variant="outlined">
                                         ยกเลิก
                                     </v-btn>
                                 </div>
@@ -124,8 +125,8 @@
                             :items="['งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา', 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', 'งานยกระดับงานวิจัยและนวัตกรรม']"></v-autocomplete>
                         <v-text-field v-model="selectedImage.title" label="ชื่อหัวข้อ" variant="outlined"
                             class="mb-4"></v-text-field>
-                        <v-textarea v-model="selectedImage.description" label="คำอธิบาย" variant="outlined"
-                            rows="4" auto-grow></v-textarea>
+                        <v-textarea v-model="selectedImage.description" label="คำอธิบาย" variant="outlined" rows="4"
+                            auto-grow></v-textarea>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn @click="saveImageEdit" color="green darken-1" variant="elevated" class="mr-2">
@@ -141,15 +142,16 @@
             <!-- delete dialog -->
             <v-dialog v-model="deleteDialog" max-width="400">
                 <v-card class="rounded-xl py-2 px-2">
-                        <v-card-title class="headline text-red-800 text-2xl">ยืนยันการลบ</v-card-title>
-                        <v-card-text>
-                            <p>คุณต้องการลบข้อมูลนี้ใช่หรือไม่?</p>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn color="red darken-1" variant="tonal" text @click="deleteDialog = false">ยกเลิก</v-btn>
-                            <v-btn color="green darken-1" variant="tonal" @click="deleteImage(selectedImage.id)">ยืนยัน</v-btn>
-                        </v-card-actions>
-                    </v-card>
+                    <v-card-title class="headline text-red-800 text-2xl">ยืนยันการลบ</v-card-title>
+                    <v-card-text>
+                        <p>คุณต้องการลบข้อมูลนี้ใช่หรือไม่?</p>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn color="red darken-1" variant="tonal" text @click="deleteDialog = false">ยกเลิก</v-btn>
+                        <v-btn color="green darken-1" variant="tonal"
+                            @click="deleteImage(selectedImage.id)">ยืนยัน</v-btn>
+                    </v-card-actions>
+                </v-card>
             </v-dialog>
 
         </div>
@@ -262,9 +264,6 @@ export default {
 
             this.images.push(newImage)
             this.clearImage()
-            this.imageDescription = ''
-            this.imageTitle = ''
-            this.group = null
             errorStore.show("เพิ่มเรียบร้อยแล้ว", {
                 color: 'success',
                 icon: 'mdi-check-circle',
@@ -305,7 +304,7 @@ export default {
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = ''
             }
-        },
+        }
     }
 }
 </script>
