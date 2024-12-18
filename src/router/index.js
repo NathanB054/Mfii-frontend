@@ -132,6 +132,12 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/groupManagement',
+      name: 'Group Management',
+      component: () => import('../views/StaffView/GroupManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/messageReply',
       name: 'Message Reply',
       component: () => import('../views/StaffView/MessageReply.vue'),
