@@ -25,10 +25,10 @@ export default {
 
     // Define base colors for each chart type
     const baseColors = {
-      patent: '#2B3349',
-      pettyPatent: '#294A8F',
-      designPatent: '#9FB7E3',
-      copyright: '#D8D0E7'
+      patent: '#F4E4B7',       // PMS 127 (เหลืองอ่อน)
+      pettyPatent: '#F2C94C',  // PMS 129 (เหลืองเข้มสดใสกว่า)
+      designPatent: '#EFAE33', // PMS 130 (เหลืองทอง)
+      copyright: '#E38A1B'     // PMS 137 (ส้มเข้ม)
     };
 
     // Generate color shades

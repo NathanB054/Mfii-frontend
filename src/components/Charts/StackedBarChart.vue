@@ -18,13 +18,13 @@ export default {
     const stackedBarChart = ref(null);
 
     const colors = {
-      patent: '#2B3349',
-      pettyPatent: '#294A8F',
-      designPatent: '#9FB7E3',
-      copyright: '#D8D0E7',
-      copyrightSoftware: '#214E63',
-      researchResult: '#407D7F',
-      prototype: '#7BA3AC'
+      patent: '#F4E4B7',          // PMS 127 (เหลืองอ่อน)
+      pettyPatent: '#F2C94C',     // PMS 129 (เหลืองเข้มสดใสกว่า)
+      designPatent: '#EFB64C',    // PMS 130 (เหลืองทอง)
+      copyright: '#E38A1B',       // PMS 137 (ส้มเข้ม)
+      copyrightSoftware: '#F68D2E', // PMS 144 (ส้มกลาง)
+      researchResult: '#F47D20',  // PMS 150 (ส้มสดใส)
+      prototype: '#E56610'        // PMS 152 (ส้มแดงอ่อน)
     };
 
     const fetchAndCreateChart = async () => {
@@ -38,9 +38,9 @@ export default {
         const datasets = [
           {
             label: 'สิทธิบัตรการประดิษฐ์',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'สิทธิบัตรการประดิษฐ์'
               ).length
             ),
@@ -48,9 +48,9 @@ export default {
           },
           {
             label: 'อนุสิทธิบัตร',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'อนุสิทธิบัตร'
               ).length
             ),
@@ -58,9 +58,9 @@ export default {
           },
           {
             label: 'สิทธิบัตรออกแบบ',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'สิทธิบัตรออกแบบ'
               ).length
             ),
@@ -68,9 +68,9 @@ export default {
           },
           {
             label: 'ลิขสิทธิ์',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'ลิขสิทธิ์'
               ).length
             ),
@@ -78,9 +78,9 @@ export default {
           },
           {
             label: 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์'
               ).length
             ),
@@ -88,9 +88,9 @@ export default {
           },
           {
             label: 'ผลงานวิจัย',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'ผลงานวิจัย'
               ).length
             ),
@@ -98,9 +98,9 @@ export default {
           },
           {
             label: 'ต้นแบบ',
-            data: majors.map(major => 
-              data.filter(item => 
-                item.major === major && 
+            data: majors.map(major =>
+              data.filter(item =>
+                item.major === major &&
                 item.intelProp === 'ต้นแบบ'
               ).length
             ),
@@ -141,7 +141,7 @@ export default {
                 },
                 tooltip: {
                   callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                       return `${context.dataset.label}: ${context.raw} รายการ`;
                     }
                   }
