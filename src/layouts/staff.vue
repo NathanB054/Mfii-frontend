@@ -26,6 +26,11 @@
           <v-list-item-title class="inline">จัดการผลงานวิจัย</v-list-item-title>
         </v-list-item>
 
+        <v-list-item link to="/staff/SearchManagement">
+          <v-icon class="mr-2">mdi-text-box-search</v-icon>
+          <v-list-item-title class="inline">จัดการสืบค้นข้อมูล</v-list-item-title>
+        </v-list-item>
+
         <v-list-item link to="/staff/MessageReply">
           <v-icon class="mr-2">mdi mdi-forum</v-icon>
           <v-list-item-title class="inline">ข้อความและการตอบกลับ</v-list-item-title>

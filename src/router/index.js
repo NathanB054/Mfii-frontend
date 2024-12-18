@@ -126,6 +126,12 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/searchManagement',
+      name: 'Search Management',
+      component: () => import('../views/StaffView/SearchManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/messageReply',
       name: 'Message Reply',
       component: () => import('../views/StaffView/MessageReply.vue'),
