@@ -37,20 +37,22 @@
         </v-list-item>
 
         <v-list>
-          <v-list-item link to="/staff/GroupManagement">
-            <v-icon class="mr-2">mdi-file-alert</v-icon>
-            <v-list-item-title class="inline">สร้างความตระหนัก</v-list-item-title>
-          </v-list-item>
+          <router-link to="/staff/GroupManagement">
+            <v-list-item link>
+              <v-icon class="mr-2">mdi-file-alert</v-icon>
+              <v-list-item-title class="inline">สร้างความตระหนัก</v-list-item-title>
+            </v-list-item>
 
-          <v-list-item link to="/staff/GroupManagement">
-            <v-icon class="mr-2">mdi-file-star-four-points</v-icon>
-            <v-list-item-title class="inline">การใช้ประโยชน์</v-list-item-title>
-          </v-list-item>
+            <v-list-item link>
+              <v-icon class="mr-2">mdi-file-star-four-points</v-icon>
+              <v-list-item-title class="inline">การใช้ประโยชน์</v-list-item-title>
+            </v-list-item>
 
-          <v-list-item link to="/staff/GroupManagement">
-            <v-icon class="mr-2">mdi-file-upload</v-icon>
-            <v-list-item-title class="inline">งานยกระดับ</v-list-item-title>
-          </v-list-item>
+            <v-list-item link>
+              <v-icon class="mr-2">mdi-file-upload</v-icon>
+              <v-list-item-title class="inline">งานยกระดับ</v-list-item-title>
+            </v-list-item>
+          </router-link>
         </v-list>
 
         <v-list-item link to="/staff/MessageReply">
