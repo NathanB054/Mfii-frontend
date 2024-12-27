@@ -31,16 +31,22 @@
           <v-list-item-title class="inline">จัดการสืบค้นข้อมูล</v-list-item-title>
         </v-list-item>
 
-        <v-list-item link to="/staff/GroupManagement" class="d-flex align-center">
-          <v-icon class="mr-2 ml-4">mdi-file-alert</v-icon>
-          <v-list-item-title class="inline">จัดการสร้างความตระหนัก</v-list-item-title>
+        <v-list>
+          <v-list-item link to="/staff/GroupManagement">
+            <v-icon class="mr-2">mdi-file-alert</v-icon>
+            <v-list-item-title class="inline">สร้างความตระหนัก</v-list-item-title>
+          </v-list-item>
 
-          <v-icon class="mr-2 ml-4">mdi-file-star-four-points</v-icon>
-          <v-list-item-title class="inline">จัดการการใช้ประโยชน์</v-list-item-title>
+          <v-list-item link to="/staff/GroupManagement">
+            <v-icon class="mr-2">mdi-file-star-four-points</v-icon>
+            <v-list-item-title class="inline">การใช้ประโยชน์</v-list-item-title>
+          </v-list-item>
 
-          <v-icon class="mr-2 ml-4">mdi-file-upload</v-icon>
-          <v-list-item-title class="inline">จัดการงานยกระดับ</v-list-item-title>
-        </v-list-item>
+          <v-list-item link to="/staff/GroupManagement">
+            <v-icon class="mr-2">mdi-file-upload</v-icon>
+            <v-list-item-title class="inline">งานยกระดับ</v-list-item-title>
+          </v-list-item>
+        </v-list>
 
         <v-list-item link to="/staff/MessageReply">
           <v-icon class="mr-2">mdi mdi-forum</v-icon>
