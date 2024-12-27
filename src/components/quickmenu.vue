@@ -1,129 +1,96 @@
 <template>
-    <v-container>
-      <v-row class="relative d-flex justify-center align-center h-full">
-        <!-- Left Side -->
-        <v-col cols="12" md="5" class="border-r border-gray-300 d-flex justify-center align-center flex-column">
-          <div class="text-subtitle-1 px-4 py-2 border border-orange-500 inline-block mb-4">Quick Menu</div>
-          <v-row class="h-full justify-center">
-            <v-col
-              v-for="(route, index) in quickMenuRoutes"
-              :key="index"
-              cols="12"
-              sm="4"
-              class="d-flex justify-center align-center"
-            >
-              <v-card
-                :to="route.to"
-                class="rounded-lg bg-gray-100 w-full transition-all duration-200 hover:shadow-lg hover:bg-gray-200 cursor-pointer"
-                height="140"
-                variant="outlined"
-              >
-                <v-card-text class="d-flex flex-column items-center justify-center text-center h-full px-2">
-                  <span class="text-red-700 font-medium text-sm">{{ route.name }}</span>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-  
-        <!-- Divider for mobile -->
-        <!-- <div class="hidden md:block absolute h-full w-px bg-gray-300 left-2/3 top-0"></div> -->
-  
-        <!-- Right Side -->
-        <v-col cols="12" md="4" class="md:pl-8 d-flex justify-center align-center flex-column">
-          <v-card 
-            color="deep-orange" 
-            class="mb-4 w-full"
+  <v-container class="bg-white rounded-md shadow-md p-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Quick Menu Section (Left Side) -->
+      <div>
+        <h2 class="text-lg md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
+          Quick Menu
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+          <v-card
+
+            v-for="(item, index) in menuItems"
+            :key="index"
+            :to="item.to"
+            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full"
           >
-            <v-card-text class="text-center text-white font-medium py-4">
-              สถิติการยื่นคำขอฯ มหาวิทยาลัยแม่ฟ้าหลวง
-            </v-card-text>
-          </v-card>
-  
-          <v-row class="mt-4 justify-center">
-            <v-col
-              v-for="(stat, index) in stats"
-              :key="index"
-              cols="6"
-              class="d-flex justify-center align-center"
+            <v-icon
+              size="50"
+              :style="{ color: item.color }"
+              class="mb-3 mt-3"
             >
-              <v-card
-                class="rounded-lg bg-gray-100 w-full"
-                height="100"
-                variant="outlined"
-              >
-                <v-card-text class="d-flex flex-column items-center justify-center text-center h-full">
-                  <div class="text-sm md:text-base font-medium">{{ stat.name }}</div>
-                  <div class="mt-2 text-gray-600 text-sm">({{ stat.count }})</div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
-  
-  <script setup>
-  const quickMenuRoutes = [
-    {
-      name: 'การขอใช้บริการวิจัย อบรม/บรรยาย/หรือ ทรัพย์สินทางปัญญา (สำหรับบุคลากร มทส.)',
-      to: '/research-service',
-    },
-    {
-      name: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร',
-      to: '/patent',
-    },
-    {
-      name: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์',
-      to: '/design-patent',
-    },
-    {
-      name: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์',
-      to: '/copyright',
-    },
-    {
-      name: 'การยื่นจด เครื่องหมายการค้า',
-      to: '/trademark',
-    },
-    {
-      name: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มทส.',
-      to: '/ip-search',
-    },
-  ]
-  
-  const stats = [
-    {
-      name: 'สิทธิบัตรการ ประดิษฐ์',
-      count: 25
-    },
-    {
-      name: 'อนุสิทธิบัตร',
-      count: 30
-    },
-    {
-      name: 'สิทธิบัตรการ ออกแบบ ผลิตภัณฑ์',
-      count: 15
-    },
-    {
-      name: 'ลิขสิทธิ์',
-      count: 45
-    },
-    {
-      name: 'เครื่องหมายการค้า',
-      count: 20
-    },
-  ]
-  </script>
-  
-  <style scoped>
-  .v-card-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4; /* Add this line */
-    -webkit-box-orient: vertical;
-    box-orient: vertical; /* Add this line for compatibility */
-    overflow: hidden;
-  }
-  </style>
-  
+              {{ item.icon }}
+            </v-icon>
+            <p class="text-base md:text-lg font-medium mb-3">{{ item.title }}</p>
+          </v-card>
+        </div>
+      </div>
+      
+      <!-- Statistics Section (Right Side) -->
+      <div>
+        <h2 class="text-lg md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
+          สถิติการยื่นจด - ประจำปีงบประมาณ 2568
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+          <v-card
+            v-for="(stat, index) in stats"
+            :key="index"
+            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full"
+          >
+            <v-icon
+              size="50"
+              :style="{ color: stat.color }"
+              class="mb-3 mt-3"
+            >
+              {{ stat.icon }}
+            </v-icon>
+            <p class="font-bold text-sm md:text-base">{{ stat.title }}</p>
+            <p class="text-lg md:text-xl font-extrabold mb-3">{{ stat.value }}</p>
+          </v-card>
+        </div>
+      </div>
+      
+    </div>
+  </v-container>
+</template>
+
+
+<script setup>
+const menuItems = [
+  { title: 'การขอใช้บริการวิจัย อบรม/บรรยาย/หรือ ทรัพย์สินทางปัญญา (สำหรับบุคลากร มทส.)', to: '/research-service', icon: 'mdi-book-open', color: '#1E88E5' }, // Blue
+  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร', to: '/patent', icon: 'mdi-lightbulb', color: '#43A047' }, // Green
+  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', to: '/design-patent', icon: 'mdi-format-paint', color: '#FB8C00' }, // Orange
+  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์', to: '/copyright', icon: 'mdi-library', color: '#8BC34A' }, // Light Green
+  { title: 'การยื่นจด เครื่องหมายการค้า', to: '/trademark', icon: 'mdi-tag', color: '#FF5722' }, // Deep Orange
+  { title: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มทส.', to:'/services/ipp', icon: 'mdi-database-search', color: '#9C27B0' } // Purple
+];
+
+const stats = [
+  { title: 'สิทธิบัตรการประดิษฐ์', value: 7, icon: 'mdi-wrench-cog', color: '#1E88E5' }, // Blue
+  { title: 'อนุสิทธิบัตร', value: 15, icon: 'mdi-lightbulb', color: '#43A047' }, // Green
+  { title: 'สิทธิบัตรการออกแบบ', value: 0, icon: 'mdi-format-paint', color: '#FB8C00' }, // Deep Orange
+  { title: 'ลิขสิทธิ์', value: 45, icon: 'mdi-library', color: '#8BC34A' }, // Light Green
+  { title: 'เครื่องหมายการค้า', value: 0, icon: 'mdi-tag', color: '#FF5722' } // Orange
+];
+</script>
+
+
+<style scoped>
+.v-card {
+  transition: all 0.3s ease-in-out;
+}
+
+.v-card:hover {
+  background-color: #ebf8ff; /* Tailwind bg-blue-50 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-md */
+  transform: scale(1.05);
+}
+
+h2 {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+</style>
