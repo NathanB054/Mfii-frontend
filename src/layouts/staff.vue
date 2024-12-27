@@ -31,6 +31,11 @@
           <v-list-item-title class="inline">จัดการสืบค้นข้อมูล</v-list-item-title>
         </v-list-item>
 
+        <v-list-item link to="/staff/RegulationManagement">
+          <v-icon class="mr-2">mdi-book-open-page-variant</v-icon>
+          <v-list-item-title class="inline">จัดการระเบียบ</v-list-item-title>
+        </v-list-item>
+
         <v-list>
           <v-list-item link to="/staff/GroupManagement">
             <v-icon class="mr-2">mdi-file-alert</v-icon>

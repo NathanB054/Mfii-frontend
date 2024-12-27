@@ -132,6 +132,12 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/regulationManagement',
+      name: 'Regulation Management',
+      component: () => import('../views/StaffView/RegulationManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/groupManagement',
       name: 'Group Management',
       component: () => import('../views/StaffView/GroupManagement.vue'),
