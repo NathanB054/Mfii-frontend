@@ -166,7 +166,9 @@ const handleLogout = async () => {
     <div class="title-bar w-full h-40 flex items-center justify-between">
         <!-- Start of content -->
         <div class="start-content flex items-center">
+            <RouterLink to="/">
             <img src="@/assets/images/mfu_logo.png" class="logo-img" alt="mfu logo" width="150px">
+            </RouterLink>
             <div class="text-title ml-4">
                 <h1 class="text-2xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
                 <h1 class="text-2xl font-bold">MFU Intellectual Property Management and Technology Transfer</h1>
