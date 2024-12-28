@@ -29,7 +29,7 @@
       
       <!-- Statistics Section (Right Side) -->
       <div>
-        <h2 class="text-lg md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
+        <h2 class="text-lg sm:text-sm md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
           สถิติการยื่นคำขอฯ มหาวิทยาลัยแม่ฟ้าหลวง
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
