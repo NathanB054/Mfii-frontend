@@ -30,7 +30,7 @@
       <!-- Statistics Section (Right Side) -->
       <div>
         <h2 class="text-lg md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
-          สถิติการยื่นจด - ประจำปีงบประมาณ 2568
+          สถิติการยื่นคำขอฯ มหาวิทยาลัยแม่ฟ้าหลวง
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
           <v-card
@@ -57,22 +57,62 @@
 
 
 <script setup>
+import { ref, onMounted } from 'vue';
+import api from '@/stores/axios-config';
+
 const menuItems = [
-  { title: 'การขอใช้บริการวิจัย อบรม/บรรยาย/หรือ ทรัพย์สินทางปัญญา (สำหรับบุคลากร มทส.)', to: '/research-service', icon: 'mdi-book-open', color: '#1E88E5' }, // Blue
-  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร', to: '/patent', icon: 'mdi-lightbulb', color: '#43A047' }, // Green
-  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', to: '/design-patent', icon: 'mdi-format-paint', color: '#FB8C00' }, // Orange
-  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์', to: '/copyright', icon: 'mdi-library', color: '#8BC34A' }, // Light Green
-  { title: 'การยื่นจด เครื่องหมายการค้า', to: '/trademark', icon: 'mdi-tag', color: '#FF5722' }, // Deep Orange
-  { title: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มทส.', to:'/services/ipp', icon: 'mdi-database-search', color: '#9C27B0' } // Purple
+  { title: 'การขอใช้บริการจัดอบรม/บรรยายหัวข้อทรัพย์สินทางปัญญา มฟล.', to: '/research-service', icon: 'mdi-book-open', color: '#1E88E5' },
+  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร', to: '/patent', icon: 'mdi-lightbulb', color: '#43A047' },
+  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', to: '/design-patent', icon: 'mdi-format-paint', color: '#FB8C00' },
+  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์', to: '/copyright', icon: 'mdi-library', color: '#8BC34A' },
+  { title: 'การยื่นจด เครื่องหมายการค้า', to: '/trademark', icon: 'mdi-tag', color: '#FF5722' },
+  { title: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มฟล.', to:'/services/ipp', icon: 'mdi-database-search', color: '#9C27B0' }
 ];
 
-const stats = [
-  { title: 'สิทธิบัตรการประดิษฐ์', value: 7, icon: 'mdi-wrench-cog', color: '#1E88E5' }, // Blue
-  { title: 'อนุสิทธิบัตร', value: 15, icon: 'mdi-lightbulb', color: '#43A047' }, // Green
-  { title: 'สิทธิบัตรการออกแบบ', value: 0, icon: 'mdi-format-paint', color: '#FB8C00' }, // Deep Orange
-  { title: 'ลิขสิทธิ์', value: 45, icon: 'mdi-library', color: '#8BC34A' }, // Light Green
-  { title: 'เครื่องหมายการค้า', value: 0, icon: 'mdi-tag', color: '#FF5722' } // Orange
-];
+//  ref จะเก็บข้อมูลไว้ใน value property
+const stats = ref([
+  { title: 'สิทธิบัตรการประดิษฐ์', value: 0, icon: 'mdi-wrench-cog', color: '#1E88E5' },
+  { title: 'อนุสิทธิบัตร', value: 0, icon: 'mdi-lightbulb', color: '#43A047' },
+  { title: 'สิทธิบัตรการออกแบบ', value: 0, icon: 'mdi-format-paint', color: '#FB8C00' },
+  { title: 'ลิขสิทธิ์', value: 0, icon: 'mdi-library', color: '#8BC34A' },
+  { title: 'เครื่องหมายการค้า', value: 0, icon: 'mdi-tag', color: '#FF5722' }
+]);
+
+const fetchResearchData = async () => {
+  try {
+    const response = await api.get('/getsResearch/all/all/all/all');
+    const data = response.data.result;
+    
+    // คำนวณจำนวนของแต่ละประเภท
+    const counts = {
+      'สิทธิบัตรการประดิษฐ์': 0,
+      'อนุสิทธิบัตร': 0,
+      'สิทธิบัตรออกแบบ': 0,
+      'ลิขสิทธิ์': 0,
+      'เครื่องหมายการค้า': 0
+    };
+
+    data.forEach(item => {
+      if (counts[item.intelProp] !== undefined) {
+        counts[item.intelProp]++;
+      }
+    });
+
+    // อัปเดต stats
+    stats.value[0].value = counts['สิทธิบัตรการประดิษฐ์'];
+    stats.value[1].value = counts['อนุสิทธิบัตร'];
+    stats.value[2].value = counts['สิทธิบัตรออกแบบ'];
+    stats.value[3].value = counts['ลิขสิทธิ์'];
+    stats.value[4].value = counts['เครื่องหมายการค้า'];
+    
+  } catch (error) {
+    console.error('Error fetching research data:', error);
+  }
+};
+
+onMounted(() => {
+  fetchResearchData();
+});
 </script>
 
 
