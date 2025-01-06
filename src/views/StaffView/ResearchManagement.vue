@@ -47,7 +47,7 @@
                                         :rules="[rules.required]" required></v-autocomplete>
                                     <v-autocomplete variant="solo-filled" flat label="ทรัพย์สินทางปัญญา"
                                         v-model="currentResearch.intelProp"
-                                        :items="['สิทธิบัตรการประดิษฐ์', 'อนุสิทธิบัตร', 'สิทธิบัตรออกแบบ', 'ลิขสิทธิ์', 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์', 'ผลงานวิจัย', 'ต้นแบบ', 'อื่น ๆ']"
+                                        :items="['สิทธิบัตรการประดิษฐ์', 'อนุสิทธิบัตร', 'สิทธิบัตรออกแบบ', 'ลิขสิทธิ์', 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์', 'ผลงานวิจัย', 'ต้นแบบ', 'เครื่องหมายการค้า', 'อื่น ๆ']"
                                         :rules="[rules.required]" required></v-autocomplete>
                                     <v-autocomplete variant="solo-filled" flat label="ประเภทอุตสาหกรรม"
                                         v-model="currentResearch.industryType"
