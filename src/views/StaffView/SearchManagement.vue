@@ -118,7 +118,7 @@
                                                     transition="scale-transition" offset-y min-width="290px">
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props" label="วันที่ยื่นคำขอ"
-                                                            v-model="formattedDateSubmit" readonly variant="solo-filled"
+                                                            v-model="currentResearch.submitDate" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]" />
                                                     </template>
@@ -338,16 +338,16 @@ export default {
                 holderOfRight: "",
                 ipType: "",
                 requestNo: "",
-                submitDate: null,
+                submitDate: new Date(),
                 finalStatus: "",
                 addEditing: "",
                 adsNo: "",
-                adsDate: null,
+                adsDate: new Date(),
                 regNo: "",
-                regDate: null,
-                expDate: null,
-                feePay: null,
-                notiFeePay: null,
+                regDate: new Date(),
+                expDate: new Date(),
+                feePay: new Date(),
+                notiFeePay: new Date(),
                 other: "",
                 industType: "",
                 workType: "",
@@ -485,16 +485,16 @@ export default {
                                 ipType: this.currentResearch.ipType,
                                 holderOfRight: this.currentResearch.holderOfRight,
                                 requestNo: this.currentResearch.requestNo,
-                                submitDate: this.currentResearch.submitDate,
+                                submitDate: formatDate(this.currentResearch.submitDate),
                                 finalStatus: this.currentResearch.finalStatus,
                                 addEditing: this.currentResearch.addEditing,
                                 adsNo: this.currentResearch.adsNo,
-                                adsDate: this.currentResearch.adsDate,
+                                adsDate: formatDate(this.currentResearch.adsDate),
                                 regNo: this.currentResearch.regNo,
-                                regDate: this.currentResearch.regDate,
-                                expDate: this.currentResearch.expDate,
-                                feePay: this.currentResearch.feePay,
-                                notiFeePay: this.currentResearch.notiFeePay,
+                                regDate: formatDate(this.currentResearch.regDate),
+                                expDate: formatDate(this.currentResearch.expDate),
+                                feePay: formatDate(this.currentResearch.feePay),
+                                notiFeePay: formatDate(this.currentResearch.notiFeePay),
                                 other: this.currentResearch.other,
                                 workType: this.currentResearch.workType,
                                 util: this.currentResearch.util,
