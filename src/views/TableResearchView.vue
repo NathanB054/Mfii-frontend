@@ -43,7 +43,7 @@
                     height="450" class="elevation-0">
                     <template v-for="header in filteredHeaders" v-slot:[`item.${header.key}`]="{ item }">
                         <div :style="{
-                            width: ['intelProp', 'editMore', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'major', 'holder', 'other', 'industryType', 'utilization', 'note'].includes(header.key) ? '250px' : 'auto',
+                            width: ['ipType', 'addEditing', 'workType'].includes(header.key) ? '150px' : ['nameOnMedia', 'inventor', 'beLongTo', 'holderOfRight', 'requestNo', 'submitDate', 'adsNo', 'adsDate', 'regNo', 'regDate', 'expDate', 'feePay', 'notiFeePay', 'finalStatus', 'other', 'industType', 'util', 'note'].includes(header.key) ? '250px' : 'auto',
                             padding: '8px'
                         }">
                             <template v-if="header.key === 'inventor'">
@@ -106,31 +106,32 @@ export default {
                 { title: "ลำดับ", key: "id" },
                 { title: "ชื่อผลงาน", key: "nameOnMedia" },
                 { title: "ชื่อ - นามสกุล", key: "inventor" },
-                { title: "สังกัด", key: "major" },
-                { title: "ผู้ทรงสิทธิ", key: "holder" },
-                { title: "ประเภทผลงาน", key: "intelProp" },
-                { title: "เลขที่คำขอ", key: "numberReq" },
-                { title: "วันที่ยื่นคำขอ", key: "dateReq" },
+                { title: "สังกัด", key: "beLongTo" },
+                { title: "ผู้ทรงสิทธิ", key: "holderOfRight" },
+                { title: "ประเภทผลงาน", key: "ipType" },
+                { title: "เลขที่คำขอ", key: "requestNo" },
+                { title: "วันที่ยื่นคำขอ", key: "submitDate" },
                 { title: "ปีงบประมาณ", key: "budgetYear" },
-                { title: "แก้ไขเพิ่มเติม", key: "editMore" },
-                { title: "เลขที่ประกาศโฆษณา", key: "numberAds" },
-                { title: "วันที่ประกาศโฆษณา", key: "dateAds" },
-                { title: "สถานะสุดท้าย", key: "lastStatus" },
-                { title: "เลขที่รับจดทะเบียน", key: "numberRegister" },
-                { title: "วันที่รับจดทะเบียน", key: "dateRegister" },
-                { title: "วันที่หมดอายุ", key: "dateExp" },
-                { title: "ครบกำหนดชำระค่าธรรมเนียมรายปี", key: "dueFee" },
-                { title: "แจ้งเตือนชำระค่าธรรมเนียมรายปี", key: "notiFee" },
+                { title: "แก้ไขเพิ่มเติม", key: "addEditing" },
+                { title: "เลขที่ประกาศโฆษณา", key: "adsDate" },
+                { title: "วันที่ประกาศโฆษณา", key: "adsNo" },
+                { title: "สถานะสุดท้าย", key: "finalStatus" },
+                { title: "เลขที่รับจดทะเบียน", key: "regNo" },
+                { title: "วันที่รับจดทะเบียน", key: "regDate" },
+                { title: "วันที่หมดอายุ", key: "expDate" },
+                { title: "ครบกำหนดชำระค่าธรรมเนียมรายปี", key: "feePay" },
+                { title: "แจ้งเตือนชำระค่าธรรมเนียมรายปี", key: "notiFeePay" },
                 { title: "อื่นๆ", key: "other" },
-                { title: "ประเภทอุตสาหกรรม", key: "industryType" },
+                { title: "ประเภทอุตสาหกรรม", key: "industType" },
                 { title: "ลักษณะผลงาน", key: "workType" },
-                { title: "การใช้ประโยชน์", key: "utilization" },
+                { title: "การใช้ประโยชน์", key: "util" },
                 { title: "หมายเหตุ", key: "note" },
             ].map((column) => ({
                 ...column,
                 align: "center",
             })),
             data: [], // เก็บข้อมูลจาก API
+
         };
     },
     methods: {
@@ -139,7 +140,7 @@ export default {
             const indust = this.Industry_type?.value || "all";
             const prop = this.Intellectual_property_type?.value || "all";
             const descript = (this.search ? this.search.trim() : "all");
-            api.get(`/getsResearch/${indust}/${prop}/all/${descript}`).then((response) => {
+            api.get(`/getsIP/${indust}/${prop}/${descript}`).then((response) => {
                 if (response.status == 200) {
                     this.data = response.data.result.map((item, index) => ({
                         ...item,
@@ -165,7 +166,7 @@ export default {
             // แสดงคอลัมน์บางส่วนเมื่อไม่ได้ล็อกอิน หรือ businessType เป็น "นิติบุคคล" หรือ "บุคคลธรรมดา"
             else {
                 return this.headers.filter((header) =>
-                    ["id", "nameOnMedia", "inventor", "major", "intelProp", "industryType"].includes(header.key)
+                    ["id", "nameOnMedia", "inventor", "beLongTo", "ipType", "industType"].includes(header.key)
                 );
             }
         },
@@ -174,7 +175,7 @@ export default {
         this.fetchResearchData();
         try {
             // ดึงข้อมูลจาก '/getsResearch/all/all/all/all' สำหรับแสดงผลก่อน
-            const researchResponse = await api.get("/getsResearch/all/all/all/all");
+            const researchResponse = await api.get("/getsIP/all/all/all");
             // console.log("Research data:", researchResponse.data); // ดูข้อมูลที่ได้รับจาก API
 
             // เข้าถึงข้อมูลจาก result และทำการปรับโครงสร้าง
@@ -189,14 +190,14 @@ export default {
                 const errorStore = useErrorStore();
                 // ถ้ามีข้อมูลใน this.data ให้เรียก /getUser
                 if (localStorage.getItem('token')) {
-                   try {
-                    const userResponse = await api.get("/getUser");
-                    this.businessType = userResponse.data.resutl.businessType;
-                    // this.isLoggedIn = userResponse.data.isLoggedIn;
-                   } catch (error) {
-                    throw error;
-                   }
-                } 
+                    try {
+                        const userResponse = await api.get("/getUser");
+                        this.businessType = userResponse.data.resutl.businessType;
+                        // this.isLoggedIn = userResponse.data.isLoggedIn;
+                    } catch (error) {
+                        throw error;
+                    }
+                }
                 //  console.log("businessType:", this.businessType);
             } else {
                 console.error("No data found from research API.");
