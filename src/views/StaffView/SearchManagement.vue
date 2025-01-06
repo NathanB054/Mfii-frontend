@@ -33,7 +33,7 @@
                         <v-card class="rounded-xl">
                             <v-card-title>{{
                                 isEdit ? "แก้ไขสืบค้นข้อมูลทรัพย์สินทางปัญญา" : "สร้างสืบค้นข้อมูลทรัพย์สินทางปัญญา"
-                            }}</v-card-title>
+                                }}</v-card-title>
                             <v-card-text>
                                 <v-form ref="form" v-model="valid">
                                     <v-text-field label="ชื่อผลงาน" variant="solo-filled"
@@ -124,8 +124,7 @@
                                                     </template>
 
                                                     <v-date-picker v-model="currentResearch.submitDate"
-                                                        @update:modelValue="MenuSubmitDate = false" locale="th-TH"
-                                                        item-format="DD/MM/YYYY" />
+                                                        @update:modelValue="MenuSubmitDate = false" locale="th-TH" />
                                                 </v-menu>
 
                                             </v-col>
@@ -439,8 +438,23 @@ export default {
             }
             this.isUploading = true;
             try {
+                const formatDate = (date) => {
+                    if (!date) return null;
+                    const d = new Date(date);
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0'); // เดือนเริ่มจาก 0
+                    const year = String(d.getFullYear());
+                    return `${day}/${month}/${year}`;
+                };
+
                 const formData = new FormData();
                 formData.append("budgetYear", this.currentResearch.budgetYear);
+                formData.append("submitDate", formatDate(this.currentResearch.submitDate));
+                formData.append("adsDate", formatDate(this.currentResearch.adsDate));
+                formData.append("regDate", formatDate(this.currentResearch.regDate));
+                formData.append("expDate", formatDate(this.currentResearch.expDate));
+                formData.append("feePay", formatDate(this.currentResearch.feePay));
+                formData.append("notiFeePay", formatDate(this.currentResearch.notiFeePay));
                 formData.append("nameOnMedia", this.currentResearch.nameOnMedia);
                 formData.append("inventor", this.currentResearch.inventor);
                 formData.append("beLongTo", this.currentResearch.beLongTo);
@@ -448,20 +462,15 @@ export default {
                 formData.append("ipType", this.currentResearch.ipType);
                 formData.append("holderOfRight", this.currentResearch.holderOfRight);
                 formData.append("requestNo", this.currentResearch.requestNo);
-                formData.append("submitDate", this.currentResearch.submitDate);
                 formData.append("finalStatus", this.currentResearch.finalStatus);
                 formData.append("addEditing", this.currentResearch.addEditing);
                 formData.append("adsNo", this.currentResearch.adsNo);
-                formData.append("adsDate", this.currentResearch.adsDate);
                 formData.append("regNo", this.currentResearch.regNo);
-                formData.append("regDate", this.currentResearch.regDate);
-                formData.append("expDate", this.currentResearch.expDate);
-                formData.append("feePay", this.currentResearch.feePay);
-                formData.append("notiFeePay", this.currentResearch.notiFeePay);
                 formData.append("other", this.currentResearch.other);
                 formData.append("workType", this.currentResearch.workType);
                 formData.append("util", this.currentResearch.util);
                 formData.append("note", this.currentResearch.note);
+
 
                 if (this.isEdit) {
                     try {
