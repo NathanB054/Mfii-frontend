@@ -47,7 +47,7 @@
                                             'สำนักวิชาศิลปศาสตร์',
                                             'สำนักวิชาวิทยาศาสตร์',
                                             'สำนักวิชาการจัดการ',
-                                            'สำนักวิชาเทคโนโลยีสารสนเทศ',
+                                            'สำนักวิชาเทคโนโลยีดิจิทัลประยุกต์',
                                             'สำนักวิชาอุตสาหกรรมเกษตร',
                                             'สำนักวิชานิติศาสตร์',
                                             'สำนักวิชาวิทยาศาสตร์เครื่องสำอาง',
@@ -59,7 +59,14 @@
                                             'สำนักวิชานวัตกรรมสังคม',
                                             'สำนักวิชาจีนวิทยา',
                                             'สำนักวิชาการแพทย์บูรณาการ',
-                                            'อื่นๆ',
+                                            'ศูนย์ความเป็นเลิศด้านนวัตกรรมผลิตภัณฑ์ธรรมชาติ',
+                                            'สถาบันชาและกาแฟ แห่งมหาวิทยาลัยแม่ฟ้าหลวง',
+                                            'ศูนย์นวัตกรรมสมุนไพรครบวงจร มหาวิทยาลัยแม่ฟ้าหลวง',
+                                            'สถาบันนวัตกรรมการเรียนรู้มหาวิทยาลัยแม่ฟ้าหลวง',
+                                            'ศูนย์ความเป็นเลิศทางด้านการวิจัยเชื้อรา',
+                                            'ศูนย์ภาษาและวัฒนธรรมจีนสิรินธร',
+                                            'โรงพยาบาลมหาวิทยาลัยแม่ฟ้าหลวง',
+                                            'อื่นๆ'
                                         ]" :rules="[rules.required]" required></v-autocomplete>
                                     <v-combobox variant="solo-filled" flat label="ผู้ทรงสิทธิ"
                                         v-model="currentResearch.holderOfRight" :rules="[rules.required]"></v-combobox>
@@ -72,6 +79,7 @@
                                             'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์',
                                             'ผลงานวิจัย',
                                             'ต้นแบบ',
+                                            'เครื่องหมายการค้า',
                                             'อื่น ๆ',
                                         ]" :rules="[rules.required]" required></v-autocomplete>
                                     <v-autocomplete variant="solo-filled" flat label="ประเภทอุตสาหกรรม"
@@ -110,8 +118,7 @@
                                                     transition="scale-transition" offset-y min-width="290px">
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props" label="วันที่ยื่นคำขอ"
-                                                            v-model="formattedDateSubmit" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattedDateSubmit" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]" />
                                                     </template>
@@ -132,8 +139,7 @@
                                                     min-width="290px">
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props" label="วันที่ประกาศโฆษณา"
-                                                            v-model="formattedDateAds" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattedDateAds" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]">
                                                         </v-text-field>
@@ -154,8 +160,7 @@
                                                     min-width="290px">
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props" label="วันที่รับจดทะเบียน"
-                                                            v-model="formattedDateReg" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattedDateReg" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]">
                                                         </v-text-field>
@@ -175,8 +180,7 @@
                                                     min-width="290px">
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props" label="วันที่หมดอายุ"
-                                                            v-model="formattedDateExp" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattedDateExp" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]">
                                                         </v-text-field>
@@ -193,8 +197,7 @@
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props"
                                                             label="ครบกำหนดชำระค่าธรรมเนียมรายปี"
-                                                            v-model="formattedfeePay" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattedfeePay" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]">
                                                         </v-text-field>
@@ -212,8 +215,7 @@
                                                     <template #activator="{ props }">
                                                         <v-text-field v-bind="props"
                                                             label="แจ้งเตือนชำระค่าธรรมเนียมรายปี"
-                                                            v-model="formattednotiFeePay" readonly
-                                                            variant="solo-filled"
+                                                            v-model="formattednotiFeePay" readonly variant="solo-filled"
                                                             prepend-inner-icon="mdi-calendar-range"
                                                             :rules="[rules.requiredDate]">
                                                         </v-text-field>
