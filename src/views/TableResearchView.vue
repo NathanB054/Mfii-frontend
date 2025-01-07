@@ -141,7 +141,7 @@ export default {
             const ipType = this.Intellectual_property_type?.value || "all";
             const descript = (this.search ? this.search.trim() : "all");
 
-            console.log("API: ", `/getsIP/${ipType}/${indust}/${descript}`);
+            // console.log("API: ", `/getsIP/${ipType}/${indust}/${descript}`);
             
             api.get(`/getsIP/${ipType}/${indust}/${descript}`).then((response) => {
                 if (response.status == 200) {
