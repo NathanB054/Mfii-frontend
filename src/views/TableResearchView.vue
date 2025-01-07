@@ -74,31 +74,31 @@ export default {
             Industry_type: "ทั้งหมด",
             Intellectual_property_type: "ทั้งหมด",
             indust: [
-                { value: "cosme", text: "เครื่องสำอาง" },
-                { value: "agtech", text: "การเกษตรและเทคโนโลยีชีวภาพ" },
-                { value: "f4f", text: "การแปรรูปอาหาร" },
-                { value: "biofc", text: "เชื้อเพลิงชีวภาพและเคมีชีวภาพ" },
-                { value: "medhub", text: "การแพทย์ครบวงจร" },
-                { value: "arts", text: "สร้างสรรค์" },
-                { value: "smeln", text: "อิเล็กทรอนิกส์อัจฉริยะ" },
-                { value: "robot", text: "หุ่นยนต์" },
-                { value: "digit", text: "ดิจิทัล" },
+                { value: "เครื่องสำอาง", text: "เครื่องสำอาง" },
+                { value: "การเกษตรและเทคโนโลยีชีวภาพ", text: "การเกษตรและเทคโนโลยีชีวภาพ" },
+                { value: "การแปรรูปอาหาร", text: "การแปรรูปอาหาร" },
+                { value: "เชื้อเพลิงชีวภาพและเคมีชีวภาพ", text: "เชื้อเพลิงชีวภาพและเคมีชีวภาพ" },
+                { value: "การแพทย์ครบวงจร", text: "การแพทย์ครบวงจร" },
+                { value: "สร้างสรรค์", text: "สร้างสรรค์" },
+                { value: "อิเล็กทรอนิกส์อัจฉริยะ", text: "อิเล็กทรอนิกส์อัจฉริยะ" },
+                { value: "หุ่นยนต์", text: "หุ่นยนต์" },
+                { value: "ดิจิทัล", text: "ดิจิทัล" },
                 {
-                    value: "amwt",
+                    value: "การท่องเที่ยวกลุ่มรายได้ดีและการท่องเที่ยวเชิงสุขภาพ",
                     text: "การท่องเที่ยวกลุ่มรายได้ดีและการท่องเที่ยวเชิงสุขภาพ",
                 },
-                { value: "alois", text: "การบินและโลจิสติกส์" },
-                { value: "nxato", text: "ยานยนต์สมัยใหม่" },
+                { value: "การบินและโลจิสติกส์", text: "การบินและโลจิสติกส์" },
+                { value: "ยานยนต์สมัยใหม่", text: "ยานยนต์สมัยใหม่" },
             ],
             prop: [
-                { value: "ptn", text: "สิทธิบัตรการประดิษฐ์" },
-                { value: "ppt", text: "อนุสิทธิบัตร" },
-                { value: "dsp", text: "สิทธิบัตรออกแบบ" },
-                { value: "cpr", text: "ลิขสิทธิ์" },
-                { value: "cpp", text: "ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์" },
-                { value: "khw", text: "ผลงานวิจัย" },
-                { value: "pte", text: "ต้นแบบ" },
-                { value: "oth", text: "อื่น ๆ" },
+                { value: "สิทธิบัตรการประดิษฐ์", text: "สิทธิบัตรการประดิษฐ์" },
+                { value: "อนุสิทธิบัตร", text: "อนุสิทธิบัตร" },
+                { value: "สิทธิบัตรออกแบบ", text: "สิทธิบัตรออกแบบ" },
+                { value: "ลิขสิทธิ์", text: "ลิขสิทธิ์" },
+                { value: "ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์", text: "ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์" },
+                { value: "ผลงานวิจัย", text: "ผลงานวิจัย" },
+                { value: "ต้นแบบ", text: "ต้นแบบ" },
+                { value: "อื่น ๆ", text: "อื่น ๆ" },
             ],
 
             businessType: "", // ประเภทผู้ใช้
@@ -138,9 +138,12 @@ export default {
         // Search ResearchData
         fetchResearchData() {
             const indust = this.Industry_type?.value || "all";
-            const prop = this.Intellectual_property_type?.value || "all";
+            const ipType = this.Intellectual_property_type?.value || "all";
             const descript = (this.search ? this.search.trim() : "all");
-            api.get(`/getsIP/${indust}/${prop}/${descript}`).then((response) => {
+
+            console.log("API: ", `/getsIP/${ipType}/${indust}/${descript}`);
+            
+            api.get(`/getsIP/${ipType}/${indust}/${descript}`).then((response) => {
                 if (response.status == 200) {
                     this.data = response.data.result.map((item, index) => ({
                         ...item,
