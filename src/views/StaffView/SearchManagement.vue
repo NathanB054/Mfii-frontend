@@ -237,9 +237,6 @@
                                     <v-text-field label="สถานะสุดท้าย" variant="solo-filled"
                                         v-model="currentResearch.finalStatus" :rules="[rules.required]"></v-text-field>
 
-                                    <v-text-field label="ลักษณะผลงาน" variant="solo-filled"
-                                        v-model="currentResearch.workType" :rules="[rules.required]"></v-text-field>
-
                                     <v-text-field label="การใช้ประโยชน์" variant="solo-filled"
                                         v-model="currentResearch.util" :rules="[rules.required]"></v-text-field>
 
@@ -503,7 +500,7 @@ export default {
                 formData,
                 {
                     headers: {
-                        "Content-Type": "multipart/form-data",
+                        "Content-Type": "application/json",
                     },
                 }
             );
