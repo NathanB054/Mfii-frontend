@@ -433,128 +433,123 @@ export default {
         },
 
         async saveResearch() {
-            if (!this.valid) {
+    if (!this.valid) {
+        return;
+    }
+    this.isUploading = true;
+
+    try {
+        // Helper function to format dates properly
+        const formatDate = (date) => {
+            // Ensure the date is either a valid Date object or a Valid Date string; return null for invalid or missing dates
+            if (!date || isNaN(new Date(date).getTime())) return null;
+            return dayjs(date).format("YYYY-MM-DD");
+        };
+
+        // Validate that all required fields are present
+        const requiredFields = [
+            "industType",
+            "requestNo",
+            "ipType",
+            "holderOfRight",
+            "beLongTo",
+            "nameOnMedia",
+            "budgetYear"
+        ];
+
+        for (const field of requiredFields) {
+            if (!this.currentResearch[field]) {
+                console.error(`${field} is required.`);
+                // Provide feedback in the UI
+                errorStore.show(`Please fill in the required field: ${field}`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+                this.isUploading = false;
                 return;
             }
-            this.isUploading = true;
-            try {
-                const formatDate = (date) => {
-                    if (!date) return null;
-                    const d = new Date(date);
-                    const day = String(d.getDate()).padStart(2, '0');
-                    const month = String(d.getMonth() + 1).padStart(2, '0'); // เดือนเริ่มจาก 0
-                    const year = String(d.getFullYear());
-                    return `${day}/${month}/${year}`;
-                };
+        }
 
-                const formData = new FormData();
-                formData.append("budgetYear", this.currentResearch.budgetYear);
-                formData.append("submitDate", formatDate(this.currentResearch.submitDate));
-                formData.append("adsDate", formatDate(this.currentResearch.adsDate));
-                formData.append("regDate", formatDate(this.currentResearch.regDate));
-                formData.append("expDate", formatDate(this.currentResearch.expDate));
-                formData.append("feePay", formatDate(this.currentResearch.feePay));
-                formData.append("notiFeePay", formatDate(this.currentResearch.notiFeePay));
-                formData.append("nameOnMedia", this.currentResearch.nameOnMedia);
-                formData.append("inventor", this.currentResearch.inventor);
-                formData.append("beLongTo", this.currentResearch.beLongTo);
-                formData.append("industType", this.currentResearch.industType);
-                formData.append("ipType", this.currentResearch.ipType);
-                formData.append("holderOfRight", this.currentResearch.holderOfRight);
-                formData.append("requestNo", this.currentResearch.requestNo);
-                formData.append("finalStatus", this.currentResearch.finalStatus);
-                formData.append("addEditing", this.currentResearch.addEditing);
-                formData.append("adsNo", this.currentResearch.adsNo);
-                formData.append("regNo", this.currentResearch.regNo);
-                formData.append("other", this.currentResearch.other);
-                formData.append("workType", this.currentResearch.workType);
-                formData.append("util", this.currentResearch.util);
-                formData.append("note", this.currentResearch.note);
+        // Prepare form data
+        const formData = new FormData();
+        formData.append("budgetYear", this.currentResearch.budgetYear);
+        formData.append("submitDate", formatDate(this.currentResearch.submitDate));
+        formData.append("adsDate", formatDate(this.currentResearch.adsDate));
+        formData.append("regDate", formatDate(this.currentResearch.regDate));
+        formData.append("expDate", formatDate(this.currentResearch.expDate));
+        formData.append("feePay", formatDate(this.currentResearch.feePay));
+        formData.append("notiFeePay", formatDate(this.currentResearch.notiFeePay));
+        formData.append("nameOnMedia", this.currentResearch.nameOnMedia);
+        formData.append("inventor", this.currentResearch.inventor);
+        formData.append("beLongTo", this.currentResearch.beLongTo);
+        formData.append("industType", this.currentResearch.industType);
+        formData.append("ipType", this.currentResearch.ipType);
+        formData.append("holderOfRight", this.currentResearch.holderOfRight);
+        formData.append("requestNo", this.currentResearch.requestNo);
+        formData.append("finalStatus", this.currentResearch.finalStatus);
+        formData.append("addEditing", this.currentResearch.addEditing);
+        formData.append("adsNo", this.currentResearch.adsNo);
+        formData.append("regNo", this.currentResearch.regNo);
+        formData.append("other", this.currentResearch.other);
+        formData.append("workType", this.currentResearch.workType);
+        formData.append("util", this.currentResearch.util);
+        formData.append("note", this.currentResearch.note);
 
-
-                if (this.isEdit) {
-                    try {
-                        await api.patch(
-                            `/updateIPData/${this.currentResearch._id}`,
-                            {
-                                budgetYear: this.currentResearch.budgetYear,
-                                nameOnMedia: this.currentResearch.nameOnMedia,
-                                inventor: this.currentResearch.inventor,
-                                beLongTo: this.currentResearch.beLongTo,
-                                industType: this.currentResearch.industType,
-                                ipType: this.currentResearch.ipType,
-                                holderOfRight: this.currentResearch.holderOfRight,
-                                requestNo: this.currentResearch.requestNo,
-                                submitDate: formatDate(this.currentResearch.submitDate),
-                                finalStatus: this.currentResearch.finalStatus,
-                                addEditing: this.currentResearch.addEditing,
-                                adsNo: this.currentResearch.adsNo,
-                                adsDate: formatDate(this.currentResearch.adsDate),
-                                regNo: this.currentResearch.regNo,
-                                regDate: formatDate(this.currentResearch.regDate),
-                                expDate: formatDate(this.currentResearch.expDate),
-                                feePay: formatDate(this.currentResearch.feePay),
-                                notiFeePay: formatDate(this.currentResearch.notiFeePay),
-                                other: this.currentResearch.other,
-                                workType: this.currentResearch.workType,
-                                util: this.currentResearch.util,
-                                note: this.currentResearch.note,
-                            }
-                        );
-                        await api.patch(
-                            `/updateIPData/${this.currentResearch._id}`,
-                            formData,
-                            {
-                                headers: {
-                                    "Content-Type": "multipart/form-data",
-                                },
-                            }
-                        );
-
-                        if (this.currentResearch.length > 0) {
-                            await api.patch(
-                                `/deleteIP/${this.currentResearch._id}`
-                            );
-                        }
-                        errorStore.show("แก้ไขสืบค้นข้อมูลทรัพย์สินทางปัญญาสำเร็จ", {
-                            color: "success",
-                            icon: "mdi-check-circle",
-                            timeout: 5000,
-                        });
-                    } catch (error) {
-                        this.dialog = false;
-                        this.resetCurrentResearch();
-                        throw error;
-                    }
-                } else {
-                    // Log formData contents
-                    console.log("FormData contents:");
-                    for (let [key, value] of formData.entries()) {
-                        console.log(`${key}:`, value);
-                    }
-
-                    await api.post("/addIP", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
-                    errorStore.show("เพิ่มสืบค้นข้อมูลทรัพย์สินทางปัญญาเรียบร้อยแล้ว", {
-                        color: "success",
-                        icon: "mdi-check-circle",
-                        timeout: 5000,
-                    });
+        if (this.isEdit) {
+            // Simplify the PATCH operation; use one request and formData appropriately
+            await api.patch(
+                `/updateIPData/${this.currentResearch._id}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
                 }
-                this.fetchResearches();
-            } catch (error) {
-                this.dialog = false;
-                this.resetCurrentResearch();
-                throw error;
-            } finally {
-                this.isUploading = false;
-                this.dialog = false;
-                this.resetCurrentResearch();
-            }
-        },
+            );
+
+            // Log success message
+            errorStore.show("แก้ไขสืบค้นข้อมูลทรัพย์สินทางปัญญาสำเร็จ", {
+                color: "success",
+                icon: "mdi-check-circle",
+                timeout: 5000,
+            });
+        } else {
+            // POST request for adding new data
+            await api.post("/addIP", formData, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+
+            // Log success message
+            errorStore.show("เพิ่มสืบค้นข้อมูลทรัพย์สินทางปัญญาเรียบร้อยแล้ว", {
+                color: "success",
+                icon: "mdi-check-circle",
+                timeout: 5000,
+            });
+        }
+
+        // Refresh the data
+        this.fetchResearches();
+    } catch (error) {
+        // Log the error details for better debugging
+        console.error("Error saving research:", error.response || error.message);
+
+        // Handle error UI feedback and reset input state
+        errorStore.show("เกิดข้อผิดพลาดในการจัดการข้อมูล", {
+            color: "error",
+            icon: "mdi-alert-circle",
+            timeout: 5000,
+        });
+    } finally {
+        // Update UI states regardless of success or failure
+        this.isUploading = false;
+        this.dialog = false;
+        this.resetCurrentResearch();
+    }
+},
         // =====================================================================================================
 
         // Delete Research =====================================================================================================
