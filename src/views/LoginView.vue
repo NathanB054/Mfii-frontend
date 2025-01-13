@@ -1,7 +1,7 @@
 <template>
   <!-- Main container for the login card -->
-  <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 mb-6 mt-5">
-    <v-card class="w-full max-w-lg rounded-xl p-8">
+  <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 !mb-6 !mt-5">
+    <v-card class="w-full max-w-lg rounded-xl !p-8">
       <!-- Card title -->
       <v-card-title>
         <h2 class="text-2xl font-semibold mb-2">

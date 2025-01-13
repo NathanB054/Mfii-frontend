@@ -6,7 +6,9 @@ import NavSearch from './NavSearch.vue';
 
 const isOpen = ref(false);
 const activeDropdown = ref(null);
+const activeNestedDropdown = ref(null);
 const mobileActiveDropdown = ref(null);
+const mobileActiveNestedDropdown = ref(null);
 const route = useRoute();
 const authStore = useAuthStore();
 
@@ -30,8 +32,20 @@ const mobileSections = [
     {
         name: 'ข้อมูลแนะนำ',
         items: [
-            { label: 'Info 1', to: '/info1' },
-            { label: 'Info 2', to: '/info2' }
+            {
+                label: 'Info 1',
+                items: [
+                    { label: 'Sub Info 1.1', to: '/info1/sub1' },
+                    { label: 'Sub Info 1.2', to: '/info1/sub2' },
+                ],
+            },
+            {
+                label: 'Info 2',
+                items: [
+                    { label: 'Sub Info 2.1', to: '/info2/sub1' },
+                    { label: 'Sub Info 2.2', to: '/info2/sub2' },
+                ],
+            },
         ],
         isActive: (route) => route.path.startsWith('/info'),
     },
@@ -57,7 +71,22 @@ const mobileSections = [
 ];
 
 const toggleDropdown = (dropdown) => {
-    activeDropdown.value = activeDropdown.value === dropdown ? null : dropdown;
+    // Close nested dropdown when main dropdown is toggled
+    if (activeDropdown.value === dropdown) {
+        activeDropdown.value = null;
+        activeNestedDropdown.value = null;
+    } else {
+        activeDropdown.value = dropdown;
+        activeNestedDropdown.value = null;
+    }
+};
+const toggleNestedDropdown = (section, dropdown) => {
+    const key = `${section}-${dropdown}`;
+    activeNestedDropdown.value = activeNestedDropdown.value === key ? null : key;
+};
+const closeDesktopDropdown = () => {
+    activeDropdown.value = null;
+    activeNestedDropdown.value = null;
 };
 
 const toggleMobileMenu = (event) => {
@@ -67,7 +96,22 @@ const toggleMobileMenu = (event) => {
 
 const toggleMobileDropdown = (dropdown, event) => {
     event.stopPropagation();
+    // Reset nested dropdown when parent dropdown is toggled
+    mobileActiveNestedDropdown.value = null;
     mobileActiveDropdown.value = mobileActiveDropdown.value === dropdown ? null : dropdown;
+};
+
+const toggleMobileNestedDropdown = (section, dropdown, event) => {
+    event.stopPropagation();
+    const key = `${section}-${dropdown}`;
+    mobileActiveNestedDropdown.value = mobileActiveNestedDropdown.value === key ? null : key;
+};
+
+// New method to close mobile menu
+const closeMobileMenu = () => {
+    isOpen.value = false;
+    mobileActiveDropdown.value = null;
+    mobileActiveNestedDropdown.value = null;
 };
 
 const handleClickOutside = (event) => {
@@ -82,8 +126,7 @@ const handleClickOutside = (event) => {
     }
 
     if (!navElement && !mobileMenuButton) {
-        isOpen.value = false;
-        mobileActiveDropdown.value = null;
+        closeMobileMenu();
     }
 };
 
@@ -123,7 +166,9 @@ const handleLogout = async () => {
     <div class="title-bar w-full h-40 flex items-center justify-between">
         <!-- Start of content -->
         <div class="start-content flex items-center">
+            <RouterLink to="/">
             <img src="@/assets/images/mfu_logo.png" class="logo-img" alt="mfu logo" width="150px">
+            </RouterLink>
             <div class="text-title ml-4">
                 <h1 class="text-2xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
                 <h1 class="text-2xl font-bold">MFU Intellectual Property Management and Technology Transfer</h1>
@@ -151,7 +196,7 @@ const handleLogout = async () => {
                             <router-link v-if="authStore.user.role === 'admin'" to="/admin">
                                 <v-list-item>
                                     <v-list-item-title>
-                                       
+
                                         Admin Page</v-list-item-title>
                                 </v-list-item>
                             </router-link>
@@ -207,7 +252,7 @@ const handleLogout = async () => {
                             class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center"
                             :class="{ 'text-gray-900': route.path === '/' }">
                             <li>
-                                <RouterLink to="/" class="px-3 py-2 text-sm font-bold">
+                                <RouterLink to="/" class="px-3 py-2 text-sm font-bold" @click="closeDesktopDropdown">
                                     หน้าหลัก
                                 </RouterLink>
                             </li>
@@ -216,22 +261,22 @@ const handleLogout = async () => {
 
                     <!-- Desktop Dropdown Menus -->
                     <template v-for="(section, index) in mobileSections" :key="index">
-                        <!-- Check if section has a single link -->
+                        <!-- Single link -->
                         <div v-if="section.to" class="hover:bg-gray-400 rounded-md transition-colors duration-300"
                             :class="{ 'bg-gray-400': section.isActive(route) }">
                             <button
                                 class="text-white hover:text-gray-900 px-3 py-2 text-sm font-bold inline-flex items-center"
                                 :class="{ 'text-gray-900': section.isActive(route) }">
                                 <li>
-                                    <!-- For external link -->
                                     <template v-if="section.external">
-                                        <a :href="section.to" target="_blank" class="px-3 py-2 text-sm font-bold">
+                                        <a :href="section.to" target="_blank" class="px-3 py-2 text-sm font-bold"
+                                            @click="closeDesktopDropdown">
                                             {{ section.name }}
                                         </a>
                                     </template>
-                                    <!-- For internal link -->
                                     <template v-else>
-                                        <RouterLink :to="section.to" class="px-3 py-2 text-sm font-bold">
+                                        <RouterLink :to="section.to" class="px-3 py-2 text-sm font-bold"
+                                            @click="closeDesktopDropdown">
                                             {{ section.name }}
                                         </RouterLink>
                                     </template>
@@ -239,7 +284,7 @@ const handleLogout = async () => {
                             </button>
                         </div>
 
-                        <!-- Check if section has multiple items (dropdown) -->
+                        <!-- Dropdown menu -->
                         <div v-else class="relative hover:bg-gray-400 rounded-md transition-colors duration-300"
                             :class="{ 'bg-gray-400': section.isActive(route) }">
                             <li>
@@ -262,19 +307,48 @@ const handleLogout = async () => {
                                     leave-from-class="opacity-100 transform translate-y-0"
                                     leave-to-class="opacity-0 transform -translate-y-2">
                                     <div v-if="activeDropdown === section.name"
-                                        class="desktop-dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                                        <!-- Loop over each item in the dropdown -->
+                                        class="desktop-dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                                        <!-- Recursive rendering for dropdown items -->
                                         <template v-for="(item, itemIndex) in section.items" :key="itemIndex">
-                                            <!-- For external links in dropdown -->
-                                            <template v-if="item.external">
-                                                <a :href="item.to" target="_blank"
-                                                    class="block px-4 py-2 text-sm transition-colors duration-200">
+                                            <!-- Nested dropdown items -->
+                                            <div v-if="item.items" class="relative group">
+                                                <button @click="toggleNestedDropdown(section.name, item.label)"
+                                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative">
+                                                    {{ item.label }}
+                                                    <svg class="w-4 h-4 ml-2 inline-block absolute right-2 top-3"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M9 5l7 7-7 7"></path>
+                                                    </svg>
+                                                </button>
+                                                <div v-if="activeNestedDropdown === `${section.name}-${item.label}`"
+                                                    class="absolute left-full top-0 mt-0 w-48 bg-white rounded-md shadow-lg py-1">
+                                                    <!-- Render nested items -->
+                                                    <template v-for="(subItem, subIndex) in item.items" :key="subIndex">
+                                                        <RouterLink :to="subItem.to" @click="closeDesktopDropdown"
+                                                            class="block px-4 py-2 text-sm transition-colors duration-200"
+                                                            :class="{
+                                                                'text-blue-500 bg-gray-100': route.path === subItem.to,
+                                                                'text-gray-700 hover:bg-gray-100': route.path !== subItem.to
+                                                            }">
+                                                            {{ subItem.label }}
+                                                        </RouterLink>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                            <!-- Regular dropdown items -->
+                                            <template v-else>
+                                                <!-- External link -->
+                                                <a v-if="item.external" :href="item.to" target="_blank"
+                                                    rel="noopener noreferrer" @click="closeDesktopDropdown"
+                                                    class="block px-3 py-2 text-base transition-colors duration-200"
+                                                    :class="{
+                                                        'text-blue-500 bg-gray-100': route.path === item.to,
+                                                        'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
+                                                    }">
                                                     {{ item.label }}
                                                 </a>
-                                            </template>
-                                            <!-- For internal links in dropdown -->
-                                            <template v-else>
-                                                <RouterLink :to="item.to"
+                                                <RouterLink v-else :to="item.to" @click="closeDesktopDropdown"
                                                     class="block px-4 py-2 text-sm transition-colors duration-200"
                                                     :class="{
                                                         'text-blue-500 bg-gray-100': route.path === item.to,
@@ -291,6 +365,7 @@ const handleLogout = async () => {
                     </template>
                 </ul>
             </div>
+
 
             <!-- Mobile Menu Button -->
             <div class="md:hidden flex h-16 items-center">
@@ -317,7 +392,7 @@ const handleLogout = async () => {
                 <div v-show="isOpen" class="md:hidden bg-white overflow-hidden">
                     <div class="px-2 pt-2 pb-3 space-y-1">
                         <RouterLink to="/" class="block px-3 py-2 text-base font-medium transition-colors duration-200"
-                            :class="{
+                            @click="closeMobileMenu" :class="{
                                 'text-blue-500 bg-gray-100': route.path === '/',
                                 'text-gray-700 hover:text-gray-900 hover:bg-gray-50': route.path !== '/'
                             }">
@@ -330,6 +405,7 @@ const handleLogout = async () => {
                             <template v-if="section.to">
                                 <!-- External link -->
                                 <a v-if="section.external" :href="section.to" target="_blank" rel="noopener noreferrer"
+                                    @click="closeMobileMenu"
                                     class="block px-3 py-2 text-base font-medium transition-colors duration-200" :class="{
                                         'text-blue-500 bg-gray-100': section.isActive(route),
                                         'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
@@ -337,7 +413,7 @@ const handleLogout = async () => {
                                     {{ section.name }}
                                 </a>
                                 <!-- Internal link -->
-                                <RouterLink v-else :to="section.to"
+                                <RouterLink v-else :to="section.to" @click="closeMobileMenu"
                                     class="block px-3 py-2 text-base font-medium transition-colors duration-200" :class="{
                                         'text-blue-500 bg-gray-100': section.isActive(route),
                                         'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
@@ -347,49 +423,111 @@ const handleLogout = async () => {
                             </template>
 
                             <!-- Dropdown section -->
-                            <div v-else class="mobile-menu-section">
-                                <button @click="toggleMobileDropdown(section.name, $event)"
-                                    class="w-full flex justify-between items-center px-3 py-2 text-base font-medium transition-colors duration-200"
-                                    :class="{
-                                        'text-blue-500 bg-gray-100': section.isActive(route),
-                                        'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
-                                    }">
-                                    {{ section.name }}
-                                    <svg class="w-4 h-4 transition-transform duration-200"
-                                        :class="{ 'transform rotate-180': mobileActiveDropdown === section.name }"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </button>
-                                <Transition enter-active-class="transition-all duration-300 ease-out"
-                                    enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-[200px]"
-                                    leave-active-class="transition-all duration-200 ease-in"
-                                    leave-from-class="opacity-100 max-h-[200px]" leave-to-class="opacity-0 max-h-0">
-                                    <div v-show="mobileActiveDropdown === section.name" class="pl-4 overflow-hidden">
-                                        <!-- Loop through dropdown items -->
-                                        <template v-for="(item, itemIndex) in section.items" :key="itemIndex">
-                                            <!-- External link -->
-                                            <a v-if="item.external" :href="item.to" target="_blank"
-                                                rel="noopener noreferrer"
-                                                class="block px-3 py-2 text-base transition-colors duration-200" :class="{
-                                                    'text-blue-500 bg-gray-100': route.path === item.to,
-                                                    'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
-                                                }">
-                                                {{ item.label }}
-                                            </a>
-                                            <!-- Internal link -->
-                                            <RouterLink v-else :to="item.to"
-                                                class="block px-3 py-2 text-base transition-colors duration-200" :class="{
-                                                    'text-blue-500 bg-gray-100': route.path === item.to,
-                                                    'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
-                                                }">
-                                                {{ item.label }}
-                                            </RouterLink>
-                                        </template>
-                                    </div>
-                                </Transition>
-                            </div>
+                            <template v-else-if="section.items">
+                                <div class="mobile-menu-section">
+                                    <button @click="toggleMobileDropdown(section.name, $event)"
+                                        class="w-full flex justify-between items-center px-3 py-2 text-base font-medium transition-colors duration-200"
+                                        :class="{
+                                            'text-blue-500 bg-gray-100': section.isActive(route),
+                                            'text-gray-700 hover:text-gray-900 hover:bg-gray-50': !section.isActive(route)
+                                        }">
+                                        {{ section.name }}
+                                        <svg class="w-4 h-4 transition-transform duration-200"
+                                            :class="{ 'transform rotate-180': mobileActiveDropdown === section.name }"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </button>
+                                    <Transition enter-active-class="transition-all duration-300 ease-out"
+                                        enter-from-class="opacity-0 max-h-0" enter-to-class="opacity-100 max-h-[400px]"
+                                        leave-active-class="transition-all duration-200 ease-in"
+                                        leave-from-class="opacity-100 max-h-[400px]" leave-to-class="opacity-0 max-h-0">
+                                        <div v-show="mobileActiveDropdown === section.name"
+                                            class="pl-2 overflow-hidden">
+                                            <template v-for="(item, itemIndex) in section.items" :key="itemIndex">
+                                                <!-- Nested dropdown handling -->
+                                                <template v-if="item.items">
+                                                    <div class="mobile-submenu-section">
+                                                        <button
+                                                            @click="toggleMobileNestedDropdown(section.name, item.label, $event)"
+                                                            class="w-full flex justify-between items-center px-3 py-2 text-base font-medium transition-colors duration-200"
+                                                            :class="{
+                                                                'text-blue-500 bg-gray-100': mobileActiveNestedDropdown === `${section.name}-${item.label}`,
+                                                                'text-gray-700 hover:text-gray-900 hover:bg-gray-50': mobileActiveNestedDropdown !== `${section.name}-${item.label}`
+                                                            }">
+                                                            {{ item.label }}
+                                                            <svg class="w-4 h-4 transition-transform duration-200"
+                                                                :class="{ 'transform rotate-180': mobileActiveNestedDropdown === `${section.name}-${item.label}` }"
+                                                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2" d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                                        </button>
+                                                        <Transition
+                                                            enter-active-class="transition-all duration-300 ease-out"
+                                                            enter-from-class="opacity-0 max-h-0"
+                                                            enter-to-class="opacity-100 max-h-[200px]"
+                                                            leave-active-class="transition-all duration-200 ease-in"
+                                                            leave-from-class="opacity-100 max-h-[200px]"
+                                                            leave-to-class="opacity-0 max-h-0">
+                                                            <div v-show="mobileActiveNestedDropdown === `${section.name}-${item.label}`"
+                                                                class="pl-4 overflow-hidden">
+                                                                <template v-for="(subItem, subIndex) in item.items"
+                                                                    :key="subIndex">
+                                                                    <!-- External link -->
+                                                                    <a v-if="subItem.external" :href="subItem.to"
+                                                                        target="_blank" rel="noopener noreferrer"
+                                                                        @click="closeMobileMenu"
+                                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                                        :class="{
+                                                                            'text-blue-500 bg-gray-100': route.path === subItem.to,
+                                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== subItem.to
+                                                                        }">
+                                                                        {{ subItem.label }}
+                                                                    </a>
+                                                                    <!-- Internal link -->
+                                                                    <RouterLink v-else :to="subItem.to"
+                                                                        @click="closeMobileMenu"
+                                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                                        :class="{
+                                                                            'text-blue-500 bg-gray-100': route.path === subItem.to,
+                                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== subItem.to
+                                                                        }">
+                                                                        {{ subItem.label }}
+                                                                    </RouterLink>
+                                                                </template>
+                                                            </div>
+                                                        </Transition>
+                                                    </div>
+                                                </template>
+                                                <!-- Regular dropdown item -->
+                                                <template v-else>
+                                                    <!-- External link -->
+                                                    <a v-if="item.external" :href="item.to" target="_blank"
+                                                        rel="noopener noreferrer" @click="closeMobileMenu"
+                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                        :class="{
+                                                            'text-blue-500 bg-gray-100': route.path === item.to,
+                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
+                                                        }">
+                                                        {{ item.label }}
+                                                    </a>
+                                                    <!-- Internal link -->
+                                                    <RouterLink v-else :to="item.to" @click="closeMobileMenu"
+                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                        :class="{
+                                                            'text-blue-500 bg-gray-100': route.path === item.to,
+                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== item.to
+                                                        }">
+                                                        {{ item.label }}
+                                                    </RouterLink>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </Transition>
+                                </div>
+                            </template>
                         </template>
                     </div>
                 </div>

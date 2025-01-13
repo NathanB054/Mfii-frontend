@@ -40,7 +40,19 @@ const router = createRouter({
     {
       path: '/services/ipp',
       name: 'Table Research',
-      component: () => import('../views/TableResearch.vue'),
+      component: () => import('../views/TableResearchView.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/regulation',
+      name: 'Regulation',
+      component: () => import('../views/RegulationDemo.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/services/ipa',
+      name: 'Request for Coverage',
+      component: () => import('../views/RequestCoverageView.vue'),
       meta: { showNavTop: true, showNavFooter: true }
     },
     {
@@ -111,6 +123,24 @@ const router = createRouter({
       path: '/staff/researchManagement',
       name: 'Research Management',
       component: () => import('../views/StaffView/ResearchManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/searchManagement',
+      name: 'Search Management',
+      component: () => import('../views/StaffView/SearchManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/regulationManagement',
+      name: 'Regulation Management',
+      component: () => import('../views/StaffView/RegulationManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/groupManagement',
+      name: 'Group Management',
+      component: () => import('../views/StaffView/GroupManagement.vue'),
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
