@@ -114,8 +114,10 @@
 
 <script>
 import StaffLayout from "@/layouts/staff.vue";
+import api from '@/stores/axios-config';
 import { useErrorStore } from "@/stores/errorStore";
 const errorStore = useErrorStore();
+
 export default {
     name: "PDF Management",
     components: {
@@ -137,6 +139,18 @@ export default {
         };
     },
     methods: {
+        async fetchPDFs() {
+            try {
+                const response = await api.get("/getsRegulation");
+                this.pdfs = response.data.map(pdf => ({ id: pdf._id, title: pdf.regulationName }));
+            } catch (error) {
+                errorStore.show("เกิดข้อผิดพลาดในการดึงข้อมูล", {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+            }
+        },
         triggerFileInput() {
             this.$refs.fileInput.click();
         },
@@ -187,39 +201,35 @@ export default {
         async uploadPDF() {
             if (!this.pdfFile || !this.pdfTitle) return;
 
-            // จำลองข้อมูลการอัพโหลด
-            const mockResponse = {
-                status: 200,
-                data: {
-                    id: Date.now(), // ใช้ timestamp เป็น id
-                },
-            };
+            const formData = new FormData();
+            formData.append("regulationName", this.pdfTitle);
+            formData.append("file", this.pdfFile);
 
-            // ใช้เวลาหน่วง (simulating delay) เพื่อให้เหมือนกับการเชื่อมต่อกับ API
-            setTimeout(() => {
-                if (mockResponse.status === 200) {
-                    this.pdfs.push({
-                        title: this.pdfTitle,
-                        description: '', // เพิ่มข้อมูลคำอธิบายถ้าต้องการ
-                        id: mockResponse.data.id,
-                    });
-                    this.clearPDF();
-                    errorStore.show(`ไฟล์ PDF ถูกอัพโหลดเรียบร้อยแล้ว`, {
-                        color: "success",
-                        icon: "mdi-alert-circle",
-                        timeout: 5000,
-                    });
-                } else {
-                    errorStore.show(`เกิดข้อผิดพลาดในการอัพโหลด`, {
-                        color: "error",
-                        icon: "mdi-alert-circle",
-                        timeout: 5000,
-                    });
-
-                }
-            },);
+            try {
+                const response = await api.post("/staff/addRegulation", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                this.pdfs.push({
+                    id: response.data.id,
+                    title: this.pdfTitle,
+                });
+                this.clearPDF();
+                errorStore.show(`ไฟล์ PDF ถูกอัพโหลดเรียบร้อยแล้ว`, {
+                    color: "success",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+            } catch (error) {
+                errorStore.show(`เกิดข้อผิดพลาดในการอัพโหลด`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+            }
         },
-        savePDFEdit() {
+        async savePDFEdit() {
             if (!this.selectedPDF.title) {
                 errorStore.show(`กรุณากรอกชื่อไฟล์`, {
                     color: "error",
@@ -229,27 +239,41 @@ export default {
                 return;
             }
 
-            // จำลองการบันทึกการแก้ไข
-            const pdfIndex = this.pdfs.findIndex(pdf => pdf.id === this.selectedPDF.id);
-            if (pdfIndex !== -1) {
-                this.pdfs[pdfIndex] = this.selectedPDF;
+            try {
+                await api.patch(`/staff/updateRegulationData/${this.selectedPDF.id}`, {
+                    regulationName: this.selectedPDF.title,
+                });
+                const pdfIndex = this.pdfs.findIndex(pdf => pdf.id === this.selectedPDF.id);
+                if (pdfIndex !== -1) {
+                    this.pdfs[pdfIndex].title = this.selectedPDF.title;
+                }
+                this.editDialog = false;
+                errorStore.show(`ข้อมูล PDF ถูกบันทึกเรียบร้อยแล้ว`, {
+                    color: "success",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+            } catch (error) {
+                errorStore.show(`เกิดข้อผิดพลาดในการอัปเดตข้อมูล`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
             }
-
-            this.editDialog = false;
-            errorStore.show(`ข้อมูล PDF ถูกบันทึกเรียบร้อยแล้ว`, {
-                color: "success",
-                icon: "mdi-alert-circle",
-                timeout: 5000,
-            });
-
         },
-        deletePDF(id) {
-            const pdfIndex = this.pdfs.findIndex(pdf => pdf.id === id);
-            if (pdfIndex !== -1) {
-                this.pdfs.splice(pdfIndex, 1); // ลบไฟล์จากรายการ
+        async deletePDF(id) {
+            try {
+                await api.delete(`/staff/deleteRegulation/pdf/${id}`);
+                this.pdfs = this.pdfs.filter(pdf => pdf.id !== id);
                 this.deleteDialog = false;
                 errorStore.show(`ไฟล์ PDF ถูกลบเรียบร้อยแล้ว`, {
                     color: "success",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000,
+                });
+            } catch (error) {
+                errorStore.show(`เกิดข้อผิดพลาดในการลบไฟล์`, {
+                    color: "error",
                     icon: "mdi-alert-circle",
                     timeout: 5000,
                 });
@@ -271,6 +295,9 @@ export default {
         dragLeave(event) {
             event.preventDefault();
         },
+    },
+    mounted() {
+        this.fetchPDFs();
     },
 };
 </script>
