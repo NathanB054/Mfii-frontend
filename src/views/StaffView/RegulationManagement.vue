@@ -142,7 +142,7 @@ export default {
         async fetchPDFs() {
             try {
                 const response = await api.get("/getsRegulation");
-                this.pdfs = response.data.map(pdf => ({ id: pdf._id, title: pdf.regulationName }));
+                this.pdfs = response.data.result.map(pdf => ({ id: pdf._id, title: pdf.regulationName }));
             } catch (error) {
                 errorStore.show("เกิดข้อผิดพลาดในการดึงข้อมูล", {
                     color: "error",
@@ -216,6 +216,7 @@ export default {
                     title: this.pdfTitle,
                 });
                 this.clearPDF();
+                this.fetchPDFs();
                 errorStore.show(`ไฟล์ PDF ถูกอัพโหลดเรียบร้อยแล้ว`, {
                     color: "success",
                     icon: "mdi-alert-circle",
@@ -263,7 +264,7 @@ export default {
         },
         async deletePDF(id) {
             try {
-                await api.delete(`/staff/deleteRegulation/pdf/${id}`);
+                await api.delete(`/staff/deleteRegulation/regulation/${id}`);
                 this.pdfs = this.pdfs.filter(pdf => pdf.id !== id);
                 this.deleteDialog = false;
                 errorStore.show(`ไฟล์ PDF ถูกลบเรียบร้อยแล้ว`, {
@@ -277,24 +278,25 @@ export default {
                     icon: "mdi-alert-circle",
                     timeout: 5000,
                 });
+                console.error(error);
             }
         },
         clearPDF() {
             this.pdfPreview = null;
             this.pdfFile = null;
-            this.pdfTitle = '';
+            this.pdfTitle = null;
             this.pdfFileName = '';
         },
         startEditPDF(pdf) {
             this.selectedPDF = { ...pdf };
             this.editDialog = true;
         },
-        dragOver(event) {
-            event.preventDefault();
-        },
-        dragLeave(event) {
-            event.preventDefault();
-        },
+        // dragOver(event) {
+        //     event.preventDefault();
+        // },
+        // dragLeave(event) {
+        //     event.preventDefault();
+        // },
     },
     mounted() {
         this.fetchPDFs();
