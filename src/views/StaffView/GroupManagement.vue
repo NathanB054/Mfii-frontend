@@ -1,6 +1,9 @@
 <template>
     <staff-layout>
+      
         <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+            <LoadingOverlay :loading="isLoading" message="โปรดรอสักครู่..." />
+            <!-- Container -->
             <div class="container mx-auto max-w-6xl">
                 <!-- Header -->
                 <div class="mb-8 text-center">
@@ -13,12 +16,12 @@
                 <div class="bg-white shadow-xl rounded-2xl p-6 mb-8">
                     <div class="grid md:grid-cols-2 gap-6 items-center">
                         <!-- Image Preview Area -->
-                        <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[300px]"
+                        <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[700px]"
                             @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop.prevent="dropFile">
                             <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*"
                                 class="hidden">
 
-                            <template v-if="!imagePreview">
+                            <template v-if="!dataInfo.imagePreview">
                                 <v-icon class="text-6xl text-gray-400 mb-4">mdi-cloud-upload</v-icon>
                                 <p class="text-gray-600 mb-4">ลากและวางรูปภาพที่นี่ หรือ</p>
                                 <button @click="triggerFileInput"
@@ -29,7 +32,12 @@
 
                             <template v-else>
                                 <div class="relative group w-full">
-                                    <img :src="imagePreview" class="max-w-full max-h-80 rounded-xl object-cover mx-auto"
+                                    <img v-if="dataInfo.imagePreview[0].includes('uploads')"
+                                        :src="dataInfo.id ? `${baseUrl}/${dataInfo.imagePreview}` : `${dataInfo.imagePreview}`"
+                                        class="yes max-w-full max-h-80 rounded-xl object-cover mx-auto"
+                                        @error="handleImageError" />
+                                    <img v-else :src="dataInfo.imagePreview"
+                                        class="no max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
                                     <div
                                         class="absolute inset-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300 rounded-xl">
@@ -45,24 +53,34 @@
                         <!-- Upload Form -->
                         <div>
                             <v-form @submit.prevent="uploadImage">
-                                <v-autocomplete variant="solo-filled" flat label="หมวดหมู่" v-model="group"
-                                    :items="['งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา', 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', 'งานยกระดับงานวิจัยและนวัตกรรม']"
-                                    :rules="[rules.required]" required></v-autocomplete>
-                                <v-text-field v-model="imageTitle" label="ชื่อหัวข้อ" variant="outlined" class="mb-4"
-                                    :rules="[rules.topic]" required></v-text-field>
+                                <!-- Dropdown with @change to trigger fetchData -->
+                                <v-autocomplete variant="solo-filled" flat label="หมวดหมู่"
+                                    v-model="servicesForApi.servicesType" :items="dropdownItems"
+                                    :rules="[rules.required]" @change="fetchData"></v-autocomplete>
 
-                                <v-textarea v-model="imageDescription" label="คำอธิบาย" variant="outlined" class="mb-4"
-                                    :rules="[rules.description]" required rows="4" auto-grow></v-textarea>
+                                <!-- Text field for the fetched data -->
+                                <v-text-field v-model="dataInfo.servicesSubType" label="ชื่อหัวข้อ" variant="outlined"
+                                    class="mb-4" :rules="[rules.topic]" required></v-text-field>
 
+                                <!-- Textarea for the fetched description -->
+                                <v-textarea v-model="dataInfo.information" label="คำอธิบาย" variant="outlined"
+                                    class="mb-4" :rules="[rules.description]" required rows="4" auto-grow></v-textarea>
+                                <!-- Buttons -->
                                 <div class="flex space-x-4">
-                                    <v-btn type="submit" color="green darken-1" variant="elevated"
-                                        :disabled="!imagePreview || !group || !imageDescription || !imageTitle"
+                                    <v-btn v-if="dataInfo.id == null" type="submit" color="green darken-1"
+                                        variant="elevated"
+                                        :disabled="!dataInfo.imagePreview || !dataInfo.information || !servicesForApi.servicesType"
                                         class="flex-grow">
                                         อัพโหลดข้อมูล
                                     </v-btn>
-                                    <v-btn v-if="imagePreview" @click="clearImage" color="red darken-1"
+                                    <v-btn v-else color="green darken-1" variant="elevated" @click="updateImagenData"
+                                        :disabled="!dataInfo.imagePreview || !servicesForApi.servicesType || !dataInfo.information || !dataInfo.servicesType"
+                                        class="flex-grow">
+                                        แก้ไขข้อมูล
+                                    </v-btn>
+                                    <v-btn v-if="dataInfo.imagePreview && dataInfo.id" @click="deleteDialog = true" color="red darken-1"
                                         variant="outlined">
-                                        ยกเลิก
+                                        ลบข้อมูล
                                     </v-btn>
                                 </div>
                             </v-form>
@@ -71,17 +89,17 @@
                 </div>
 
                 <!-- Image Gallery -->
-                <div class="bg-white shadow-xl rounded-2xl p-6">
+                <!-- <div class="bg-white shadow-xl rounded-2xl p-6">
                     <h2 class="text-2xl font-semibold text-gray-800 mb-6">
                         คลังข้อมูล
                     </h2>
 
-                    <template v-if="images.length">
+                    <template v-if="dataInfo.length">
                         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                            <div v-for="(image, index) in images" :key="index" class="relative group">
+                            <div v-for="(info, index) in dataInfo" :key="index" class="relative group">
                                 <div class="bg-white shadow-lg rounded-xl overflow-hidden">
                                     <div class="relative">
-                                        <img v-if="image.url" :src="image.url" alt="Image"
+                                        <img v-if="info.filePath" :src="info.filePath" alt="Image"
                                             class="w-full h-48 object-cover" />
                                         <div
                                             class="absolute inset-0 bg-opacity-100 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center space-x-4">
@@ -94,10 +112,11 @@
                                                 <v-icon>mdi-delete</v-icon>
                                             </button>
                                         </div>
+                                        
                                     </div>
                                     <div class="p-4">
-                                        <p class="text-gray-500 text-sm">{{ image.group }}</p>
-                                        <p class="text-gray-800 font-medium break-words">{{ image.title }}</p>
+                                        <p class="text-gray text-sm">{{ info.servicesType }}</p>
+                                        <p class="text-gray font-medium break-words">{{ info.servicesSubType }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -107,11 +126,11 @@
                         <v-icon class="text-6xl text-gray-400 mb-4">mdi-image-off</v-icon>
                         <p class="text-gray-600">ยังไม่มีข้อมูลในคลัง</p>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Edit Image Dialog -->
-            <v-dialog v-model="editDialog" max-width="600">
+            <!-- <v-dialog v-model="editDialog" max-width="600">
                 <v-card v-if="selectedImage" class="rounded-2xl">
                     <v-card-title class="text-2xl font-semibold text-gray-800 pb-0">
                         แก้ไขข้อมูล
@@ -137,7 +156,7 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-dialog>
+            </v-dialog> -->
 
             <!-- delete dialog -->
             <v-dialog v-model="deleteDialog" max-width="400">
@@ -149,7 +168,7 @@
                     <v-card-actions>
                         <v-btn color="red darken-1" variant="tonal" text @click="deleteDialog = false">ยกเลิก</v-btn>
                         <v-btn color="green darken-1" variant="tonal"
-                            @click="deleteImage(selectedImage.id)">ยืนยัน</v-btn>
+                            @click="deleteData(dataInfo.id)">ยืนยัน</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -161,20 +180,32 @@
 <script>
 import StaffLayout from "@/layouts/staff.vue";
 import { useErrorStore } from "@/stores/errorStore";
+import api from "@/stores/axios-config";
+import "vuetify/dist/vuetify.min.css";
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
+
 const errorStore = useErrorStore();
+const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
     name: "Aware Management View",
     components: {
         StaffLayout,
+        LoadingOverlay
     },
     data() {
         return {
-            imageFile: null,
-            imagePreview: null,
-            imageDescription: '',
-            imageTitle: '',
-            editDialog: false,
+            isLoading: false,
             deleteDialog: false,
+            baseUrl: baseURL,
+            dataInfo: {
+                id: null,
+                servicesType: null,
+                information: null,
+                servicesSubType: null,
+                imagePreview: null,
+            },
+            imageFile: null,
+            imageCheck: null,
             selectedImage: null,
             images: [],
             group: null,
@@ -182,7 +213,15 @@ export default {
                 required: value => !!value || 'กรุณากรอกข้อมูลในช่อง',
                 topic: value => !!value || 'กรุณากรอกชื่อหัวข้อ',
                 description: value => !!value || 'กรุณากรอกคำอธิบาย',
-            }
+            },
+            servicesForApi: {
+                servicesType: null || "งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา",
+            },
+            dropdownItems: [
+                "งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา",
+                "การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา",
+                "งานยกระดับงานวิจัยและนวัตกรรม",
+            ],
         }
     },
     methods: {
@@ -193,12 +232,14 @@ export default {
             const file = event.target.files[0]
             if (file) {
                 this.processFile(file)
+                this.imageFile = file
             }
         },
         dropFile(event) {
             const file = event.dataTransfer.files[0]
             if (file && file.type.startsWith('image/')) {
                 this.processFile(file)
+                this.imageFile = file
             }
         },
         processFile(file) {
@@ -224,7 +265,7 @@ export default {
             reader.onload = (e) => {
                 const img = new Image()
                 img.onload = () => {
-                    this.imagePreview = e.target.result
+                    this.dataInfo.imagePreview = e.target.result
                 }
                 img.onerror = () => {
                     errorStore.show(`ไม่สามารถอ่านไฟล์รูปภาพได้`, {
@@ -245,31 +286,7 @@ export default {
             reader.readAsDataURL(file)
             this.imageFile = file
         },
-        uploadImage() {
-            if (!this.imagePreview || !this.group || !this.imageDescription || !this.imageTitle) {
-                errorStore.show(`กรุณากรอกข้อมูลให้ครบ`, {
-                    color: "warning",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                });
-                return
-            }
 
-            const newImage = {
-                group: this.group,
-                url: this.imagePreview,
-                title: this.imageTitle,
-                description: this.imageDescription
-            }
-
-            this.images.push(newImage)
-            this.clearImage()
-            errorStore.show("เพิ่มเรียบร้อยแล้ว", {
-                color: 'success',
-                icon: 'mdi-check-circle',
-                timeout: 5000
-            });
-        },
         startEditImage(image) {
             this.selectedImage = { ...image }
             this.editDialog = true
@@ -299,10 +316,170 @@ export default {
             this.group = null
             this.imageTitle = ''
             this.imageDescription = ''
-            this.imagePreview = null
+            this.dataInfo.imagePreview = null
             this.imageFile = null
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = ''
+            }
+        },
+
+
+        // ===================================================== API =========================================================
+
+        // fetch data
+        async fetchData() {
+            this.isLoading = true;
+            if (!this.servicesForApi.servicesType) return;
+            try {
+                const res = await api.get(`/getsServices/${this.servicesForApi.servicesType}/all`);
+                // Check if res.data and res.data.result exist and are valid arrays
+                if (res.data && Array.isArray(res.data.result) && res.data.result.length > 0) {
+                    // Extract data from the first item in the result array
+                    this.dataInfo = null;
+                    this.dataInfo = {
+                        id: res.data.result[0]?._id || null,
+                        servicesType: res.data.result[0]?.servicesType || this.servicesForApi.servicesType,
+                        servicesSubType: res.data.result[0]?.servicesSubType || "",
+                        information: res.data.result[0]?.information || "",
+                        imagePreview: res.data.result[0]?.filePath || null
+                    };
+                    this.imageFile = res.data.result[0]?.filePath || null
+                    this.imageCheck = this.imageFile;
+                    this.isLoading = false;
+                } else {
+                    // Handle empty or invalid data gracefully
+                    this.dataInfo = {
+                        id: null,
+                        servicesType: "",
+                        servicesSubType: "",
+                        information: ""
+                    };
+                    this.isLoading = false;
+                }
+            } catch (error) {
+                this.isLoading = false;
+                console.error("Error fetching data:", error);
+                throw error;
+            }
+        },
+
+        // แก้ไขข้อมูล
+        async updateImagenData() {
+            const formUpdate = new FormData();
+            this.isLoading = true;
+            try {
+                // if change image do this function
+                if (this.imageFile !== this.imageCheck) {
+                    const updateImg = api.patch(`/staff/deleteFileServices/services/${this.dataInfo.id}`, {
+                        filePath: this.imageCheck[0]
+                    }).then(api.patch(`/staff/addFileServices/services/${this.dataInfo.id}`, {
+                        file: this.imageFile
+                    }, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                    })
+                    )
+                }
+                // and update data
+                formUpdate.append('servicesType', this.servicesForApi.servicesType);
+                formUpdate.append('servicesSubType', this.dataInfo.servicesSubType);
+                formUpdate.append('information', this.dataInfo.information);
+                const res = await api.patch(`/staff/updateServicesData/${this.dataInfo.id}`, formUpdate);
+                this.isLoading = false;
+                errorStore.show("แก้ไขข้อมูลเรียบร้อย", {
+                    color: 'success',
+                    icon: 'mdi-check-circle',
+                    timeout: 5000
+                });
+            } catch (error) {
+                this.isLoading = false;
+                throw error;
+            }
+        },
+
+        // upload image และ information
+        async uploadImage() {
+            this.isLoading = true
+            console.log(this.servicesForApi, this.dataInfo)
+            if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information || !this.dataInfo.imagePreview) {
+                errorStore.show(`กรุณากรอกข้อมูลให้ครบ`, {
+                    color: "warning",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000
+                });
+                return
+            }
+            const newImage = {
+                group: this.group,
+                url: this.dataInfo.imagePreview,
+                title: this.imageTitle,
+                description: this.imageDescription,
+            }
+
+            const formPayload = new FormData();
+            try {
+                formPayload.append('servicesType', this.servicesForApi.servicesType);
+                formPayload.append('servicesSubType', this.dataInfo.servicesSubType);
+                formPayload.append('information', this.dataInfo.information);
+                formPayload.append('file', this.imageFile);
+                const res = await api.post('/staff/addServices', formPayload, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                })
+                console.log(res);
+                this.images.push(newImage);
+                this.clearImage();
+
+                // fetch data
+                this.fetchData();
+                this.isLoading = false
+                errorStore.show("เพิ่มเรียบร้อยแล้ว", {
+                    color: 'success',
+                    icon: 'mdi-check-circle',
+                    timeout: 5000
+                });
+            } catch (error) {
+                console.error(error);
+                this.isLoading = false
+            }
+
+        },
+
+        // ลบข้อมูล
+        async deleteData(id) {
+            this.isLoading = true;
+            try {
+                await api.delete(`/staff/deleteServices/services/${id}`);
+                this.fetchData();
+                this.deleteDialog = false;
+                this.isLoading = false;
+                errorStore.show("ลบข้อมูลสําเร็จ", {
+                    color: 'success',
+                    icon: 'mdi-check-circle',
+                    timeout: 5000
+                });
+            } catch (error) {
+                this.isLoading = false;
+                this.deleteDialog = false;
+                throw error;
+            }
+    },
+
+},
+
+
+    mounted() {
+        this.fetchData();
+    },
+    // เช็คว่า servicesType มีการเปลี่ยนแปลงหรือไม่
+    watch: {
+        'servicesForApi.servicesType': {
+            handler(newValue) {
+                if (newValue) {
+                    this.fetchData();
+                }
             }
         }
     }
