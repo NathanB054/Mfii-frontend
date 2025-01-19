@@ -19,7 +19,7 @@ const mobileSections = [
             { label: 'งานสร้างความตระหนักทรัพย์สินทางปัญญา', to: '/services/aai' },
             { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' },
             { label: 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', to: '/services/abi' },
-            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/upi' },
+            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: '/services/upi' },
             { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' },
         ],
         isActive: (route) => route.path.startsWith('/service'),
