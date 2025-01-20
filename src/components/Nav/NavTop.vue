@@ -19,7 +19,7 @@ const mobileSections = [
             { label: 'งานสร้างความตระหนักทรัพย์สินทางปัญญา', to: '/services/aai' },
             { label: 'การขอรับความคุ้มครองทรัพย์สินทางปัญญา', to: '/services/ipa' },
             { label: 'การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา', to: '/services/abi' },
-            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: 'services/upi' },
+            { label: 'การยกระดับงานวิจัยและนวัตกรรม', to: '/services/upi' },
             { label: 'ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล', to: '/services/ipp' },
         ],
         isActive: (route) => route.path.startsWith('/service'),
@@ -249,10 +249,10 @@ const handleLogout = async () => {
                     <div class="hover:bg-gray-400 rounded-md transition-colors duration-300"
                         :class="{ 'bg-gray-400': route.path === '/' }">
                         <button
-                            class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center"
+                            class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center "
                             :class="{ 'text-gray-900': route.path === '/' }">
                             <li>
-                                <RouterLink to="/" class="px-3 py-2 text-sm font-bold" @click="closeDesktopDropdown">
+                                <RouterLink to="/" class="text-nav px-3 py-2 text-sm font-bold" @click="closeDesktopDropdown">
                                     หน้าหลัก
                                 </RouterLink>
                             </li>
@@ -269,13 +269,13 @@ const handleLogout = async () => {
                                 :class="{ 'text-gray-900': section.isActive(route) }">
                                 <li>
                                     <template v-if="section.external">
-                                        <a :href="section.to" target="_blank" class="px-3 py-2 text-sm font-bold"
+                                        <a :href="section.to" target="_blank" class="text-nav px-3 py-2 text-sm font-bold"
                                             @click="closeDesktopDropdown">
                                             {{ section.name }}
                                         </a>
                                     </template>
                                     <template v-else>
-                                        <RouterLink :to="section.to" class="px-3 py-2 text-sm font-bold"
+                                        <RouterLink :to="section.to" class="text-nav px-3 py-2 text-sm font-bold"
                                             @click="closeDesktopDropdown">
                                             {{ section.name }}
                                         </RouterLink>
@@ -289,7 +289,7 @@ const handleLogout = async () => {
                             :class="{ 'bg-gray-400': section.isActive(route) }">
                             <li>
                                 <button @click="toggleDropdown(section.name)"
-                                    class="desktop-dropdown-button text-white hover:text-gray-900 px-3 py-2 text-sm font-bold inline-flex items-center"
+                                    class="text-nav desktop-dropdown-button text-white hover:text-gray-900 px-3 py-2 text-sm font-bold inline-flex items-center"
                                     :class="{ 'text-gray-900': section.isActive(route) }">
                                     {{ section.name }}
                                     <svg class="w-4 h-4 ml-1 transition-transform duration-200"
@@ -541,7 +541,21 @@ const handleLogout = async () => {
     transition-property: all;
 }
 
+@media (max-width: 1280px) {
+    .text-nav{
+        display: flex;
+        align-self: center;
+        font-size: 13px;
+    }
+}
+
 @media (max-width: 1024px) {
+    .text-nav{
+        display: flex;
+        align-self: center;
+        font-size: 10px;
+    }
+    
     .end-content {
         margin-right: 0 !important;
     }
@@ -560,6 +574,7 @@ const handleLogout = async () => {
 
     .text-title {
         justify-items: center !important;
+        text-align: center; /* Center text when width < 1024px */
     }
 }
 
