@@ -1,6 +1,6 @@
 <template>
     <staff-layout>
-      
+
         <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
             <LoadingOverlay :loading="isLoading" message="โปรดรอสักครู่..." />
             <!-- Container -->
@@ -21,9 +21,9 @@
                             <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*"
                                 class="hidden">
 
-                            <template v-if="!dataInfo.imagePreview">
+                            <template v-if="!dataInfo.FilePreview">
                                 <v-icon class="text-6xl text-gray-400 mb-4">mdi-cloud-upload</v-icon>
-                                <p class="text-gray-600 mb-4">ลากและวางรูปภาพที่นี่ หรือ</p>
+                                <p class="text-gray-600 mb-4">ลากและวางไฟล์ที่นี่ หรือ</p>
                                 <button @click="triggerFileInput"
                                     class="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
                                     เลือกไฟล์
@@ -32,18 +32,38 @@
 
                             <template v-else>
                                 <div class="relative group w-full">
-                                    <img v-if="dataInfo.imagePreview[0].includes('uploads')"
-                                        :src="dataInfo.id ? `${baseUrl}/${dataInfo.imagePreview}` : `${dataInfo.imagePreview}`"
+                                    <!-- เช็คว่าเป็นรูปภาพ -->
+                                    <img v-if="dataInfo.FilePreview[0].includes('uploads\\image')"
+                                        :src="dataInfo.id ? `${baseUrl}/${dataInfo.FilePreview}` : `${dataInfo.FilePreview}`"
                                         class="yes max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
-                                    <img v-else :src="dataInfo.imagePreview"
+
+                                    <!-- เช็คว่าเป็น pdf -->
+                                    <div v-else-if="dataInfo.FilePreview[0].includes('.pdf')">
+                                        <iframe v-if="dataInfo.id" :src="`${baseUrl}/${dataInfo.FilePreview}#toolbar=0`"
+                                            class="yes max-w-full min-h-[500px] rounded-xl mx-auto" frameborder="0"
+                                            width="100%" height="100%">
+                                        </iframe>
+                                    </div>
+                                    <!-- เช็คว่าเป็น pdf preview -->
+                                    <div v-else-if="dataInfo.FilePreview.includes('data:application/pdf')">
+                                        <iframe :src="`${dataInfo.FilePreview}#toolbar=0`"
+                                            class="yes max-w-full min-h-[500px] rounded-xl mx-auto" frameborder="0"
+                                            width="100%" height="100%">
+                                        </iframe>
+                                    </div>
+                                    
+                                     <!-- เช็คว่าเป็นรูป preview -->
+                                    <img v-else :src="dataInfo.FilePreview"
                                         class="no max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
+
+                                        <!-- <div>{{ dataInfo.FilePreview }}</div> -->
                                     <div
-                                        class="absolute inset-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300 rounded-xl">
+                                        :class="dataInfo.FilePreview[0].includes('.pdf') ? 'mt-2' : 'absolute inset-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300 rounded-xl '">
                                         <button @click="triggerFileInput"
                                             class="bg-white px-4 py-2 rounded-full opacity-80 group-hover:opacity-100 transition-all hover:scale-110">
-                                            เปลี่ยนรูป
+                                            เปลี่ยนไฟล์
                                         </button>
                                     </div>
                                 </div>
@@ -69,17 +89,17 @@
                                 <div class="flex space-x-4">
                                     <v-btn v-if="dataInfo.id == null" type="submit" color="green darken-1"
                                         variant="elevated"
-                                        :disabled="!dataInfo.imagePreview || !dataInfo.information || !servicesForApi.servicesType"
+                                        :disabled="!dataInfo.FilePreview || !dataInfo.information || !servicesForApi.servicesType"
                                         class="flex-grow">
                                         อัพโหลดข้อมูล
                                     </v-btn>
                                     <v-btn v-else color="green darken-1" variant="elevated" @click="updateImagenData"
-                                        :disabled="!dataInfo.imagePreview || !servicesForApi.servicesType || !dataInfo.information || !dataInfo.servicesType"
+                                        :disabled="!dataInfo.FilePreview || !servicesForApi.servicesType || !dataInfo.information || !dataInfo.servicesType"
                                         class="flex-grow">
                                         แก้ไขข้อมูล
                                     </v-btn>
-                                    <v-btn v-if="dataInfo.imagePreview && dataInfo.id" @click="deleteDialog = true" color="red darken-1"
-                                        variant="outlined">
+                                    <v-btn v-if="dataInfo.FilePreview && dataInfo.id" @click="deleteDialog = true"
+                                        color="red darken-1" variant="outlined">
                                         ลบข้อมูล
                                     </v-btn>
                                 </div>
@@ -167,8 +187,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-btn color="red darken-1" variant="tonal" text @click="deleteDialog = false">ยกเลิก</v-btn>
-                        <v-btn color="green darken-1" variant="tonal"
-                            @click="deleteData(dataInfo.id)">ยืนยัน</v-btn>
+                        <v-btn color="green darken-1" variant="tonal" @click="deleteData(dataInfo.id)">ยืนยัน</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -183,7 +202,6 @@ import { useErrorStore } from "@/stores/errorStore";
 import api from "@/stores/axios-config";
 import "vuetify/dist/vuetify.min.css";
 import LoadingOverlay from "@/components/LoadingOverlay.vue";
-
 const errorStore = useErrorStore();
 const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
@@ -202,7 +220,7 @@ export default {
                 servicesType: null,
                 information: null,
                 servicesSubType: null,
-                imagePreview: null,
+                FilePreview: null,
             },
             imageFile: null,
             imageCheck: null,
@@ -228,64 +246,98 @@ export default {
         triggerFileInput() {
             this.$refs.fileInput.click()
         },
+
         handleFileUpload(event) {
             const file = event.target.files[0]
-            if (file) {
+            if (file.type === 'application/pdf' || file.type.startsWith('image')) {
                 this.processFile(file)
                 this.imageFile = file
+            } else {
+                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000
+                })
             }
         },
+
         dropFile(event) {
             const file = event.dataTransfer.files[0]
-            if (file && file.type.startsWith('image/')) {
+            if (file.type === 'application/pdf' || file.type.startsWith('image')) {
                 this.processFile(file)
                 this.imageFile = file
             }
+            else {
+                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
+                    color: "error",
+                    icon: "mdi-alert-circle",
+                    timeout: 5000
+                })
+            }
         },
+
+
         processFile(file) {
-            if (!file.type.startsWith('image/')) {
-                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพ`, {
+            // Check if the file is an image or a PDF
+            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
                     color: "error",
                     icon: "mdi-alert-circle",
                     timeout: 5000
                 });
-                return
+                return;
             }
 
+            // Check file size (limit to 5MB)
             if (file.size > 5 * 1024 * 1024) {
                 errorStore.show(`ขนาดไฟล์ต้องไม่เกิน 5MB`, {
                     color: "error",
                     icon: "mdi-alert-circle",
                     timeout: 5000
                 });
-                return
+                return;
             }
 
-            const reader = new FileReader()
-            reader.onload = (e) => {
-                const img = new Image()
-                img.onload = () => {
-                    this.dataInfo.imagePreview = e.target.result
-                }
-                img.onerror = () => {
-                    errorStore.show(`ไม่สามารถอ่านไฟล์รูปภาพได้`, {
-                        color: "error",
-                        icon: "mdi-alert-circle",
-                        timeout: 5000
-                    });
-                }
-                img.src = e.target.result
+            const reader = new FileReader();
+
+            // Handle image files
+            if (file.type.startsWith('image/')) {
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        this.dataInfo.FilePreview = e.target.result; // Display image preview
+                    };
+                    img.onerror = () => {
+                        errorStore.show(`ไม่สามารถอ่านไฟล์รูปภาพได้`, {
+                            color: "error",
+                            icon: "mdi-alert-circle",
+                            timeout: 5000
+                        });
+                    };
+                    img.src = e.target.result;
+                };
             }
+
+            // Handle PDF files
+            if (file.type === 'application/pdf') {
+                reader.onload = (e) => {
+                    this.dataInfo.FilePreview = e.target.result; // Store PDF data for further processing
+                    // You can add logic here to display the PDF preview (e.g., use a PDF viewer)
+                };
+            }
+
             reader.onerror = () => {
                 errorStore.show(`เกิดข้อผิดพลาดในการอ่านไฟล์`, {
                     color: "error",
                     icon: "mdi-alert-circle",
                     timeout: 5000
                 });
-            }
-            reader.readAsDataURL(file)
-            this.imageFile = file
+            };
+
+            reader.readAsDataURL(file);
+            this.imageFile = file;
         },
+
 
         startEditImage(image) {
             this.selectedImage = { ...image }
@@ -316,7 +368,7 @@ export default {
             this.group = null
             this.imageTitle = ''
             this.imageDescription = ''
-            this.dataInfo.imagePreview = null
+            this.dataInfo.FilePreview = null
             this.imageFile = null
             if (this.$refs.fileInput) {
                 this.$refs.fileInput.value = ''
@@ -341,7 +393,7 @@ export default {
                         servicesType: res.data.result[0]?.servicesType || this.servicesForApi.servicesType,
                         servicesSubType: res.data.result[0]?.servicesSubType || "",
                         information: res.data.result[0]?.information || "",
-                        imagePreview: res.data.result[0]?.filePath || null
+                        FilePreview: res.data.result[0]?.filePath || null
                     };
                     this.imageFile = res.data.result[0]?.filePath || null
                     this.imageCheck = this.imageFile;
@@ -367,11 +419,13 @@ export default {
         async updateImagenData() {
             const formUpdate = new FormData();
             this.isLoading = true;
+            console.log("Check", this.imageCheck)
+            console.log("File", this.imageFile)
             try {
                 // if change image do this function
                 if (this.imageFile !== this.imageCheck) {
                     const updateImg = api.patch(`/staff/deleteFileServices/services/${this.dataInfo.id}`, {
-                        filePath: this.imageCheck[0]
+                        filePath: this.imageCheck
                     }).then(api.patch(`/staff/addFileServices/services/${this.dataInfo.id}`, {
                         file: this.imageFile
                     }, {
@@ -380,6 +434,8 @@ export default {
                         },
                     })
                     )
+
+                    console.log("Updated File")
                 }
                 // and update data
                 formUpdate.append('servicesType', this.servicesForApi.servicesType);
@@ -392,6 +448,8 @@ export default {
                     icon: 'mdi-check-circle',
                     timeout: 5000
                 });
+
+                this.fetchData();
             } catch (error) {
                 this.isLoading = false;
                 throw error;
@@ -402,7 +460,7 @@ export default {
         async uploadImage() {
             this.isLoading = true
             console.log(this.servicesForApi, this.dataInfo)
-            if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information || !this.dataInfo.imagePreview) {
+            if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information || !this.dataInfo.FilePreview) {
                 errorStore.show(`กรุณากรอกข้อมูลให้ครบ`, {
                     color: "warning",
                     icon: "mdi-alert-circle",
@@ -412,7 +470,7 @@ export default {
             }
             const newImage = {
                 group: this.group,
-                url: this.dataInfo.imagePreview,
+                url: this.dataInfo.FilePreview,
                 title: this.imageTitle,
                 description: this.imageDescription,
             }
@@ -465,9 +523,9 @@ export default {
                 this.deleteDialog = false;
                 throw error;
             }
-    },
+        },
 
-},
+    },
 
 
     mounted() {
