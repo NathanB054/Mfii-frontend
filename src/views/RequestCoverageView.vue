@@ -56,9 +56,12 @@
         v-show="item.show"
         class="bg-gray-200 border border-gray-300 shadow-md p-4 w-full sm:w-1/2 mt-4"
       >
-        <ul>
+        <ul class="flex flex-row">
           <li v-for="(detail, idx) in item.details" :key="idx">
             {{ detail }}
+          </li>
+          <li>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat, cum laudantium? Nam quas qui, inventore expedita recusandae adipisci, eaque nostrum libero, minima nisi itaque aliquid facilis similique quia vel nemo!
           </li>
         </ul>
       </div>

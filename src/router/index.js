@@ -144,6 +144,12 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/CoverageManagement',
+      name: 'Coverage Management',
+      component: () => import('../views/StaffView/CoverageManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/messageReply',
       name: 'Message Reply',
       component: () => import('../views/StaffView/MessageReply.vue'),

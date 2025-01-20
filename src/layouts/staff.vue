@@ -55,6 +55,11 @@
           </router-link>
         <!-- </v-list> -->
 
+        <v-list-item link to="/staff/CoverageManagement">
+          <v-icon class="mr-2">mdi-book-open-page-variant</v-icon>
+          <v-list-item-title class="inline">จัดการการขอรับความคุ้มครอง</v-list-item-title>
+        </v-list-item>
+
         <v-list-item link to="/staff/MessageReply">
           <v-icon class="mr-2">mdi mdi-forum</v-icon>
           <v-list-item-title class="inline">ข้อความและการตอบกลับ</v-list-item-title>
