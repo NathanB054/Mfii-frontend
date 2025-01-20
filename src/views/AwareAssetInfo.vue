@@ -1,26 +1,25 @@
 <template>
-    <div class="main-container">
+<div>
+
+    <div v-if="isLoading" class="main-container" height="100vh">
+        
+    </div>
+
+    <div v-else  class="main-container">
         <!-- ด้านซ้าย: พื้นที่สำหรับภาพ -->
-        <div class="left">
-            <div class="image-box">
-                <img :src="imageSrc" alt="Infographic or Activity" />
+
+        <div  class="left">
+            <div v-if="dataInfo.filePath" class="image-box">
+                <img :src="`${baseUrl}/${dataInfo.filePath[0]}`" alt="Infographic or Activity" />
             </div>
         </div>
 
         <!-- ด้านขวา: พื้นที่สำหรับ Text Box และข้อมูลติดต่อ -->
-        <div class="right">
+        <div v-if="dataInfo.information && dataInfo.servicesSubType" class="right">
             <div class="text-box">
-                <p class="text-header">ข้อมูลการสร้างความตระหนัก</p>
+                <p class="text-header">{{ dataInfo.servicesSubType }}</p>
                 <p class="long-text">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor,
-                    dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas
-                    ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie,
-                    enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa,
-                    scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero
-                    pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio
-                    eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus
-                    orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque
-                    fermentum. Pellentesque nulla eros accumsan quis justo at tincidunt lobortis den
+                    {{ dataInfo.information }}
                 </p>
             </div>
 
@@ -28,22 +27,56 @@
             <AssetAwareInfo />
         </div>
     </div>
+</div>
+    
 </template>
 
 <script>
 import AssetAwareInfo from "../components/AssetAwareInfo.vue";
 import imagePath from "../assets/images/800x500 test.jpeg";
+import api from "@/stores/axios-config";
+import { useErrorStore } from "@/stores/errorStore";
+import LoadingOverlay from "@/components/LoadingOverlay.vue";
+
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 
 export default {
     name: "AwareAssetInfo",
     components: {
         AssetAwareInfo,
+        LoadingOverlay,
     },
     data() {
         return {
+            isLoading: false,
+            baseUrl: baseURL,
             imageSrc: imagePath,
+            dataInfo: {},
         };
     },
+
+    methods: {
+        async fetchData() {
+            this.isLoading = true;
+          try {
+            const res = await api.get(`/getsServices/งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา/all`);
+           if (res.data) {
+               this.dataInfo = res.data.result[0];
+           }
+           this.isLoading = false;
+          } catch (error) {
+            this.isLoading = false;
+            console.error("Error fetching data:", error);
+            throw error;
+          }
+
+        }
+    },
+
+    mounted() {
+        this.fetchData();
+    }
 };
 </script>
 
@@ -69,7 +102,7 @@ export default {
     align-items: center;
     width: 100%;
     /* ให้พื้นที่สำหรับรูปภาพเต็มที่ในคอลัมน์ซ้าย */
-    height: 500px;
+    height: 70vh;
     /* กำหนดความสูงเป็น 500px */
     text-align: center;
     overflow: hidden;
