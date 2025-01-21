@@ -3,7 +3,9 @@
         <!-- ด้านซ้าย: พื้นที่สำหรับภาพ -->
         <div class="left flex justify-center align-center">
             <div v-if="dataInfo.filePath" class="image-box">
-                <img v-if="dataInfo.filePath.includes('uploads\\image')" :src="`${baseUrl}/${dataInfo.filePath[0]}`" alt="Infographic or Activity" />
+
+                <img v-if="dataInfo.filePath[0].includes('uploads\\image')" :src="`${baseUrl}/${dataInfo.filePath[0]}`" class="yes" alt="Infographic or Activity" />
+                    
                 <iframe v-else :src="`${baseUrl}/${dataInfo.filePath[0]}#toolbar=0`"
                     class="yes max-w-full  rounded-xl mx-auto" frameborder="0" width="100%" height="100%">
                 </iframe>
@@ -126,5 +128,9 @@ export default {
     padding: 10px;
     font-size: 14px;
     resize: none;
+}
+
+.yes{
+    width: 100%;
 }
 </style>
