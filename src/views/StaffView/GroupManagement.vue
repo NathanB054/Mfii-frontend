@@ -18,7 +18,7 @@
                         <!-- Image Preview Area -->
                         <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[700px]"
                             @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop.prevent="dropFile">
-                            <input type="file" ref="fileInput" @change="handleFileUpload" accept="image/*"
+                            <input type="file" ref="fileInput" @change="handleFileUpload" accept="*"
                                 class="hidden">
 
                             <template v-if="!dataInfo.FilePreview">
@@ -531,6 +531,7 @@ export default {
     mounted() {
         this.fetchData();
     },
+
     // เช็คว่า servicesType มีการเปลี่ยนแปลงหรือไม่
     watch: {
         'servicesForApi.servicesType': {
