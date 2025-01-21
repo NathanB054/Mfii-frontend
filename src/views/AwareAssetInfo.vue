@@ -1,34 +1,39 @@
 <template>
-<div>
+    <div>
 
-    <div v-if="isLoading" class="main-container" height="100vh">
-        
-    </div>
+        <div v-if="isLoading" class="main-container" height="100vh">
 
-    <div v-else  class="main-container">
-        <!-- ด้านซ้าย: พื้นที่สำหรับภาพ -->
-
-        <div  class="left">
-            <div v-if="dataInfo.filePath" class="image-box">
-                <img :src="`${baseUrl}/${dataInfo.filePath[0]}`" alt="Infographic or Activity" />
-            </div>
         </div>
 
-        <!-- ด้านขวา: พื้นที่สำหรับ Text Box และข้อมูลติดต่อ -->
-        <div v-if="dataInfo.information && dataInfo.servicesSubType" class="right">
-            <div class="text-box">
-                <p class="text-header">{{ dataInfo.servicesSubType }}</p>
-                <p class="long-text">
-                    {{ dataInfo.information }}
-                </p>
+        <div v-else class="main-container">
+            <!-- ด้านซ้าย: พื้นที่สำหรับภาพ -->
+            <div class="left flex justify-center align-center">
+                <div v-if="dataInfo.filePath" class="image-box">
+
+                    <img v-if="dataInfo.filePath[0].includes('uploads\\image')"
+                        :src="`${baseUrl}/${dataInfo.filePath[0]}`" class="yes" alt="Infographic or Activity" />
+
+                    <iframe v-else :src="`${baseUrl}/${dataInfo.filePath[0]}#toolbar=0`"
+                        class="yes max-w-full  rounded-xl mx-auto" frameborder="0" width="100%" height="100%">
+                    </iframe>
+                </div>
             </div>
 
-            <!-- เรียกใช้ AssetAwareInfo -->
-            <AssetAwareInfo />
+            <!-- ด้านขวา: พื้นที่สำหรับ Text Box และข้อมูลติดต่อ -->
+            <div v-if="dataInfo.information && dataInfo.servicesSubType" class="right">
+                <div class="text-box">
+                    <p class="text-header">{{ dataInfo.servicesSubType }}</p>
+                    <p class="long-text">
+                        {{ dataInfo.information }}
+                    </p>
+                </div>
+
+                <!-- เรียกใช้ AssetAwareInfo -->
+                <AssetAwareInfo />
+            </div>
         </div>
     </div>
-</div>
-    
+
 </template>
 
 <script>
@@ -59,17 +64,17 @@ export default {
     methods: {
         async fetchData() {
             this.isLoading = true;
-          try {
-            const res = await api.get(`/getsServices/งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา/all`);
-           if (res.data) {
-               this.dataInfo = res.data.result[0];
-           }
-           this.isLoading = false;
-          } catch (error) {
-            this.isLoading = false;
-            console.error("Error fetching data:", error);
-            throw error;
-          }
+            try {
+                const res = await api.get(`/getsServices/งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา/all`);
+                if (res.data) {
+                    this.dataInfo = res.data.result[0];
+                }
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.error("Error fetching data:", error);
+                throw error;
+            }
 
         }
     },
