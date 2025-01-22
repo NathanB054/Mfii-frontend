@@ -11,9 +11,13 @@
         <h1 style="font-size: 3rem; font-weight: bold;">Staff</h1>
       </div>
       <v-list dense class="text-white">
+        <v-list-item to="/">
+          <v-icon class="mr-2">mdi-home</v-icon>
+          <v-list-item-title class="inline">Home page</v-list-item-title>
+        </v-list-item>
         <v-list-item link to="/staff">
           <v-icon class="mr-2">mdi-view-dashboard</v-icon>
-          <v-list-item-title class="inline">หน้าหลัก</v-list-item-title>
+          <v-list-item-title class="inline">แดชบอร์ด</v-list-item-title>
         </v-list-item>
 
         <v-list-item link to="/staff/newPost">
@@ -35,7 +39,7 @@
           <v-icon class="mr-2">mdi-book-open-page-variant</v-icon>
           <v-list-item-title class="inline">จัดการระเบียบ</v-list-item-title>
         </v-list-item>
-
+        
         <!-- <v-list> -->
           <router-link to="/staff/GroupManagement">
             <v-list-item link>
@@ -70,10 +74,6 @@
           <v-list-item-title class="inline">หน้าหลัก Admin</v-list-item-title>
         </v-list-item>
 
-        <v-list-item to="/">
-          <v-icon class="mr-2">mdi-home</v-icon>
-          <v-list-item-title class="inline">Home page</v-list-item-title>
-        </v-list-item>
       </v-list>
 
       <!-- logout -->
