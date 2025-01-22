@@ -1,29 +1,30 @@
 <template>
     <v-container>
-        <div class="main-container">
+        <div v-if="dataInfo" class="main-container">
             <!-- Left Column: Image Slider -->
-            <div class="left">
+            <div class="left flex justify-center align-center">
+            <div v-if="dataInfo.filePath" class="image-box">
+                <img v-if="dataInfo.filePath.includes('uploads\\image')" :src="`${baseUrl}/${dataInfo.filePath[0]}`" alt="Infographic or Activity" />
+                <iframe v-else :src="`${baseUrl}/${dataInfo.filePath[0]}#toolbar=0`"
+                    class="yes max-w-full  rounded-xl mx-auto" frameborder="0" width="100%" height="100%">
+                </iframe>
+            </div>
+        </div>
+
+            <!-- <div class="left">
                 <v-carousel height="500" hide-delimiters>
                     <v-carousel-item v-for="(image, index) in images" :key="index">
                         <v-img :src="image" contain width="800" height="500"></v-img>
                     </v-carousel-item>
                 </v-carousel>
-            </div>
+            </div> -->
 
             <!-- Right Column: Text and Additional Info -->
-            <div class="right">
+            <div v-if="dataInfo.information && dataInfo.servicesSubType" class="right">
                 <div class="text-box">
-                    <p class="text-header">ข้อมูลการดำเนินการยกระดับผลงานวิจัยสู่ภาคอุตสาหกรรม</p>
+                    <p class="text-header">{{ dataInfo.servicesSubType }}</p>
                     <p class="long-text">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor,
-                        dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas
-                        ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie,
-                        enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa,
-                        scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero
-                        pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio
-                        eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus
-                        orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque
-                        fermentum. Pellentesque nulla eros accumsan quis justo at tincidunt lobortis den
+                       {{ dataInfo.information }}
                     </p>
                 </div>
 
@@ -39,6 +40,9 @@ import AssetAwareInfo from "../components/AssetAwareInfo.vue";
 import image1 from "../assets/images/5_Steps_to_Create_an_Infographic_Blog_Post.jpg";
 import image2 from "../assets/images/800x500 test.jpeg";
 
+import api from "@/stores/axios-config";
+
+const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
     name: "AwareAssetInfo",
     components: {
@@ -46,9 +50,36 @@ export default {
     },
     data() {
         return {
-            images: [image1, image2], // Array of images for the slider
+            // images: [image1, image2], // Array of images for the slider,
+            dataInfo: null,
+            baseUrl: baseURL,
+            isLoading: false
         };
     },
+
+    methods: {
+        async fetchData() {
+            this.isLoading = true;
+            try {
+                const res = await api.get(`/getsServices/งานยกระดับงานวิจัยและนวัตกรรม/all`);
+                if (res.data) {
+                    this.dataInfo = res.data.result[0];
+                }
+                console.log(this.dataInfo);
+                this.isLoading = false;
+            } catch (error) {
+                this.isLoading = false;
+                console.error("Error fetching data:", error);
+                throw error;
+            }
+        },
+    },
+
+
+
+    mounted() {
+        this.fetchData();
+    }
 };
 </script>
 
@@ -66,6 +97,29 @@ export default {
     width: 48%;
     box-sizing: border-box;
 }
+
+.image-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* ให้พื้นที่สำหรับรูปภาพเต็มที่ในคอลัมน์ซ้าย */
+    height: 70vh;
+    /* กำหนดความสูงเป็น 500px */
+    text-align: center;
+    overflow: hidden;
+    /* ตัดส่วนเกินของรูปที่ไม่อยู่ในกรอบ */
+}
+
+.image-box img {
+    width: 800px;
+    /* กำหนดความกว้างเป็น 800px */
+    height: 100%;
+    /* กำหนดความสูงเป็น 500px */
+    object-fit: contain;
+    /* ทำให้รูปภาพเต็มกรอบโดยไม่เสียสัดส่วน */
+}
+
 
 .text-box {
     margin-bottom: 20px;

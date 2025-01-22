@@ -5,9 +5,10 @@
         <Carousel />
       </div>
     </div>
-    <div>
-      <quickmenu />
-    </div>
+    
+    <!-- <div class="container mx-auto p-4"> -->
+        <QuickMenu />
+    <!-- </div> -->
 
     <div>
       <!-- Content -->
@@ -80,7 +81,7 @@
 
 <script>
 import Carousel from '../components/carousel.vue';
-import quickmenu from '@/components/quickmenu.vue';
+import QuickMenu from '@/components/quickmenu.vue';
 import YtVideos from '@/components/ytvideos.vue';
 import api from '@/stores/axios-config';
 const baseURL = import.meta.env.VITE_BASE_URL;
@@ -103,7 +104,8 @@ export default {
   },
   components: {
     Carousel,
-    quickmenu,
+    QuickMenu,
+    // StatisticsCard,
     YtVideos
   },
 

@@ -1,8 +1,8 @@
 <template>
-  <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 mb-5 mt-5">
-    <v-card class="w-full max-w-2xl rounded-xl p-8">
+  <v-container class="font-noto-sans-thai rounded-xl flex justify-center items-center bg-gray-100 !mb-5 !mt-5">
+    <v-card class="w-full max-w-2xl rounded-xl !p-8">
       <v-card-title>
-        <h2 class="text-2xl font-semibold mb-2">
+        <h2 class="text-2xl font-semibold !mb-2">
           <v-icon class="align-baseline" style="font-size: 28px">mdi-account-plus</v-icon>
           สมัครสมาชิก
         </h2>

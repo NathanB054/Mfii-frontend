@@ -40,7 +40,27 @@ const router = createRouter({
     {
       path: '/services/ipp',
       name: 'Table Research',
-      component: () => import('../views/TableResearch.vue'),
+      component: () => import('../views/TableResearchView.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/regulation',
+      name: 'Regulation',
+      component: () => import('../views/RegulationDemo.vue'),
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/services/ipa',
+      name: 'Request for Coverage',
+      component: () => import('../views/RequestCoverageView.vue'),
+      props: true,
+      meta: { showNavTop: true, showNavFooter: true }
+    },
+    {
+      path: '/services/ipa/:topicToggle',
+      name: 'Request for Coverage',
+      component: () => import('../views/RequestCoverageView.vue'),
+      props: true,
       meta: { showNavTop: true, showNavFooter: true }
     },
     {
@@ -114,6 +134,30 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/searchManagement',
+      name: 'Search Management',
+      component: () => import('../views/StaffView/SearchManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/regulationManagement',
+      name: 'Regulation Management',
+      component: () => import('../views/StaffView/RegulationManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/groupManagement',
+      name: 'Group Management',
+      component: () => import('../views/StaffView/GroupManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
+      path: '/staff/CoverageManagement',
+      name: 'Coverage Management',
+      component: () => import('../views/StaffView/CoverageManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/messageReply',
       name: 'Message Reply',
       component: () => import('../views/StaffView/MessageReply.vue'),
@@ -147,6 +191,21 @@ const router = createRouter({
   },
 
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // if there is a saved position, return it (for example, when using browser navigation buttons)
+    if (savedPosition) {
+      return savedPosition;
+    }
+
+    // optionally, wait for the DOM to be ready to scroll
+    return new Promise((resolve) => {
+      // set a timeout or any necessary delay (if needed)
+      setTimeout(() => {
+        // this will scroll to the top
+        resolve({ top: 0 });
+      }, 0);
+    });
+  },
 })
 
 

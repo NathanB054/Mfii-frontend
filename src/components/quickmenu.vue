@@ -1,129 +1,136 @@
 <template>
-    <v-container>
-      <v-row class="relative d-flex justify-center align-center h-full">
-        <!-- Left Side -->
-        <v-col cols="12" md="5" class="border-r border-gray-300 d-flex justify-center align-center flex-column">
-          <div class="text-subtitle-1 px-4 py-2 border border-orange-500 inline-block mb-4">Quick Menu</div>
-          <v-row class="h-full justify-center">
-            <v-col
-              v-for="(route, index) in quickMenuRoutes"
-              :key="index"
-              cols="12"
-              sm="4"
-              class="d-flex justify-center align-center"
+  <v-container class="bg-white rounded-md shadow-md p-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Quick Menu Section (Left Side) -->
+      <div>
+        <h2 class="text-lg md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
+          Quick Menu
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+          <v-card
+
+            v-for="(item, index) in menuItems"
+            :key="index"
+            :to="item.to+(item.prop !== undefined ? '/'+item.prop : '')"
+            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
+           
+            <v-icon
+              size="50"
+              :style="{ color: item.color }"
+              class="mb-3 mt-3"
             >
-              <v-card
-                :to="route.to"
-                class="rounded-lg bg-gray-100 w-full transition-all duration-200 hover:shadow-lg hover:bg-gray-200 cursor-pointer"
-                height="140"
-                variant="outlined"
-              >
-                <v-card-text class="d-flex flex-column items-center justify-center text-center h-full px-2">
-                  <span class="text-red-700 font-medium text-sm">{{ route.name }}</span>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-  
-        <!-- Divider for mobile -->
-        <!-- <div class="hidden md:block absolute h-full w-px bg-gray-300 left-2/3 top-0"></div> -->
-  
-        <!-- Right Side -->
-        <v-col cols="12" md="4" class="md:pl-8 d-flex justify-center align-center flex-column">
-          <v-card 
-            color="deep-orange" 
-            class="mb-4 w-full"
-          >
-            <v-card-text class="text-center text-white font-medium py-4">
-              สถิติการยื่นคำขอฯ มหาวิทยาลัยแม่ฟ้าหลวง
-            </v-card-text>
+              {{ item.icon }}
+            </v-icon>
+            <p class="text-base md:text-lg font-medium mb-3">{{ item.title }}</p>
           </v-card>
-  
-          <v-row class="mt-4 justify-center">
-            <v-col
-              v-for="(stat, index) in stats"
-              :key="index"
-              cols="6"
-              class="d-flex justify-center align-center"
+        </div>
+      </div>
+      
+      <!-- Statistics Section (Right Side) -->
+      <div>
+        <h2 class="text-lg sm:text-sm md:text-xl font-bold mb-4 text-white bg-blue-700 p-3 rounded-md text-center uppercase shadow">
+          สถิติการยื่นคำขอฯ มหาวิทยาลัยแม่ฟ้าหลวง
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+          <v-card
+            v-for="(stat, index) in stats"
+            :key="index"
+            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full"
+          >
+            <v-icon
+              size="50"
+              :style="{ color: stat.color }"
+              class="mb-3 mt-3"
             >
-              <v-card
-                class="rounded-lg bg-gray-100 w-full"
-                height="100"
-                variant="outlined"
-              >
-                <v-card-text class="d-flex flex-column items-center justify-center text-center h-full">
-                  <div class="text-sm md:text-base font-medium">{{ stat.name }}</div>
-                  <div class="mt-2 text-gray-600 text-sm">({{ stat.count }})</div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
-  
-  <script setup>
-  const quickMenuRoutes = [
-    {
-      name: 'การขอใช้บริการวิจัย อบรม/บรรยาย/หรือ ทรัพย์สินทางปัญญา (สำหรับบุคลากร มทส.)',
-      to: '/research-service',
-    },
-    {
-      name: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร',
-      to: '/patent',
-    },
-    {
-      name: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์',
-      to: '/design-patent',
-    },
-    {
-      name: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์',
-      to: '/copyright',
-    },
-    {
-      name: 'การยื่นจด เครื่องหมายการค้า',
-      to: '/trademark',
-    },
-    {
-      name: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มทส.',
-      to: '/ip-search',
-    },
-  ]
-  
-  const stats = [
-    {
-      name: 'สิทธิบัตรการ ประดิษฐ์',
-      count: 25
-    },
-    {
-      name: 'อนุสิทธิบัตร',
-      count: 30
-    },
-    {
-      name: 'สิทธิบัตรการ ออกแบบ ผลิตภัณฑ์',
-      count: 15
-    },
-    {
-      name: 'ลิขสิทธิ์',
-      count: 45
-    },
-    {
-      name: 'เครื่องหมายการค้า',
-      count: 20
-    },
-  ]
-  </script>
-  
-  <style scoped>
-  .v-card-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4; /* Add this line */
-    -webkit-box-orient: vertical;
-    box-orient: vertical; /* Add this line for compatibility */
-    overflow: hidden;
+              {{ stat.icon }}
+            </v-icon>
+            <p class="font-bold text-sm md:text-base">{{ stat.title }}</p>
+            <p class="text-lg md:text-xl font-extrabold mb-3">{{ stat.value }}</p>
+          </v-card>
+        </div>
+      </div>
+      
+    </div>
+  </v-container>
+</template>
+
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import api from '@/stores/axios-config';
+
+const menuItems = [
+  { title: 'การขอใช้บริการจัดอบรม/บรรยายหัวข้อทรัพย์สินทางปัญญา มฟล.',prop:'ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ', to: '/services/ipa', icon: 'mdi-book-open', color: '#1E88E5' },
+  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ หรือ อนุสิทธิบัตร', prop:'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร',to: '/services/ipa', icon: 'mdi-lightbulb', color: '#43A047' },
+  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', prop:'สิทธิบัตรการออกแบบผลิตภัณฑ์',to: '/services/ipa', icon: 'mdi-format-paint', color: '#FB8C00' },
+  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์',prop:'ลิขสิทธิ์', to: '/services/ipa', icon: 'mdi-library', color: '#8BC34A' },
+  { title: 'การยื่นจด เครื่องหมายการค้า',prop:'เครื่องหมายการค้า', to: '/services/ipa', icon: 'mdi-tag', color: '#FF5722' },
+  { title: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มฟล.', to:'/services/ipp', icon: 'mdi-database-search', color: '#9C27B0' }
+];
+
+//  ref จะเก็บข้อมูลไว้ใน value property
+const stats = ref([
+  { title: 'สิทธิบัตรการประดิษฐ์', value: 0, icon: 'mdi-wrench-cog', color: '#1E88E5' },
+  { title: 'อนุสิทธิบัตร', value: 0, icon: 'mdi-lightbulb', color: '#43A047' },
+  { title: 'สิทธิบัตรการออกแบบ', value: 0, icon: 'mdi-format-paint', color: '#FB8C00' },
+  { title: 'ลิขสิทธิ์', value: 0, icon: 'mdi-library', color: '#8BC34A' },
+  { title: 'เครื่องหมายการค้า', value: 0, icon: 'mdi-tag', color: '#FF5722' }
+]);
+
+const fetchResearchData = async () => {
+  try {
+    const response = await api.get('/getsResearch/all/all/all/all');
+    const data = response.data.result;
+    
+    // คำนวณจำนวนของแต่ละประเภท
+    const counts = {
+      'สิทธิบัตรการประดิษฐ์': 0,
+      'อนุสิทธิบัตร': 0,
+      'สิทธิบัตรออกแบบ': 0,
+      'ลิขสิทธิ์': 0,
+      'เครื่องหมายการค้า': 0
+    };
+
+    data.forEach(item => {
+      if (counts[item.intelProp] !== undefined) {
+        counts[item.intelProp]++;
+      }
+    });
+
+    // อัปเดต stats
+    stats.value[0].value = counts['สิทธิบัตรการประดิษฐ์'];
+    stats.value[1].value = counts['อนุสิทธิบัตร'];
+    stats.value[2].value = counts['สิทธิบัตรออกแบบ'];
+    stats.value[3].value = counts['ลิขสิทธิ์'];
+    stats.value[4].value = counts['เครื่องหมายการค้า'];
+    
+  } catch (error) {
+    console.error('Error fetching research data:', error);
   }
-  </style>
-  
+};
+
+onMounted(() => {
+  fetchResearchData();
+});
+</script>
+
+
+<style scoped>
+.v-card {
+  transition: all 0.3s ease-in-out;
+}
+
+.v-card:hover {
+  background-color: #ebf8ff; /* Tailwind bg-blue-50 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-md */
+  transform: scale(1.05);
+}
+
+h2 {
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+</style>

@@ -11,9 +11,13 @@
         <h1 style="font-size: 3rem; font-weight: bold;">Staff</h1>
       </div>
       <v-list dense class="text-white">
+        <v-list-item to="/">
+          <v-icon class="mr-2">mdi-home</v-icon>
+          <v-list-item-title class="inline">Home page</v-list-item-title>
+        </v-list-item>
         <v-list-item link to="/staff">
           <v-icon class="mr-2">mdi-view-dashboard</v-icon>
-          <v-list-item-title class="inline">หน้าหลัก</v-list-item-title>
+          <v-list-item-title class="inline">แดชบอร์ด</v-list-item-title>
         </v-list-item>
 
         <v-list-item link to="/staff/newPost">
@@ -26,6 +30,40 @@
           <v-list-item-title class="inline">จัดการผลงานวิจัย</v-list-item-title>
         </v-list-item>
 
+        <v-list-item link to="/staff/SearchManagement">
+          <v-icon class="mr-2">mdi-text-box-search</v-icon>
+          <v-list-item-title class="inline">จัดการสืบค้นข้อมูล</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item link to="/staff/RegulationManagement">
+          <v-icon class="mr-2">mdi-book-open-page-variant</v-icon>
+          <v-list-item-title class="inline">จัดการระเบียบ</v-list-item-title>
+        </v-list-item>
+        
+        <!-- <v-list> -->
+          <router-link to="/staff/GroupManagement">
+            <v-list-item link>
+              <v-icon class="mr-2">mdi-file-alert</v-icon>
+              <v-list-item-title class="inline">จัดการทรัพย์สินทางปัญญา</v-list-item-title>
+            </v-list-item>
+
+            <!-- <v-list-item link>
+              <v-icon class="mr-2">mdi-file-star-four-points</v-icon>
+              <v-list-item-title class="inline">การใช้ประโยชน์</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item link>
+              <v-icon class="mr-2">mdi-file-upload</v-icon>
+              <v-list-item-title class="inline">งานยกระดับ</v-list-item-title>
+            </v-list-item> -->
+          </router-link>
+        <!-- </v-list> -->
+
+        <v-list-item link to="/staff/CoverageManagement">
+          <v-icon class="mr-2">mdi-book-open-page-variant</v-icon>
+          <v-list-item-title class="inline">จัดการการขอรับความคุ้มครอง</v-list-item-title>
+        </v-list-item>
+
         <v-list-item link to="/staff/MessageReply">
           <v-icon class="mr-2">mdi mdi-forum</v-icon>
           <v-list-item-title class="inline">ข้อความและการตอบกลับ</v-list-item-title>
@@ -36,10 +74,6 @@
           <v-list-item-title class="inline">หน้าหลัก Admin</v-list-item-title>
         </v-list-item>
 
-        <v-list-item to="/">
-          <v-icon class="mr-2">mdi-home</v-icon>
-          <v-list-item-title class="inline">Home page</v-list-item-title>
-        </v-list-item>
       </v-list>
 
       <!-- logout -->
