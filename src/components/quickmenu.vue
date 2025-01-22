@@ -12,9 +12,9 @@
 
             v-for="(item, index) in menuItems"
             :key="index"
-            :to="item.to"
-            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full"
-          >
+            :to="item.to+(item.prop !== undefined ? '/'+item.prop : '')"
+            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
+           
             <v-icon
               size="50"
               :style="{ color: item.color }"
@@ -61,11 +61,11 @@ import { ref, onMounted } from 'vue';
 import api from '@/stores/axios-config';
 
 const menuItems = [
-  { title: 'การขอใช้บริการจัดอบรม/บรรยายหัวข้อทรัพย์สินทางปัญญา มฟล.', to: '/services/ipa', icon: 'mdi-book-open', color: '#1E88E5' },
-  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ / อนุสิทธิบัตร', to: '/services/ipa', icon: 'mdi-lightbulb', color: '#43A047' },
-  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', to: '/services/ipa', icon: 'mdi-format-paint', color: '#FB8C00' },
-  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์', to: '/services/ipa', icon: 'mdi-library', color: '#8BC34A' },
-  { title: 'การยื่นจด เครื่องหมายการค้า', to: '/services/ipa', icon: 'mdi-tag', color: '#FF5722' },
+  { title: 'การขอใช้บริการจัดอบรม/บรรยายหัวข้อทรัพย์สินทางปัญญา มฟล.',prop:'ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ', to: '/services/ipa', icon: 'mdi-book-open', color: '#1E88E5' },
+  { title: 'การยื่นจดสิทธิบัตรการ ประดิษฐ์ หรือ อนุสิทธิบัตร', prop:'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร',to: '/services/ipa', icon: 'mdi-lightbulb', color: '#43A047' },
+  { title: 'การยื่นจดสิทธิบัตรการ ออกแบบผลิตภัณฑ์', prop:'สิทธิบัตรการออกแบบผลิตภัณฑ์',to: '/services/ipa', icon: 'mdi-format-paint', color: '#FB8C00' },
+  { title: 'การยื่นคำขอแจ้งข้อมูล ลิขสิทธิ์',prop:'ลิขสิทธิ์', to: '/services/ipa', icon: 'mdi-library', color: '#8BC34A' },
+  { title: 'การยื่นจด เครื่องหมายการค้า',prop:'เครื่องหมายการค้า', to: '/services/ipa', icon: 'mdi-tag', color: '#FF5722' },
   { title: 'ระบบสืบค้นฐานข้อมูล ทรัพย์สินทางปัญญา มฟล.', to:'/services/ipp', icon: 'mdi-database-search', color: '#9C27B0' }
 ];
 
