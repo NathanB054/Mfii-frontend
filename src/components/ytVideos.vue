@@ -17,7 +17,7 @@
 import api from '@/stores/axios-config';
 const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
- name: 'ytVideos',
+ name: 'ytvideos',
  data() {
      return {
        images: [],
