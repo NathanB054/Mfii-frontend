@@ -56,13 +56,13 @@ const router = createRouter({
       props: true,
       meta: { showNavTop: true, showNavFooter: true }
     },
-    {
-      path: '/services/ipa/:topicToggle',
-      name: 'Request for Coverage',
-      component: () => import('../views/RequestCoverageView.vue'),
-      props: true,
-      meta: { showNavTop: true, showNavFooter: true }
-    },
+    // {
+    //   path: '/services/ipa/:topicToggle',
+    //   name: 'Request for Coverage',
+    //   component: () => import('../views/RequestCoverageView.vue'),
+    //   props: true,
+    //   meta: { showNavTop: true, showNavFooter: true }
+    // },
     {
       path: '/database',
       name: 'Database IP MFU',
