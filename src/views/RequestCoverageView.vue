@@ -19,7 +19,7 @@
         </div>
         <!-- Icon Fixed at the Bottom -->
         <div class="icon-container">
-          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์ หริอ อนุสิทธิบัตร'"
+          <i v-if="item.title === `สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร`"
             class="mdi mdi-lightbulb-on-outline text-xl"></i>
           <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'" class="mdi mdi-palette-outline text-xl"></i>
           <i v-if="item.title === 'ลิขสิทธิ์'" class="mdi mdi-book-lock-outline text-xl"></i>
