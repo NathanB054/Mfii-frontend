@@ -12,9 +12,9 @@
 
             v-for="(item, index) in menuItems"
             :key="index"
-            :to="item.to+(item.prop !== undefined ? '/'+item.prop : '')"
+            :to="item.to" 
             class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
-           
+            <!-- +(item.prop !== undefined ? '/'+item.prop : '') -->
             <v-icon
               size="50"
               :style="{ color: item.color }"
