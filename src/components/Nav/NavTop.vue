@@ -7,8 +7,10 @@ import NavSearch from './NavSearch.vue';
 const isOpen = ref(false);
 const activeDropdown = ref(null);
 const activeNestedDropdown = ref(null);
+const activeNestedNestedDropdown = ref(null);
 const mobileActiveDropdown = ref(null);
 const mobileActiveNestedDropdown = ref(null);
+const mobileActiveNestedNestedDropdown = ref(null);
 const route = useRoute();
 const authStore = useAuthStore();
 
@@ -33,17 +35,34 @@ const mobileSections = [
         name: 'ข้อมูลแนะนำ',
         items: [
             {
-                label: 'Info 1',
+                label: 'ข้อมูลทรัพย์สินทางปัญญา มฟล. ',
                 items: [
-                    { label: 'Sub Info 1.1', to: '/info1/sub1' },
-                    { label: 'Sub Info 1.2', to: '/info1/sub2' },
+                    { label: 'ระเบียบข้อบังคับ มฟล.', to: '/info1/sub1' },
+                    { label: 'จัดสรรผลประโยชน์', to: '/info1/sub2' },
                 ],
             },
             {
-                label: 'Info 2',
+                label: 'ดาวน์โหลดเอกสาร ',
                 items: [
-                    { label: 'Sub Info 2.1', to: '/info2/sub1' },
-                    { label: 'Sub Info 2.2', to: '/info2/sub2' },
+                    { label: 'แบบฟอร์มขอยื่นจด', to: '/info2/sub1' },
+                    { label: 'เอกสารการอบรม', to: '/info2/sub2' },
+                ],
+            },
+            {
+                label: 'ลิ้งค์หน่วยงานที่เกี่ยวข้อง',
+                items: [
+                    { label: 'ภายใน', items: [
+                        { label: 'MRii', to: '/info2/sub1' },
+                        { label: 'MFii', to: '/info2/sub1' },
+                        { label: 'Research', to: '/info2/sub1' },
+                    
+                    ] },
+                    { label: 'ภายนอก', items: [
+                        { label: 'DIP', to: '/info2/sub3', external: true },
+                        { label: 'WIPO', to: '/info2/sub3', external: true },
+                        { label: 'อวท.', to: '/info2/sub3', external: true }
+                    
+                    ] },
                 ],
             },
         ],
@@ -84,9 +103,16 @@ const toggleNestedDropdown = (section, dropdown) => {
     const key = `${section}-${dropdown}`;
     activeNestedDropdown.value = activeNestedDropdown.value === key ? null : key;
 };
+
+const toggleNestedNestedDropdown = (section, nestedsection, dropdown) => {
+    const key = `${nestedsection}-${section}-${dropdown}`;
+    activeNestedNestedDropdown.value = activeNestedNestedDropdown.value === key ? null : key
+}
+
 const closeDesktopDropdown = () => {
     activeDropdown.value = null;
     activeNestedDropdown.value = null;
+    activeNestedNestedDropdown.value = null;
 };
 
 const toggleMobileMenu = (event) => {
@@ -106,12 +132,18 @@ const toggleMobileNestedDropdown = (section, dropdown, event) => {
     const key = `${section}-${dropdown}`;
     mobileActiveNestedDropdown.value = mobileActiveNestedDropdown.value === key ? null : key;
 };
+const toggleMobileNestedNestedDropdown = (section, nestedsection, dropdown, event) => {
+    event.stopPropagation();
+    const key = `${nestedsection}-${section}-${dropdown}`;
+    mobileActiveNestedNestedDropdown.value = mobileActiveNestedNestedDropdown.value === key ? null : key;
+};
 
 // New method to close mobile menu
 const closeMobileMenu = () => {
     isOpen.value = false;
     mobileActiveDropdown.value = null;
     mobileActiveNestedDropdown.value = null;
+    mobileActiveNestedNestedDropdown.value = null;
 };
 
 const handleClickOutside = (event) => {
@@ -167,7 +199,7 @@ const handleLogout = async () => {
         <!-- Start of content -->
         <div class="start-content flex items-center">
             <RouterLink to="/">
-            <img src="@/assets/images/mfu_logo.png" class="logo-img" alt="mfu logo" width="150px">
+                <img src="@/assets/images/mfu_logo.png" class="logo-img" alt="mfu logo" width="150px">
             </RouterLink>
             <div class="text-title ml-4">
                 <h1 class="text-2xl font-bold">ฝ่ายจัดการทรัพย์สินทางปัญญา มหาวิทยาลัยแม่ฟ้าหลวง</h1>
@@ -252,7 +284,8 @@ const handleLogout = async () => {
                             class="text-white hover:text-gray-900 px-3 py-2 text-sm font-medium inline-flex items-center "
                             :class="{ 'text-gray-900': route.path === '/' }">
                             <li>
-                                <RouterLink to="/" class="text-nav px-3 py-2 text-sm font-bold" @click="closeDesktopDropdown">
+                                <RouterLink to="/" class="text-nav px-3 py-2 text-sm font-bold"
+                                    @click="closeDesktopDropdown">
                                     หน้าหลัก
                                 </RouterLink>
                             </li>
@@ -269,8 +302,8 @@ const handleLogout = async () => {
                                 :class="{ 'text-gray-900': section.isActive(route) }">
                                 <li>
                                     <template v-if="section.external">
-                                        <a :href="section.to" target="_blank" class="text-nav px-3 py-2 text-sm font-bold"
-                                            @click="closeDesktopDropdown">
+                                        <a :href="section.to" target="_blank"
+                                            class="text-nav px-3 py-2 text-sm font-bold" @click="closeDesktopDropdown">
                                             {{ section.name }}
                                         </a>
                                     </template>
@@ -325,7 +358,64 @@ const handleLogout = async () => {
                                                     class="absolute left-full top-0 mt-0 w-48 bg-white rounded-md shadow-lg py-1">
                                                     <!-- Render nested items -->
                                                     <template v-for="(subItem, subIndex) in item.items" :key="subIndex">
-                                                        <RouterLink :to="subItem.to" @click="closeDesktopDropdown"
+                                                        <!-- External link -->
+                                                        <a v-if="subItem.external" :href="subItem.to" target="_blank"
+                                                            rel="noopener noreferrer" @click="closeMobileMenu"
+                                                            class="block px-4 py-2 text-sm transition-colors duration-200"
+                                                            :class="{
+                                                                'text-blue-500 bg-gray-100': route.path === subItem.to,
+                                                                'text-gray-700 hover:bg-gray-100': route.path !== subItem.to
+                                                            }">
+                                                            {{ subItem.label }}
+                                                        </a>
+                                                        <!-- {{ typeof subItem.items }} -->
+                                                        <div v-else-if="subItem.items" class="relative group">
+                                                            <button
+                                                                @click="toggleNestedNestedDropdown(section.name, subItem.label, item.label)"
+                                                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative">
+                                                                {{ subItem.label }}
+                                                                <svg class="w-4 h-4 ml-2 inline-block absolute right-2 top-3"
+                                                                    fill="none" stroke="currentColor"
+                                                                    viewBox="0 0 24 24" stroke-width="2"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path d="M9 5l7 7-7 7"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <div v-if="activeNestedNestedDropdown === `${subItem.label}-${section.name}-${item.label}`"
+                                                                class="absolute left-full top-0 mt-0 w-48 bg-white rounded-md shadow-lg py-1">
+                                                                <template
+                                                                    v-for="(nestedsubitem, nestedsubitemIdex) in subItem.items">
+                                                                    <!-- External link -->
+                                                                    <a v-if="nestedsubitem.external"
+                                                                        :href="nestedsubitem.to" target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        @click="closeDesktopDropdown"
+                                                                        class="block px-4 py-2 text-sm transition-colors duration-200"
+                                                                        :class="{
+                                                                            'text-blue-500 bg-gray-100': route.path === nestedsubitem.to,
+                                                                            'text-gray-700 hover:bg-gray-100': route.path !== nestedsubitem.to
+                                                                        }">
+                                                                        {{ nestedsubitem.label }}
+                                                                    </a>
+
+                                                                    <!-- Internal link -->
+                                                                    <RouterLink
+                                                                        v-else-if="nestedsubitem.to !== undefined"
+                                                                        :to="nestedsubitem.to"
+                                                                        @click="closeDesktopDropdown"
+                                                                        class="block px-4 py-2 text-sm transition-colors duration-200"
+                                                                        :class="{
+                                                                            'text-blue-500 bg-gray-100': route.path === nestedsubitem.to,
+                                                                            'text-gray-700 hover:bg-gray-100': route.path !== nestedsubitem.to
+                                                                        }">
+                                                                        {{ nestedsubitem.label }}
+                                                                    </RouterLink>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                        <!-- Internal link -->
+                                                        <RouterLink v-else :to="subItem.to"
+                                                            @click="closeDesktopDropdown"
                                                             class="block px-4 py-2 text-sm transition-colors duration-200"
                                                             :class="{
                                                                 'text-blue-500 bg-gray-100': route.path === subItem.to,
@@ -486,6 +576,69 @@ const handleLogout = async () => {
                                                                         }">
                                                                         {{ subItem.label }}
                                                                     </a>
+
+
+                                                                    <div v-else-if="subItem.items"
+                                                                        class="mobile-submenu-section">
+                                                                        <button
+                                                                            @click="toggleMobileNestedNestedDropdown(section.name, subItem.label, item.label, $event)"
+                                                                            class="w-full flex justify-between items-center px-3 py-2 text-base font-medium transition-colors duration-200"
+                                                                            :class="{
+                                                                                'text-blue-500 bg-gray-100': mobileActiveNestedNestedDropdown === `${subItem.label}-${section.name}-${item.label}`,
+                                                                                'text-gray-700 hover:text-gray-900 hover:bg-gray-50': mobileActiveNestedNestedDropdown !== `${subItem.label}-${section.name}-${item.label}`
+                                                                            }">
+
+                                                                            {{ subItem.label }}
+                                                                            <svg class="w-4 h-4 transition-transform duration-200"
+                                                                                :class="{ 'transform rotate-180': mobileActiveNestedNestedDropdown === `${subItem.label}-${section.name}-${item.label}` }"
+                                                                                fill="none" stroke="currentColor"
+                                                                                viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round"
+                                                                                    stroke-linejoin="round"
+                                                                                    stroke-width="2"
+                                                                                    d="M19 9l-7 7-7-7" />
+                                                                            </svg>
+                                                                        </button>
+                                                                        <Transition
+                                                                            enter-active-class="transition-all duration-300 ease-out"
+                                                                            enter-from-class="opacity-0 max-h-0"
+                                                                            enter-to-class="opacity-100 max-h-[200px]"
+                                                                            leave-active-class="transition-all duration-200 ease-in"
+                                                                            leave-from-class="opacity-100 max-h-[200px]"
+                                                                            leave-to-class="opacity-0 max-h-0">
+                                                                            <div v-show="mobileActiveNestedNestedDropdown === `${subItem.label}-${section.name}-${item.label}`"
+                                                                                class="pl-4 overflow-hidden">
+                                                                                <template
+                                                                                    v-for="(nestedsubitem, nestedsubitemIdex) in subItem.items">
+                                                                                    <!-- External link -->
+                                                                                    <a v-if="nestedsubitem.external"
+                                                                                        :href="nestedsubitem.to"
+                                                                                        target="_blank"
+                                                                                        rel="noopener noreferrer"
+                                                                                        @click="closeMobileMenu"
+                                                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                                                        :class="{
+                                                                                            'text-blue-500 bg-gray-100': route.path === nestedsubitem.to,
+                                                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== nestedsubitem.to
+                                                                                        }">
+                                                                                        {{ nestedsubitem.label }}
+                                                                                    </a>
+                                                                                    <!-- Internal link -->
+                                                                                    <RouterLink
+                                                                                        v-else-if="nestedsubitem.to !== undefined && !nestedsubitem.external"
+                                                                                        :to="nestedsubitem.to"
+                                                                                        @click="closeMobileMenu"
+                                                                                        class="block px-3 py-2 text-base transition-colors duration-200"
+                                                                                        :class="{
+                                                                                            'text-blue-500 bg-gray-100': route.path === nestedsubitem.to,
+                                                                                            'text-gray-600 hover:text-gray-900 hover:bg-gray-50': route.path !== nestedsubitem.to
+                                                                                        }">
+                                                                                        {{ nestedsubitem.label }}
+                                                                                    </RouterLink>
+                                                                                </template>
+                                                                            </div>
+                                                                        </Transition>
+                                                                    </div>
                                                                     <!-- Internal link -->
                                                                     <RouterLink v-else :to="subItem.to"
                                                                         @click="closeMobileMenu"
@@ -542,7 +695,7 @@ const handleLogout = async () => {
 }
 
 @media (max-width: 1280px) {
-    .text-nav{
+    .text-nav {
         display: flex;
         align-self: center;
         font-size: 13px;
@@ -550,12 +703,12 @@ const handleLogout = async () => {
 }
 
 @media (max-width: 1024px) {
-    .text-nav{
+    .text-nav {
         display: flex;
         align-self: center;
         font-size: 10px;
     }
-    
+
     .end-content {
         margin-right: 0 !important;
     }
@@ -574,7 +727,8 @@ const handleLogout = async () => {
 
     .text-title {
         justify-items: center !important;
-        text-align: center; /* Center text when width < 1024px */
+        text-align: center;
+        /* Center text when width < 1024px */
     }
 }
 
