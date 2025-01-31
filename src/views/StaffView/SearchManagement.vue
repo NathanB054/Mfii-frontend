@@ -378,7 +378,7 @@ export default {
 
             // Send the updated status to the localhost
             try {
-                await api.patch(`/updateIPData/${item._id}`, {
+                await api.patch(`staff/updateIPData/${item._id}`, {
                     status: item.status,
                 });
                 errorStore.show(
@@ -496,7 +496,7 @@ export default {
         if (this.isEdit) {
             // Simplify the PATCH operation; use one request and formData appropriately
             await api.patch(
-                `/updateIPData/${this.currentResearch._id}`,
+                `staff/updateIPData/${this.currentResearch._id}`,
                 formData,
                 {
                     headers: {
@@ -513,7 +513,7 @@ export default {
             });
         } else {
             // POST request for adding new data
-            await api.post("/addIP", formData, {
+            await api.post("staff/addIP", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -561,7 +561,7 @@ export default {
         async deleteResearch() {
             try {
                 await api.delete(
-                    `/deleteIP/${this.currentResearch._id}`
+                    `staff/deleteIP/${this.currentResearch._id}`
                 );
                 this.dialogDelete = false;
                 this.fetchResearches();
