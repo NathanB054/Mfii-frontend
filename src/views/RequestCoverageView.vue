@@ -14,12 +14,12 @@
         class="relative bg-white border border-gray-300 shadow-md rounded-lg cursor-pointer w-full sm:w-1/3 lg:w-[18%] flex flex-col justify-between items-center text-center"
         @click="toggleDropdown(index)" :class="{ 'bg-blue text-white': item.show, 'bg-white text-black': !item.show }">
         <!-- Title Section -->
-        <div class="title-section flex flex-1 items-center justify-center">
+        <div class="title-section flex flex-1 items-center justify-center mt-2">
           <div>{{ item.title }}</div>
         </div>
         <!-- Icon Fixed at the Bottom -->
-        <div class="icon-container text-xl ">
-          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร'"><img
+        <div class="text-xl">
+          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร'"><img
               src="@/assets/icons/intellectual.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
           <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'"><img
             src="@/assets/icons/design.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
@@ -213,14 +213,6 @@ export default {
 </script>
 
 <style scoped>
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  /* Fixed height for consistent positioning */
-}
-
 .title-section {
   display: flex;
   align-items: center;
