@@ -248,10 +248,11 @@ export default {
       this.fetchResearchData();
 
       // แสดงคอลัมน์ทั้งหมดเมื่อ businessType เป็น "บุคลากร มฟล"
-    //   filter ข้อมูลที่จะแสดงให้เฉาะ @mfu.ac.th และ บุคลากร มฟล
-      if (this.businessType === "บุคลากร มฟล" || this.user.email.includes("@mfu.ac.th")) {
+      // filter ข้อมูลที่จะแสดงให้เฉาะ @mfu.ac.th และ บุคลากร มฟล
+      if (this.businessType === "บุคลากร มฟล" || (this.user && this.user.email && this.user.email.includes("@mfu.ac.th"))) {
         return this.headers;
       }
+      
       // แสดงคอลัมน์บางส่วนเมื่อไม่ได้ล็อกอิน หรือ businessType เป็น "นิติบุคคล" หรือ "บุคคลธรรมดา"
       else {
         return this.headers.filter((header) =>
