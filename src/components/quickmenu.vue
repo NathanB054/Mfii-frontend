@@ -9,7 +9,7 @@
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
           <v-card v-for="(item, index) in menuItems" :key="index" :to="{ path: item.to, query: { data: item.data } }"
-            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
+            class="quickMenu p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
             <div class="flex flex-col items-center justify-center h-full w-full py-2">
               <img :src="item.icon" alt="icon" class="mb-3 mt-3" style="width: 60px; height: 60px" />
               <p class="text-base md:text-lg mb-3">
@@ -28,7 +28,7 @@
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
           <v-card v-for="(stat, index) in stats" :key="index"
-            class="p-6 hover:shadow-xl transition-transform transform hover:scale-105 cursor-pointer rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
+          class="p-6 rounded-lg flex flex-col items-center justify-center bg-gray-50 w-full h-full">
             <div class="flex flex-col items-center justify-center h-full w-full py-5">
               <img :src="stat.icon" alt="icon" class="mb-3 mt-3" style="width: 60px; height: 60px" />
               <p class="text-base md:text-lg ">{{ stat.title }}</p>
@@ -144,11 +144,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.v-card {
+.quickMenu {
   transition: all 0.3s ease-in-out;
 }
 
-.v-card:hover {
+.quickMenu:hover {
   background-color: #ebf8ff;
   /* Tailwind bg-blue-50 */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
