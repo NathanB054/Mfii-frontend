@@ -40,7 +40,7 @@
                     <v-icon small class="mr-2" @click="editResearch(item)"
                       >mdi-pencil</v-icon
                     >
-                    <v-icon
+                    <!-- <v-icon
                       small
                       class="mr-2"
                       :class="
@@ -49,7 +49,7 @@
                       @click="toggleVisibility(item)"
                     >
                       {{ item.status == "active" ? "mdi-eye" : "mdi-eye-off" }}
-                    </v-icon>
+                    </v-icon> -->
                     <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
                   </v-container>
                 </template>
@@ -130,14 +130,11 @@
                       'สิทธิบัตรการประดิษฐ์',
                       'อนุสิทธิบัตร',
                       'สิทธิบัตรออกแบบ',
-                      'ลิขสิทธิ์',
+                      'ลิขสิทธิ์ อื่นๆ',
                       'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์',
-                      'ผลงานวิจัย',
-                      'ต้นแบบ',
                       'เครื่องหมายการค้า',
-                      'อื่น ๆ',
                     ]"
-                    :rules="[rules.required]"
+                    :rules="[rules.required]"   
                     required
                   ></v-autocomplete>
                   <v-autocomplete
@@ -810,7 +807,7 @@ export default {
 
     // Date Picker
     formatThaiDate: (date) => {
-      if (!date || isNaN(new Date(date).getTime())) return "วันที่ไม่ถูกต้อง";
+      if (!date || isNaN(new Date(date).getTime())) return "ไม่มีข้อมูล";
       return dayjs(date).locale("th").format("DD MMMM YYYY");
     },
   },
