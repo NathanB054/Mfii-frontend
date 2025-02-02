@@ -8,7 +8,6 @@
 import { ref, onMounted } from 'vue';
 import { Chart, registerables } from 'chart.js';
 import api from '@/stores/axios-config';
-import { prototype } from 'postcss/lib/previous-map';
 
 Chart.register(...registerables);
 
@@ -21,10 +20,9 @@ export default {
       patent: '#F4E4B7',          // PMS 127 (เหลืองอ่อน)
       pettyPatent: '#F2C94C',     // PMS 129 (เหลืองเข้มสดใสกว่า)
       designPatent: '#EFB64C',    // PMS 130 (เหลืองทอง)
-      copyright: '#E38A1B',       // PMS 137 (ส้มเข้ม)
       copyrightSoftware: '#F68D2E', // PMS 144 (ส้มกลาง)
-      researchResult: '#F47D20',  // PMS 150 (ส้มสดใส)
-      prototype: '#E56610'        // PMS 152 (ส้มแดงอ่อน)
+      copyrightOther: '#E38A1B',  // PMS 137 (ส้มเข้ม)
+      trademark: '#F47D20'        // PMS 150 (ส้มสดใส)
     };
 
     const fetchAndCreateChart = async () => {
@@ -32,14 +30,17 @@ export default {
         const response = await api.get('/getsResearch/all/all/all/all');
         const data = response.data.result;
 
+        // Filter out "สำนักวิชาเทคโนโลยีสารสนเทศ"
+        const filteredData = data.filter(item => item.major !== 'สำนักวิชาเทคโนโลยีสารสนเทศ');
+
         // Group by major
-        const majors = [...new Set(data.map(item => item.major))];
+        const majors = [...new Set(filteredData.map(item => item.major))];
 
         const datasets = [
           {
             label: 'สิทธิบัตรการประดิษฐ์',
             data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
                 item.intelProp === 'สิทธิบัตรการประดิษฐ์'
               ).length
@@ -49,7 +50,7 @@ export default {
           {
             label: 'อนุสิทธิบัตร',
             data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
                 item.intelProp === 'อนุสิทธิบัตร'
               ).length
@@ -57,29 +58,19 @@ export default {
             backgroundColor: colors.pettyPatent
           },
           {
-            label: 'สิทธิบัตรออกแบบ',
+            label: 'สิทธิบัตรออกแบบผลิตภัณฑ์',
             data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
-                item.intelProp === 'สิทธิบัตรออกแบบ'
+                item.intelProp === 'สิทธิบัตรออกแบบผลิตภัณฑ์'
               ).length
             ),
             backgroundColor: colors.designPatent
           },
           {
-            label: 'ลิขสิทธิ์',
+            label: 'ลิขสิทธิ์(โปรแกรมคอมพิวเตอร์)',
             data: majors.map(major =>
-              data.filter(item =>
-                item.major === major &&
-                item.intelProp === 'ลิขสิทธิ์'
-              ).length
-            ),
-            backgroundColor: colors.copyright
-          },
-          {
-            label: 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์',
-            data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
                 item.intelProp === 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์'
               ).length
@@ -87,24 +78,24 @@ export default {
             backgroundColor: colors.copyrightSoftware
           },
           {
-            label: 'ผลงานวิจัย',
+            label: 'ลิขสิทธิ์อื่นๆ',
             data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
-                item.intelProp === 'ผลงานวิจัย'
+                item.intelProp === 'ลิขสิทธิ์'
               ).length
             ),
-            backgroundColor: colors.researchResult
+            backgroundColor: colors.copyrightOther
           },
           {
-            label: 'ต้นแบบ',
+            label: 'เครื่องหมายการค้า',
             data: majors.map(major =>
-              data.filter(item =>
+              filteredData.filter(item =>
                 item.major === major &&
-                item.intelProp === 'ต้นแบบ'
+                item.intelProp === 'เครื่องหมายการค้า'
               ).length
             ),
-            backgroundColor: colors.prototype
+            backgroundColor: colors.trademark
           }
         ];
 
@@ -169,8 +160,8 @@ export default {
 <style scoped>
 .chart-container {
   position: relative;
-  height: 60vh;
+  height: 90vh;
   width: 100%;
-  padding: 20px;
+  padding: 10px;
 }
 </style>

@@ -31,7 +31,7 @@
 
                 <v-col cols="12">
                   <v-autocomplete variant="solo-filled" label="ประเภทธุรกิจ" v-model="user.businessType"
-                    :items="['บุคคลธรรมดา', 'นิติบุคคล']" :rules="[rules.required]" required></v-autocomplete>
+                    :items="['บุคคลธรรมดา', 'นิติบุคคล', 'บุคลากร มฟล']" :rules="[rules.required]" required></v-autocomplete>
 
                   <v-text-field variant="solo-filled" v-model="user.businessName" label="ชื่อกิจการ"
                     :rules="[rules.required, rules.notEmpty]" required></v-text-field>
