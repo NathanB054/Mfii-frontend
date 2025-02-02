@@ -47,7 +47,7 @@
             <p v-for="step in item.steps[0].split(',')">
               {{ step }}
             </p>
-            <div v-if="item.linkServices[0] !== undefined">
+            <div v-if="item.linkServices[0] !== undefined && item.linkServices[0] !== ''">
               <a v-if="item.linkServices[0].startsWith('http') || item.linkServices[0].startsWith('https')"
                 :href="item.linkServices[0]" target="_blank"
                 class="inline-block px-4 py-2 mt-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md transform hover:scale-105 hover:bg-blue-600 hover:shadow-lg transition duration-300">
@@ -181,11 +181,11 @@ export default {
               linkServices: filtered.map(item => item.linkServices)
             });
           })
-          // console.log(this.detailsItems);
+          console.log(this.detailsItems);
           // this.detailsItems = res.data.result;
 
         }
-        // console.log(this.detailsItems);
+        console.log(this.detailsItems);
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
