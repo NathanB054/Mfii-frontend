@@ -8,17 +8,17 @@
                 <!-- Header -->
                 <div class="mb-8 text-center">
                     <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                        จัดการสร้างความตระหนัก, การใช้ประโยชน์, และงานยกระดับงานวิจัยและนวัตกรรม
+                        การขอรับความคุ้มครองทรัพย์สินทางปัญญา
                     </h1>
                 </div>
 
                 <!-- Upload Section -->
                 <div class="bg-white shadow-xl rounded-2xl p-6 mb-8">
-                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                    <div class="grid md:grid-cols-1 gap-6 items-center">
                         <!-- Image Preview Area -->
-                        <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[700px]"
+                        <!-- <div class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center text-center min-h-[700px]"
                             @dragover.prevent="dragOver" @dragleave.prevent="dragLeave" @drop.prevent="dropFile">
-                            <input type="file" ref="fileInput" @change="handleFileUpload" accept="*"
+                            <input type="file" ref="fileInput" @change="handleFileUpload" accept=".pdf"
                                 class="hidden">
 
                             <template v-if="!dataInfo.FilePreview">
@@ -30,22 +30,22 @@
                                 </button>
                             </template>
 
-                            <template v-else>
+<template v-else>
                                 <div class="relative group w-full">
-                                    <!-- เช็คว่าเป็นรูปภาพ -->
+                                    เช็คว่าเป็นรูปภาพ
                                     <img v-if="dataInfo.FilePreview[0].includes('uploads\\image')"
                                         :src="dataInfo.id ? `${baseUrl}/${dataInfo.FilePreview}` : `${dataInfo.FilePreview}`"
                                         class="yes max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
 
-                                    <!-- เช็คว่าเป็น pdf -->
+                                    เช็คว่าเป็น pdf
                                     <div v-else-if="dataInfo.FilePreview[0].includes('.pdf')">
                                         <iframe v-if="dataInfo.id" :src="`${baseUrl}/${dataInfo.FilePreview}#toolbar=0`"
                                             class="yes max-w-full min-h-[500px] rounded-xl mx-auto" frameborder="0"
                                             width="100%" height="100%">
                                         </iframe>
                                     </div>
-                                    <!-- เช็คว่าเป็น pdf preview -->
+                                    เช็คว่าเป็น pdf preview
                                     <div v-else-if="dataInfo.FilePreview.includes('data:application/pdf')">
                                         <iframe :src="`${dataInfo.FilePreview}#toolbar=0`"
                                             class="yes max-w-full min-h-[500px] rounded-xl mx-auto" frameborder="0"
@@ -53,12 +53,12 @@
                                         </iframe>
                                     </div>
                                     
-                                     <!-- เช็คว่าเป็นรูป preview -->
+                                     เช็คว่าเป็นรูป preview
                                     <img v-else :src="dataInfo.FilePreview"
                                         class="no max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
 
-                                        <!-- <div>{{ dataInfo.FilePreview }}</div> -->
+                            
                                     <div
                                         :class="dataInfo.FilePreview[0].includes('.pdf') ? 'mt-2' : 'absolute inset-0 group-hover:bg-opacity-20 flex items-center justify-center transition-all duration-300 rounded-xl '">
                                         <button @click="triggerFileInput"
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                             </template>
-                        </div>
+</div> -->
 
                         <!-- Upload Form -->
                         <div>
@@ -79,22 +79,27 @@
                                     :rules="[rules.required]" @change="fetchData"></v-autocomplete>
 
                                 <!-- Text field for the fetched data -->
-                                <v-text-field v-model="dataInfo.servicesSubType" label="ชื่อหัวข้อ" variant="outlined"
-                                    class="mb-4" :rules="[rules.topic]" required></v-text-field>
+                                <v-textarea v-model="dataInfo.servicesSubType" label="ขั้นตอนการยื่นคำขอ"
+                                    variant="outlined" class="mb-4" :rules="[rules.topic]" required rows="4"
+                                    auto-grow></v-textarea>
 
                                 <!-- Textarea for the fetched description -->
-                                <v-textarea v-model="dataInfo.information" label="คำอธิบาย" variant="outlined"
-                                    class="mb-4" :rules="[rules.description]" required rows="4" auto-grow></v-textarea>
+                                <v-textarea v-model="dataInfo.information" label="นิยาม/ความหมายสั้น ๆ"
+                                    variant="outlined" class="mb-4" :rules="[rules.description]" required rows="4"
+                                    auto-grow></v-textarea>
+                                <v-text-field v-model="dataInfo.linkServices"
+                                    :rules="[dataInfo.linkServices == undefined  ? rules.validLink : null]"
+                                    label="ลิงค์" variant="outlined" class="mb-4"></v-text-field>
                                 <!-- Buttons -->
                                 <div class="flex space-x-4">
                                     <v-btn v-if="dataInfo.id == null" type="submit" color="green darken-1"
                                         variant="elevated"
-                                        :disabled="!dataInfo.FilePreview || !dataInfo.information || !servicesForApi.servicesType"
+                                        :disabled="!dataInfo.information || !servicesForApi.servicesType || disabledButton"
                                         class="flex-grow">
                                         อัพโหลดข้อมูล
                                     </v-btn>
                                     <v-btn v-else color="green darken-1" variant="elevated" @click="updateImagenData"
-                                        :disabled="!dataInfo.FilePreview || !servicesForApi.servicesType || !dataInfo.information || !dataInfo.servicesType"
+                                        :disabled="!servicesForApi.servicesType || !dataInfo.information || !dataInfo.servicesType || disabledButton"
                                         class="flex-grow">
                                         แก้ไขข้อมูล
                                     </v-btn>
@@ -205,7 +210,7 @@ import LoadingOverlay from "@/components/LoadingOverlay.vue";
 const errorStore = useErrorStore();
 const baseURL = import.meta.env.VITE_BASE_URL;
 export default {
-    name: "Aware Management View",
+    name: "CoverageManagement",
     components: {
         StaffLayout,
         LoadingOverlay
@@ -217,9 +222,10 @@ export default {
             baseUrl: baseURL,
             dataInfo: {
                 id: null,
-                servicesType: null,
-                information: null,
-                servicesSubType: null,
+                servicesType: null, //หมวดหมู่
+                information: null, //คือ นิยาม/ความหมายสั้นๆ
+                servicesSubType: null,   //คือ ขัันตอนการยื่นคําขอ
+                linkServices: null, //คือ ลิ้งค์สําหรับแนบ
                 FilePreview: null,
             },
             imageFile: null,
@@ -231,152 +237,30 @@ export default {
                 required: value => !!value || 'กรุณากรอกข้อมูลในช่อง',
                 topic: value => !!value || 'กรุณากรอกชื่อหัวข้อ',
                 description: value => !!value || 'กรุณากรอกคำอธิบาย',
+                validLink: value => {
+                    const urlPattern = /^(https?|ftp|http):\/\/[^\s/$.?#].[^\s]*$|^-$|^$/i;
+                    return urlPattern.test(value) || 'กรุณากรอกลิงค์ที่ถูกต้อง';
+                },
+
             },
+            disabledButton: false,
             servicesForApi: {
-                servicesType: null || "งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา",
+                servicesType: null || "สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร",
             },
             dropdownItems: [
-                "งานสร้างความตระหนักด้านทรัพย์สินทางปัญญา",
-                "การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา",
-                "งานยกระดับงานวิจัยและนวัตกรรม",
+                "สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร",
+                "สิทธิบัตรการออกแบบผลิตภัณฑ์",
+                "ลิขสิทธิ์",
+                "เครื่องหมายการค้า",
+                "ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ"
             ],
         }
     },
     methods: {
-        triggerFileInput() {
-            this.$refs.fileInput.click()
-        },
-
-        handleFileUpload(event) {
-            const file = event.target.files[0]
-            if (file.type === 'application/pdf' || file.type.startsWith('image')) {
-                this.processFile(file)
-                this.imageFile = file
-            } else {
-                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
-                    color: "error",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                })
-            }
-        },
-
-        dropFile(event) {
-            const file = event.dataTransfer.files[0]
-            if (file.type === 'application/pdf' || file.type.startsWith('image')) {
-                this.processFile(file)
-                this.imageFile = file
-            }
-            else {
-                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
-                    color: "error",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                })
-            }
-        },
-
-
-        processFile(file) {
-            // Check if the file is an image or a PDF
-            if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
-                errorStore.show(`กรุณาอัพโหลดเฉพาะไฟล์รูปภาพหรือ PDF`, {
-                    color: "error",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                });
-                return;
-            }
-
-            // Check file size (limit to 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                errorStore.show(`ขนาดไฟล์ต้องไม่เกิน 5MB`, {
-                    color: "error",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                });
-                return;
-            }
-
-            const reader = new FileReader();
-
-            // Handle image files
-            if (file.type.startsWith('image/')) {
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        this.dataInfo.FilePreview = e.target.result; // Display image preview
-                    };
-                    img.onerror = () => {
-                        errorStore.show(`ไม่สามารถอ่านไฟล์รูปภาพได้`, {
-                            color: "error",
-                            icon: "mdi-alert-circle",
-                            timeout: 5000
-                        });
-                    };
-                    img.src = e.target.result;
-                };
-            }
-
-            // Handle PDF files
-            if (file.type === 'application/pdf') {
-                reader.onload = (e) => {
-                    this.dataInfo.FilePreview = e.target.result; // Store PDF data for further processing
-                    // You can add logic here to display the PDF preview (e.g., use a PDF viewer)
-                };
-            }
-
-            reader.onerror = () => {
-                errorStore.show(`เกิดข้อผิดพลาดในการอ่านไฟล์`, {
-                    color: "error",
-                    icon: "mdi-alert-circle",
-                    timeout: 5000
-                });
-            };
-
-            reader.readAsDataURL(file);
-            this.imageFile = file;
-        },
-
-
-        startEditImage(image) {
-            this.selectedImage = { ...image }
-            this.editDialog = true
-        },
-        saveImageEdit() {
-            const index = this.images.findIndex(img => img.id === this.selectedImage.id)
-            if (index !== -1) {
-                this.images[index] = { ...this.selectedImage }
-                this.editDialog = false
-                errorStore.show("แก้ไขสำเร็จ", {
-                    color: 'success',
-                    icon: 'mdi-check-circle',
-                    timeout: 5000
-                });
-            }
-        },
-        deleteImage(imageId) {
-            this.images = this.images.filter(img => img.id !== imageId)
-            this.deleteDialog = false
-            errorStore.show("ลบสำเร็จ", {
-                color: 'success',
-                icon: 'mdi-check-circle',
-                timeout: 5000
-            });
-        },
-        clearImage() {
-            this.group = null
-            this.imageTitle = ''
-            this.imageDescription = ''
-            this.dataInfo.FilePreview = null
-            this.imageFile = null
-            if (this.$refs.fileInput) {
-                this.$refs.fileInput.value = ''
-            }
-        },
-
+        // ===================================================== Image input (unused) =========================================================
 
         // ===================================================== API =========================================================
+
 
         // fetch data
         async fetchData() {
@@ -393,7 +277,8 @@ export default {
                         servicesType: res.data.result[0]?.servicesType || this.servicesForApi.servicesType,
                         servicesSubType: res.data.result[0]?.servicesSubType || "",
                         information: res.data.result[0]?.information || "",
-                        FilePreview: res.data.result[0]?.filePath || null
+                        FilePreview: res.data.result[0]?.filePath || null,
+                        linkServices: res.data.result[0]?.linkServices || null
                     };
                     this.imageFile = res.data.result[0]?.filePath || null
                     this.imageCheck = this.imageFile;
@@ -441,6 +326,7 @@ export default {
                 formUpdate.append('servicesType', this.servicesForApi.servicesType);
                 formUpdate.append('servicesSubType', this.dataInfo.servicesSubType);
                 formUpdate.append('information', this.dataInfo.information);
+                formUpdate.append('linkServices', this.dataInfo.linkServices);
                 const res = await api.patch(`/staff/updateServicesData/${this.dataInfo.id}`, formUpdate);
                 this.isLoading = false;
                 errorStore.show("แก้ไขข้อมูลเรียบร้อย", {
@@ -460,7 +346,7 @@ export default {
         async uploadImage() {
             this.isLoading = true
             console.log(this.servicesForApi, this.dataInfo)
-            if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information || !this.dataInfo.FilePreview) {
+            if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information) {
                 errorStore.show(`กรุณากรอกข้อมูลให้ครบ`, {
                     color: "warning",
                     icon: "mdi-alert-circle",
@@ -480,15 +366,12 @@ export default {
                 formPayload.append('servicesType', this.servicesForApi.servicesType);
                 formPayload.append('servicesSubType', this.dataInfo.servicesSubType);
                 formPayload.append('information', this.dataInfo.information);
-                formPayload.append('file', this.imageFile);
+                formPayload.append('linkServices', this.dataInfo.linkServices);
                 const res = await api.post('/staff/addServices', formPayload, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
                 })
-                console.log(res);
-                this.images.push(newImage);
-                this.clearImage();
 
                 // fetch data
                 this.fetchData();
@@ -530,6 +413,11 @@ export default {
 
     mounted() {
         this.fetchData();
+        if (this.dataInfo.linkServices !== undefined && this.dataInfo.linkServices !== null) {
+            if (this.dataInfo.linkServices.trim() === '') {
+                this.disabledButton = false
+            }
+        }
     },
 
     // เช็คว่า servicesType มีการเปลี่ยนแปลงหรือไม่
@@ -540,7 +428,22 @@ export default {
                     this.fetchData();
                 }
             }
+        },
+        'dataInfo.linkServices': function (newValue, oldValue) {
+            // You can use your validation logic here.
+            // console.log(newValue);
+
+            const isValid = this.rules.validLink(newValue);
+            // console.log('isValid',isValid);
+            if (isValid !== true) {
+                // Handle invalid link, for example, set an error message or log
+               this.disabledButton = true
+            }else{
+                this.disabledButton = false
+            }
         }
+
+
     }
 }
 </script>

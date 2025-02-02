@@ -82,7 +82,7 @@
 <script>
 import Carousel from '../components/carousel.vue';
 import QuickMenu from '@/components/quickmenu.vue';
-import YtVideos from '@/components/ytVideos.vue';
+import YtVideos from '../components/ytvideos.vue';
 import api from '@/stores/axios-config';
 const baseURL = import.meta.env.VITE_BASE_URL;
 

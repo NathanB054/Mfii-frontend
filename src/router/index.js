@@ -53,8 +53,16 @@ const router = createRouter({
       path: '/services/ipa',
       name: 'Request for Coverage',
       component: () => import('../views/RequestCoverageView.vue'),
+      props: true,
       meta: { showNavTop: true, showNavFooter: true }
     },
+    // {
+    //   path: '/services/ipa/:topicToggle',
+    //   name: 'Request for Coverage',
+    //   component: () => import('../views/RequestCoverageView.vue'),
+    //   props: true,
+    //   meta: { showNavTop: true, showNavFooter: true }
+    // },
     {
       path: '/database',
       name: 'Database IP MFU',
@@ -144,6 +152,12 @@ const router = createRouter({
       meta: { requiresAuth: true, roles: ['staff', 'admin'] },
     },
     {
+      path: '/staff/CoverageManagement',
+      name: 'Coverage Management',
+      component: () => import('../views/StaffView/CoverageManagement.vue'),
+      meta: { requiresAuth: true, roles: ['staff', 'admin'] },
+    },
+    {
       path: '/staff/messageReply',
       name: 'Message Reply',
       component: () => import('../views/StaffView/MessageReply.vue'),
@@ -177,6 +191,21 @@ const router = createRouter({
   },
 
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // if there is a saved position, return it (for example, when using browser navigation buttons)
+    if (savedPosition) {
+      return savedPosition;
+    }
+
+    // optionally, wait for the DOM to be ready to scroll
+    return new Promise((resolve) => {
+      // set a timeout or any necessary delay (if needed)
+      setTimeout(() => {
+        // this will scroll to the top
+        resolve({ top: 0 });
+      }, 0);
+    });
+  },
 })
 
 
