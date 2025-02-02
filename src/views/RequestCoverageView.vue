@@ -19,17 +19,16 @@
         </div>
         <!-- Icon Fixed at the Bottom -->
         <div class="text-xl">
-          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร'"><img
-              src="@/assets/icons/intellectual.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
-          <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'"><img
-            src="@/assets/icons/design.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
-          <i v-if="item.title === 'ลิขสิทธิ์'"><img
-            src="@/assets/icons/copyright.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
-          <i v-if="item.title === 'เครื่องหมายการค้า'"><img
-            src="@/assets/icons/trademarks.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
-          <i v-if="item.title === 'ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ'"
-            class="text-xl"><img
-            src="@/assets/icons/waiting.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร'"><img src="@/assets/icons/intellectual.png"
+              alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'"><img src="@/assets/icons/design.png" alt="icon"
+              class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'ลิขสิทธิ์'"><img src="@/assets/icons/copyright.png" alt="icon" class="my-3"
+              style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'เครื่องหมายการค้า'"><img src="@/assets/icons/trademarks.png" alt="icon" class="my-3"
+              style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ'" class="text-xl"><img
+              src="@/assets/icons/waiting.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
         </div>
       </div>
     </div>
@@ -40,22 +39,27 @@
         class="bg-gray-200 border border-gray-300 shadow-md p-4 w-full sm:w-1/2 mt-4">
         <div class="grid grid-cols-3 gap-0">
 
-          <p>นิยาม <br>  {{ item.details[0] }}</p>
+          <p>นิยาม <br> {{ item.details[0] }}</p>
           <div class="border-l border-gray-400 mx-auto"></div>
 
-          <div v-if = "item.steps[0] !== undefined">
+          <div v-if="item.steps[0] !== undefined">
             ขั้นตอนการยื่นคำขอ
             <p v-for="step in item.steps[0].split(',')">
               {{ step }}
             </p>
-            <div v-if="item.linkServices[0] !==undefined "  >
-              <a v-if="item.linkServices[0].startsWith('http') || item.linkServices[0].startsWith('https')" :href="item.linkServices[0 ]" target="_blank">ลิงค์เอกสาร</a>
-              <p v-else >ลิงค์เอกสารไม่ถูกต้อง</p>
+            <div v-if="item.linkServices[0] !== undefined">
+              <a v-if="item.linkServices[0].startsWith('http') || item.linkServices[0].startsWith('https')"
+                :href="item.linkServices[0]" target="_blank"
+                class="inline-block px-4 py-2 mt-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md transform hover:scale-105 hover:bg-blue-600 hover:shadow-lg transition duration-300">
+                <i class="fas fa-link mr-2"></i>ลิงค์เอกสาร
+              </a>
+              <p v-else class="text-red-500 font-semibold mt-2">ลิงค์เอกสารไม่ถูกต้อง</p>
             </div>
-            <div v-else>ไม่มีลิงค์เอกสาร</div>
+            <div v-else class="text-gray-500 italic mt-2">ไม่มีลิงค์เอกสาร</div>
+
           </div>
         </div>
-        
+
         <!-- <ul class="flex flex-row justify-between">
 
           <li v-for="(detail, idx) in item.details" :key="idx">
@@ -82,7 +86,7 @@ export default {
     topicToggle: {
       type: String,
       required: false,
-      default:''
+      default: ''
 
     }
   },
@@ -103,7 +107,7 @@ export default {
 
   },
   watch: {
-    '$route.query.data': function(newData) {
+    '$route.query.data': function (newData) {
       this.receivedData = newData;
       this.toggleDropdownByTitle(newData);
     }
@@ -194,14 +198,14 @@ export default {
 
   mounted() {
     this.fetchData().then(() => {
-    // console.log('prop',this.topicToggle)
-    if (this.topicToggle) {
-      this.detailsItems.forEach(item => {
-        item.show = (item.title === this.topicToggle);
-      });
-    }
-    this.toggleDropdownByTitle(this.receivedData);
-  });
+      // console.log('prop',this.topicToggle)
+      if (this.topicToggle) {
+        this.detailsItems.forEach(item => {
+          item.show = (item.title === this.topicToggle);
+        });
+      }
+      this.toggleDropdownByTitle(this.receivedData);
+    });
   }
 };
 </script>
