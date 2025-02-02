@@ -82,10 +82,10 @@
             <v-dialog v-model="editDialog" max-width="600px">
                 <v-card v-if="selectedPDF" class="rounded-xl pa-6">
                     <v-card-title class="text-2xl font-semibold text-gray-800">
-                        แก้ไขข้อมูล PDF
+                        แก้ไขข้อมูล ระเบียบ
                     </v-card-title>
                     <v-card-text>
-                        <v-text-field v-model="selectedPDF.title" label="ชื่อไฟล์ PDF" variant="outlined"
+                        <v-text-field v-model="selectedPDF.title" label="ชื่อระเบียบ" variant="outlined"
                             class="mb-4"></v-text-field>
                     </v-card-text>
                     <v-card-actions>
