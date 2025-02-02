@@ -75,6 +75,11 @@ export default {
                 { name: "ติดต่อเรา", path: "/about-us/contact" },
                 { name: "สมัครสมาชิก", path: "/register" },
                 { name: "เข้าสู่ระบบ", path: "/login" },
+                { name: "การใช้ประโยชน์ผลงานทรัพย์สินทางปัญญา", path: "/services/abi" },
+                { name: "การขอรับความคุ้มครองทรัพย์สินทางปัญญา", path: "/services/ipa" },
+                { name: "งานสร้างความตระหนักทรัพย์สินทางปัญญา", path: "/services/aai" },
+                { name: "การยกระดับงานวิจัยและนวัตกรรม", path: "/services/upi" },
+                { name: "ระบบสืบค้นฐานข้อมูลทรัพย์สินทางปัญญา มฟล", path: "/services/ipp" },
             ],
         };
     },

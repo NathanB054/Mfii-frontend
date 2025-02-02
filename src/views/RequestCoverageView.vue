@@ -14,18 +14,22 @@
         class="relative bg-white border border-gray-300 shadow-md rounded-lg cursor-pointer w-full sm:w-1/3 lg:w-[18%] flex flex-col justify-between items-center text-center"
         @click="toggleDropdown(index)" :class="{ 'bg-blue text-white': item.show, 'bg-white text-black': !item.show }">
         <!-- Title Section -->
-        <div class="title-section flex flex-1 items-center justify-center">
-          <div>{{ item.title }}</div>
+        <div class="title-section flex flex-1 items-center justify-center mt-2">
+          <div>{{ item.title }} </div>
         </div>
         <!-- Icon Fixed at the Bottom -->
-        <div class="icon-container">
-          <i v-if="item.title === `สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร`"
-            class="mdi mdi-lightbulb-on-outline text-xl"></i>
-          <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'" class="mdi mdi-palette-outline text-xl"></i>
-          <i v-if="item.title === 'ลิขสิทธิ์'" class="mdi mdi-book-lock-outline text-xl"></i>
-          <i v-if="item.title === 'เครื่องหมายการค้า'" class="mdi mdi-tag-outline text-xl"></i>
+        <div class="text-xl">
+          <i v-if="item.title === 'สิทธิบัตรการประดิษฐ์ หรือ อนุสิทธิบัตร'"><img
+              src="@/assets/icons/intellectual.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'สิทธิบัตรการออกแบบผลิตภัณฑ์'"><img
+            src="@/assets/icons/design.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'ลิขสิทธิ์'"><img
+            src="@/assets/icons/copyright.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
+          <i v-if="item.title === 'เครื่องหมายการค้า'"><img
+            src="@/assets/icons/trademarks.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
           <i v-if="item.title === 'ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ'"
-            class="mdi mdi-eye-outline text-xl"></i>
+            class="text-xl"><img
+            src="@/assets/icons/waiting.png" alt="icon" class="my-3" style="width: 50px; height: 50px" /></i>
         </div>
       </div>
     </div>
@@ -93,42 +97,17 @@ export default {
         "ลิขสิทธิ์",
         "เครื่องหมายการค้า",
         "ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ"
-      ]
+      ],
+      receivedData: this.$route.query.data || ''
     };
 
   },
-  // {
-  //         title: "สิทธิบัตรการประดิษฐ์/อนุสิทธิบัตร",
-  //         details: [
-  //           "นิยาม/ความหมายสั้น ๆ",
-  //           "แบบฟอร์มคำขอ ที่เกี่ยวข้องของแต่ละประเภท",
-  //           "ขั้นตอนการยื่นคำขอ",
-  //         ],
-  //         show: false,
-  //       },
-  //       {
-  //         title: "สิทธิบัตรการออกแบบผลิตภัณฑ์",
-  //         details: [
-  //           "นิยาม/ความหมายสั้น ๆ",
-  //           "แบบฟอร์มคำขอ ที่เกี่ยวข้องของแต่ละประเภท",
-  //         ],
-  //         show: false,
-  //       },
-  //       {
-  //         title: "ลิขสิทธิ์",
-  //         details: ["รายละเอียดอื่น ๆ เกี่ยวกับลิขสิทธิ์"],
-  //         show: false,
-  //       },
-  //       {
-  //         title: "เครื่องหมายการค้า",
-  //         details: ["รายละเอียดเกี่ยวกับเครื่องหมายการค้า"],
-  //         show: false,
-  //       },
-  //       {
-  //         title: "ระบบติดตามผลงานที่อยู่ระหว่างดำเนินการยื่นคำขอฯ",
-  //         details: ["แบบลิ้งค์ IP Tracking ในนี้ด้วย"],
-  //         show: false,
-  //       },
+  watch: {
+    '$route.query.data': function(newData) {
+      this.receivedData = newData;
+      this.toggleDropdownByTitle(newData);
+    }
+  },
   methods: {
     toggleDropdown(index) {
       if (this.detailsItems[index]) {
@@ -140,6 +119,24 @@ export default {
         console.error("Invalid index:", index);
       }
     },
+
+    // Toggle dropdown by title เปิด dropdown ตาม title ที่รับมา
+    toggleDropdownByTitle(title) {
+      this.detailsItems.forEach(item => {
+        if (item.title === title) {
+          item.show = !item.show;
+        } else {
+          item.show = false;
+        }
+      });
+    },
+
+
+
+
+
+
+
     beforeEnter(el) {
       el.style.opacity = 0;
       el.style.transform = 'translateY(-20px)';
@@ -168,7 +165,7 @@ export default {
       this.isLoading = true;
       try {
         const res = await api.get(`/getsServices/all/all`);
-        console.log(res.data.result);
+        // console.log(res.data.result);
         if (res.data) {
           this.topics.forEach(topic => {
             const filtered = res.data.result.filter(item => item.servicesType === topic);
@@ -180,11 +177,11 @@ export default {
               linkServices: filtered.map(item => item.linkServices)
             });
           })
-          console.log(this.detailsItems);
+          // console.log(this.detailsItems);
           // this.detailsItems = res.data.result;
 
         }
-        console.log(this.detailsItems);
+        // console.log(this.detailsItems);
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -197,26 +194,19 @@ export default {
 
   mounted() {
     this.fetchData().then(() => {
-    console.log('prop',this.topicToggle)
+    // console.log('prop',this.topicToggle)
     if (this.topicToggle) {
       this.detailsItems.forEach(item => {
         item.show = (item.title === this.topicToggle);
       });
     }
+    this.toggleDropdownByTitle(this.receivedData);
   });
   }
 };
 </script>
 
 <style scoped>
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  /* Fixed height for consistent positioning */
-}
-
 .title-section {
   display: flex;
   align-items: center;
