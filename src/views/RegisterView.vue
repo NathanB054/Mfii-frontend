@@ -123,7 +123,7 @@ export default {
           firstName: form.value.firstName.trim(),
           lastName: form.value.lastName.trim(),
           email: form.value.email.trim().toLowerCase(), // trim และแปลงเป็น lowercase
-          phone: form.value.phone.trim(),
+          phoneNumber: form.value.phone.trim(),
           password: form.value.password.trim(),
         };
 
