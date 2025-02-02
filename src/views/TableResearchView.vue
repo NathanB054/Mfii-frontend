@@ -249,7 +249,7 @@ export default {
 
       // แสดงคอลัมน์ทั้งหมดเมื่อ businessType เป็น "บุคลากร มฟล"
       // filter ข้อมูลที่จะแสดงให้เฉาะ @mfu.ac.th และ บุคลากร มฟล
-      if (this.businessType === "บุคลากร มฟล" || (this.user && this.user.email && this.user.email.includes("@mfu.ac.th"))) {
+      if (this.user && this.user.email && this.user.email.includes("@mfu.ac.th")) {
         return this.headers;
       }
       
