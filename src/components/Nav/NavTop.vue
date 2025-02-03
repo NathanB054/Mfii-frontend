@@ -102,16 +102,16 @@ const mobileSections = [
             label: "ภายใน",
             items: [
               { label: "MRii", to: "/info2/sub1" },
-              { label: "MFii", to: "/info2/sub1" },
-              { label: "Research", to: "/info2/sub1" },
+              { label: "MFii", to: "/info2/sub2" },
+              { label: "Research", to: "/info2/sub3" },
             ],
           },
           {
             label: "ภายนอก",
             items: [
-              { label: "DIP", to: "/info2/sub3", external: true },
-              { label: "WIPO", to: "/info2/sub3", external: true },
-              { label: "อวท.", to: "/info2/sub3", external: true },
+              { label: "DIP", to: "/info3/sub1", external: true },
+              { label: "WIPO", to: "/info3/sub2", external: true },
+              { label: "อวท.", to: "/info3/sub3", external: true },
             ],
           },
         ],
@@ -200,6 +200,8 @@ const handleClickOutside = (event) => {
 
   if (!navElement || (!isClickOnButton && !dropdownContent)) {
     activeDropdown.value = null;
+    activeNestedDropdown.value = null; // Close nested dropdown
+    activeNestedNestedDropdown.value = null; // Close nested nested dropdown
   }
 
   if (!navElement && !mobileMenuButton) {
@@ -460,11 +462,10 @@ const handleLogout = async () => {
                           @click="
                             toggleNestedDropdown(section.name, item.label)
                           "
-                          class="block w-full text-left px-3 py-2 text-base text-gray-700 hover:bg-gray-100 relative"
+                          class="block w-full text-right px-3 py-2 text-base text-gray-700 hover:bg-gray-100 relative"
                         >
-                          {{ item.label }}
                           <svg
-                            class="w-4 h-4 ml-2 inline-block absolute right-2 top-3"
+                            class="w-4 h-4 mr-2 inline-block absolute left-2 top-3"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -472,8 +473,9 @@ const handleLogout = async () => {
                             stroke-linecap="round"
                             stroke-linejoin="round"
                           >
-                            <path d="M9 5l7 7-7 7"></path>
+                            <path d="M15 19l-7-7 7-7"></path>
                           </svg>
+                          {{ item.label }}
                         </button>
                         <div
                           v-if="
@@ -517,11 +519,10 @@ const handleLogout = async () => {
                                     item.label
                                   )
                                 "
-                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative"
+                                class="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative"
                               >
-                                {{ subItem.label }}
                                 <svg
-                                  class="w-4 h-4 ml-2 inline-block absolute right-2 top-3"
+                                  class="w-4 h-4 mr-2 inline-block absolute left-2 top-3"
                                   fill="none"
                                   stroke="currentColor"
                                   viewBox="0 0 24 24"
@@ -529,8 +530,9 @@ const handleLogout = async () => {
                                   stroke-linecap="round"
                                   stroke-linejoin="round"
                                 >
-                                  <path d="M9 5l7 7-7 7"></path>
+                                  <path d="M15 19l-7-7 7-7"></path>
                                 </svg>
+                                {{ subItem.label }}
                               </button>
                               <div
                                 v-if="
@@ -667,7 +669,7 @@ const handleLogout = async () => {
             class="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            viewBox="0 0 24 24"
+            viewBox="0 24 24"
             stroke="currentColor"
           >
             <path
@@ -1142,5 +1144,35 @@ const handleLogout = async () => {
   .text-title h1 {
     font-size: xx-small;
   }
+}
+
+.desktop-dropdown-content {
+  right: 0; /* Align dropdown to the right */
+  left: auto; /* Remove left alignment */
+}
+
+.desktop-dropdown-content .relative.group {
+  text-align: right; /* Align text to the right */
+}
+
+.desktop-dropdown-content .relative.group button {
+  justify-content: flex-end; /* Align button content to the right */
+}
+
+.desktop-dropdown-content .relative.group svg {
+  margin-left: 0; /* Remove left margin */
+  margin-right: 0.5rem; /* Add right margin */
+}
+
+/* Adjust nested dropdowns */
+.desktop-dropdown-content .absolute.left-full {
+  right: 100%; /* Align nested dropdown to the left */
+  left: auto; /* Remove left alignment */
+}
+
+/* Adjust nested nested dropdowns */
+.desktop-dropdown-content .absolute.left-full .absolute.left-full {
+  right: 100%; /* Align nested nested dropdown to the left */
+  left: auto; /* Remove left alignment */
 }
 </style>
