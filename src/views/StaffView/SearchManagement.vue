@@ -180,6 +180,7 @@
                         <!-- Date Picker วันที่ยื่นคำขอ -->
                         <v-menu
                           v-model="MenuSubmitDate"
+                          :close-on-content-click="false"
                           :nudge-right="40"
                           transition="scale-transition"
                           offset-y
