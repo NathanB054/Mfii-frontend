@@ -57,15 +57,11 @@ export default {
         const response = await api.get('/countIP');
         const data = response.data.result;
 
-        console.log('Fetched data:', data); // Log fetched data for debugging
-
         // Extract majors from the fetched data
         const fetchedMajors = [...new Set(data.map(item => item.beLongTo))];
 
         // Merge fetched majors with all possible majors
         const majors = [...new Set([...allMajors, ...fetchedMajors])];
-
-        console.log('Majors:', majors); // Log majors for debugging
 
         const datasets = [
           {
@@ -117,8 +113,6 @@ export default {
             backgroundColor: colors.trademark
           }
         ];
-
-        console.log('Datasets:', datasets); // Log datasets for debugging
 
         if (stackedBarChart.value) {
           new Chart(stackedBarChart.value, {
