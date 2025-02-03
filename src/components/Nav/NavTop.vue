@@ -460,7 +460,7 @@ const handleLogout = async () => {
                           @click="
                             toggleNestedDropdown(section.name, item.label)
                           "
-                          class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 relative"
+                          class="block w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 relative"
                         >
                           {{ item.label }}
                           <svg
@@ -551,7 +551,7 @@ const handleLogout = async () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     @click="closeDesktopDropdown"
-                                    class="block px-4 py-2 text-sm transition-colors duration-200"
+                                    class="block px-4 py-2 text-base transition-colors duration-200"
                                     :class="{
                                       'text-blue-500 bg-gray-100':
                                         route.path === nestedsubitem.to,
@@ -567,7 +567,7 @@ const handleLogout = async () => {
                                     v-else-if="nestedsubitem.to !== undefined"
                                     :to="nestedsubitem.to"
                                     @click="closeDesktopDropdown"
-                                    class="block px-4 py-2 text-sm transition-colors duration-200"
+                                    class="block px-4 py-2 text-base transition-colors duration-200"
                                     :class="{
                                       'text-blue-500 bg-gray-100':
                                         route.path === nestedsubitem.to,
@@ -585,7 +585,7 @@ const handleLogout = async () => {
                               v-else
                               :to="subItem.to"
                               @click="closeDesktopDropdown"
-                              class="block px-4 py-2 text-sm transition-colors duration-200"
+                              class="block px-4 py-2 text-base transition-colors duration-200"
                               :class="{
                                 'text-blue-500 bg-gray-100':
                                   route.path === subItem.to,
@@ -620,7 +620,7 @@ const handleLogout = async () => {
                           v-else
                           :to="item.to"
                           @click="closeDesktopDropdown"
-                          class="block px-4 py-2 text-sm transition-colors duration-200"
+                          class="block px-3 py-2 text-base transition-colors duration-200"
                           :class="{
                             'text-blue-500 bg-gray-100': route.path === item.to,
                             'text-gray-700 hover:bg-gray-100':
