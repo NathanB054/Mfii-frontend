@@ -57,22 +57,17 @@ export default {
         const response = await api.get('/countIP');
         const data = response.data.result;
 
-        console.log('Fetched data:', data); // Log fetched data for debugging
-
         // Extract majors from the fetched data
         const fetchedMajors = [...new Set(data.map(item => item.beLongTo))];
 
         // Merge fetched majors with all possible majors
         const majors = [...new Set([...allMajors, ...fetchedMajors])];
 
-        console.log('Majors:', majors); // Log majors for debugging
-
         const datasets = [
           {
             label: 'สิทธิบัตรการประดิษฐ์',
             data: majors.map(major => {
               const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'สิทธิบัตรการประดิษฐ์')?.count || 0;
-              console.log(`Count for สิทธิบัตรการประดิษฐ์ in ${major}:`, count);
               return count;
             }),
             backgroundColor: colors.patent
@@ -81,16 +76,14 @@ export default {
             label: 'อนุสิทธิบัตร',
             data: majors.map(major => {
               const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'อนุสิทธิบัตร')?.count || 0;
-              console.log(`Count for อนุสิทธิบัตร in ${major}:`, count);
               return count;
             }),
             backgroundColor: colors.pettyPatent
           },
           {
-            label: 'สิทธิบัตรออกแบบผลิตภัณฑ์',
+            label: 'สิทธิบัตรการออกแบบ',
             data: majors.map(major => {
-              const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'สิทธิบัตรออกแบบผลิตภัณฑ์')?.count || 0;
-              console.log(`Count for สิทธิบัตรออกแบบผลิตภัณฑ์ in ${major}:`, count);
+              const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'สิทธิบัตรการออกแบบ')?.count || 0;
               return count;
             }),
             backgroundColor: colors.designPatent
@@ -98,8 +91,7 @@ export default {
           {
             label: 'ลิขสิทธิ์(โปรแกรมคอมพิวเตอร์)',
             data: majors.map(major => {
-              const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'ลิขสิทธิ์(โปรแกรมคอมพิวเตอร์)')?.count || 0;
-              console.log(`Count for ลิขสิทธิ์(โปรแกรมคอมพิวเตอร์) in ${major}:`, count);
+              const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'ลิขสิทธิ์-โปรแกรมคอมพิวเตอร์')?.count || 0;
               return count;
             }),
             backgroundColor: colors.copyrightSoftware
@@ -108,7 +100,6 @@ export default {
             label: 'ลิขสิทธิ์อื่นๆ',
             data: majors.map(major => {
               const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'ลิขสิทธิ์')?.count || 0;
-              console.log(`Count for ลิขสิทธิ์ in ${major}:`, count);
               return count;
             }),
             backgroundColor: colors.copyrightOther
@@ -117,14 +108,11 @@ export default {
             label: 'เครื่องหมายการค้า',
             data: majors.map(major => {
               const count = data.find(item => item.beLongTo === major)?.ipTypeCounts.find(ip => ip.ipType === 'เครื่องหมายการค้า')?.count || 0;
-              console.log(`Count for เครื่องหมายการค้า in ${major}:`, count);
               return count;
             }),
             backgroundColor: colors.trademark
           }
         ];
-
-        console.log('Datasets:', datasets); // Log datasets for debugging
 
         if (stackedBarChart.value) {
           new Chart(stackedBarChart.value, {
