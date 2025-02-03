@@ -33,11 +33,11 @@
                             <template v-else>
                                 <div class="relative group w-full">
                                     <!-- เช็คว่าเป็นรูปภาพ -->
-                                    <img v-if="dataInfo.FilePreview[0].includes('uploads\\image')"
+                                    <img v-if="dataInfo.FilePreview[0].includes('image')"   
                                         :src="dataInfo.id ? `${baseUrl}/${dataInfo.FilePreview}` : `${dataInfo.FilePreview}`"
                                         class="yes max-w-full max-h-80 rounded-xl object-cover mx-auto"
                                         @error="handleImageError" />
-
+                                        
                                     <!-- เช็คว่าเป็น pdf -->
                                     <div v-else-if="dataInfo.FilePreview[0].includes('.pdf')">
                                         <iframe v-if="dataInfo.id" :src="`${baseUrl}/${dataInfo.FilePreview}#toolbar=0`"
