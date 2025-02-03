@@ -9,7 +9,7 @@
     <v-row>
       <v-col v-for="(item, index) in regulations" :key="item._id" cols="12" md="4" class="mb-4">
         <v-card>
-          <v-card-title>{{ item.regulationName }}</v-card-title>
+          <v-card-title v-text="item.regulationName" class="wrap-text"></v-card-title>
           <!-- <v-card-subtitle>{{ item.description }}</v-card-subtitle> -->
           <v-card-actions>
             <v-btn color="primary" @click="downloadPdf(index)">ดาวน์โหลด PDF</v-btn>
@@ -89,4 +89,8 @@ export default {
 
 <style scoped>
 /* ใช้ Tailwind CSS และ Vuetify ในการออกแบบ */
+.wrap-text {
+  white-space: normal;
+  word-wrap: break-word;
+}
 </style>
