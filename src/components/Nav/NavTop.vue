@@ -109,9 +109,8 @@ const mobileSections = [
           {
             label: "ภายนอก",
             items: [
-              { label: "DIP", to: "/info3/sub1", external: true },
-              { label: "WIPO", to: "/info3/sub2", external: true },
-              { label: "อวท.", to: "/info3/sub3", external: true },
+              { label: "DIP", to: "https://www.wipo.int/portal/en/", external: true },
+              { label: "WIPO", to: "https://www.ipthailand.go.th/th/", external: true },
             ],
           },
         ],
