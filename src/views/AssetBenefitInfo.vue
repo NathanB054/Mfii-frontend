@@ -8,7 +8,7 @@
     <div class="left flex justify-center align-center">
       <div v-if="dataInfo.filePath" class="image-box">
         <img
-          v-if="dataInfo.filePath[0].includes('uploads\\image')"
+          v-if="dataInfo.filePath[0].includes('image')"
           :src="`${baseUrl}/${dataInfo.filePath[0]}`"
           class="yes"
           alt="Infographic or Activity"

@@ -11,8 +11,7 @@
         <div v-if="dataInfo && dataInfo.filePath" class="image-box">
           <img
             v-if="
-              dataInfo.filePath[0] &&
-              dataInfo.filePath[0].includes('uploads\\image')
+              dataInfo.filePath[0] && dataInfo.filePath[0].includes('image')
             "
             :src="`${baseUrl}/${dataInfo.filePath[0]}`"
             class="yes"
