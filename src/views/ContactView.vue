@@ -61,9 +61,9 @@
                   </v-container>
                 </v-container>
 
-                <v-container v-else-if="user.role != 'user'" class="flex justify-center">
+                <!-- <v-container v-else-if="user.role != 'user'" class="flex justify-center">
                   <h1 style="color: red;">คุณไม่มีสิทธิใช้งานบริการนี้</h1>
-                </v-container>
+                </v-container> -->
                 <v-card-text v-else>
                   <v-form ref="form" @submit.prevent="sendRequest">
                     <v-row>
