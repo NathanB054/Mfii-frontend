@@ -165,7 +165,7 @@ export default {
             }
         },
         async replyMessage(message, id) {
-            console.log(message, this.user)
+            // console.log(message, this.user)
             try {
                 await api.patch('/mesReplyUpdate/' + id, {
                     messages: message,

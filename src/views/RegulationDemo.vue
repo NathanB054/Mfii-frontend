@@ -57,7 +57,7 @@ export default {
         // ค้นหาไฟล์ PDF
         const pdfPath = regulation.filePath.find(path => path.toLowerCase().endsWith('.pdf'));
 
-        console.log(pdfPath);
+        // console.log(pdfPath);
 
         if (pdfPath) {
           // แก้ไข path เพื่อรองรับ backslash

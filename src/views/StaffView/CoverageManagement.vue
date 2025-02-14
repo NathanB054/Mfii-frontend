@@ -304,8 +304,8 @@ export default {
         async updateImagenData() {
             const formUpdate = new FormData();
             this.isLoading = true;
-            console.log("Check", this.imageCheck)
-            console.log("File", this.imageFile)
+            // console.log("Check", this.imageCheck)
+            // console.log("File", this.imageFile)
             try {
                 // if change image do this function
                 if (this.imageFile !== this.imageCheck) {
@@ -320,7 +320,7 @@ export default {
                     })
                     )
 
-                    console.log("Updated File")
+                    // console.log("Updated File")
                 }
                 // and update data
                 formUpdate.append('servicesType', this.servicesForApi.servicesType);
@@ -345,7 +345,7 @@ export default {
         // upload image และ information
         async uploadImage() {
             this.isLoading = true
-            console.log(this.servicesForApi, this.dataInfo)
+            // console.log(this.servicesForApi, this.dataInfo)
             if (!this.servicesForApi.servicesType || !this.dataInfo.servicesSubType || !this.dataInfo.information) {
                 errorStore.show(`กรุณากรอกข้อมูลให้ครบ`, {
                     color: "warning",

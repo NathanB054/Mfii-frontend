@@ -181,11 +181,11 @@ export default {
               linkServices: filtered.map(item => item.linkServices)
             });
           })
-          console.log(this.detailsItems);
+          // console.log(this.detailsItems);
           // this.detailsItems = res.data.result;
 
         }
-        console.log(this.detailsItems);
+        // console.log(this.detailsItems);
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;

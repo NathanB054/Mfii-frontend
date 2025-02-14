@@ -142,9 +142,9 @@ export default {
     };
   },
   beforeRouteUpdate(to, from, next) {
-    console.log("Routing update detected");
-    console.log("From:", from.params.id);
-    console.log("To:", to.params.id);
+    // console.log("Routing update detected");
+    // console.log("From:", from.params.id);
+    // console.log("To:", to.params.id);
     // Fetch new data for the new ID
     this.fetchData();
     next();

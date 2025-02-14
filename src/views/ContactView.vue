@@ -151,7 +151,7 @@ export default {
           // Handle error
         }
       } else {
-        console.log("Form is not valid");
+        // console.log("Form is not valid");
         errorStore.show("กรุณากรอกข้อมูลให้ครบ", {
             color: 'warning',
             icon: 'mdi-alert-circle',
