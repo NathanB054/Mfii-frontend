@@ -101,16 +101,16 @@ const mobileSections = [
           {
             label: "ภายใน",
             items: [
-              { label: "MRii", to: "/info2/sub1" },
-              { label: "MFii", to: "/info2/sub2" },
-              { label: "Research", to: "/info2/sub3" },
+              { label: "Mfii ", to: "https://mfii.mfu.ac.th/mfii-main.html", external: true },
+              { label: "Mrii ", to: "https://mrii.mfu.ac.th/mrii-index.html", external: true},
+              { label: "Research (RD)", to: " https://research.mfu.ac.th/rs-index.html", external: true },
             ],
           },
           {
             label: "ภายนอก",
             items: [
-              { label: "DIP", to: "https://www.wipo.int/portal/en/", external: true },
-              { label: "WIPO", to: "https://www.ipthailand.go.th/th/", external: true },
+              { label: "DIP", to: "https://www.ipthailand.go.th/th/", external: true },
+              { label: "WIPO", to: "https://www.wipo.int/portal/en/", external: true },
             ],
           },
         ],
