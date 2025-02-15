@@ -61,9 +61,9 @@
                   </v-container>
                 </v-container>
 
-                <!-- <v-container v-else-if="user.role != 'user'" class="flex justify-center">
+                <v-container v-else-if="user.role != 'user'" class="flex justify-center">
                   <h1 style="color: red;">คุณไม่มีสิทธิใช้งานบริการนี้</h1>
-                </v-container> -->
+                </v-container>
                 <v-card-text v-else>
                   <v-form ref="form" @submit.prevent="sendRequest">
                     <v-row>
@@ -138,7 +138,7 @@ export default {
         this.form.messageReply.user = this.user._id;
         try {
           await api.post('/user/mesRequest', this.form);
-          errorStore.show("ขอข้อมูลเพิ่มเติมสำเร็จ!", {
+          errorStore.show("ขอข้อมูลเพิ่มเติมสำเร็จ! กำลังจะนำท่านไปหน้าข้อความ", {
             color: 'success',
             icon: 'mdi-check-circle',
             timeout: 5000
