@@ -15,7 +15,7 @@
       <!-- Chart 1 -->
       <div class="w-full max-w-xl max-h-xl mx-auto p-4 sm:max-w-xs sm:max-h-xs lg:max-w-xl lg:max-h-xl">
         <PieChart chart-type="patent" />
-        <div class="text-center mt-2 text-sm text-gray-700">
+        <div class="text-center mt-10 text-sm text-gray-700">
           สถานะการขอรับความคุ้มครอง ทรัพย์สินทางปัญญา
         </div>
       </div>

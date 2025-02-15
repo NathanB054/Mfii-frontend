@@ -57,7 +57,7 @@ export default {
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  position: 'bottom',
+                  position: 'right', // Change position to 'right'
                   labels: {
                     font: {
                       size: 12
