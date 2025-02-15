@@ -13,7 +13,7 @@
       class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-1 items-center"
     >
       <!-- Chart 1 -->
-      <div class="w-full max-w-xs mx-auto p-4">
+      <div class="w-full max-w-xl max-h-xl mx-auto p-4 sm:max-w-xs sm:max-h-xs lg:max-w-xl lg:max-h-xl">
         <PieChart chart-type="patent" />
         <div class="text-center mt-2 text-sm text-gray-700">
           สถานะการขอรับความคุ้มครอง ทรัพย์สินทางปัญญา

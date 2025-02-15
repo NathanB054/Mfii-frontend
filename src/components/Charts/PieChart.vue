@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-container">
     <canvas ref="pieChart"></canvas>
   </div>
 </template>
@@ -54,6 +54,7 @@ export default {
             },
             options: {
               responsive: true,
+              maintainAspectRatio: false,
               plugins: {
                 legend: {
                   position: 'bottom',
@@ -82,3 +83,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+ 
+}
+</style>
